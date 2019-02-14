@@ -16,7 +16,8 @@
         }
     ],
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+        "eluceo/ical": "^0.15.0"
     },
     "require-dev": {
         "larapack/dd": "^1.0",
