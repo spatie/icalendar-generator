@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "eluceo/ical": "^0.15.0"
+        "ext-mbstring" : "*"
     },
     "require-dev": {
         "larapack/dd": "^1.0",
@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src"
+            "Spatie\\Calendar\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "Spatie\\Calendar\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -44,10 +44,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Skeleton\\SkeletonServiceProvider"
+                "Spatie\\Calendar\\SkeletonServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "Spatie\\Skeleton\\SkeletonFacade"
+                "Skeleton": "Spatie\\Calendar\\SkeletonFacade"
             }
         }
     }

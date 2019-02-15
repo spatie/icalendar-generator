@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Skeleton;
+namespace Spatie\Calendar;
 
 use Illuminate\Support\ServiceProvider;
 
-class SkeletonServiceProvider extends ServiceProvider
+class CalendarServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
