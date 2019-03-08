@@ -2,30 +2,45 @@
 
 namespace Spatie\Calendar\Components;
 
+use Closure;
 use Spatie\Calendar\ComponentPayload;
 
-class Calendar implements Component
+class Calendar extends Component
 {
-    /** @var array  */
+    /** @var array */
     protected $events = [];
 
     /** @var string */
     protected $name;
 
-    public static function create(): Calendar
+    public function getComponentType(): string
     {
-        return new self();
+        return 'CALENDAR';
     }
 
-    public function name(string $name) : Calendar
+    public function getRequiredProperties(): array
+    {
+        return [
+            'name'
+        ];
+    }
+
+    public function __construct(string $name)
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function addEvent(Event $event): Calendar
+    public static function name(string $name): Calendar
     {
+        return new self($name);
+    }
+
+    public function event($event): Calendar
+    {
+        if ($event instanceof Closure) {
+            $event = $event(new Event());
+        }
+
         $this->events[] = $event;
 
         return $this;
@@ -33,9 +48,11 @@ class Calendar implements Component
 
     public function getPayload(): ComponentPayload
     {
-        return ComponentPayload::new('CALENDAR')
-            ->add('VERSION', '2.0')
-            ->add('PRODID', $this->name)
-            ->addComponents($this->events);
+        $this->ensureRequiredPropertiesAreSet();
+
+        return ComponentPayload::new($this->getComponentType())
+            ->textProperty('VERSION', '2.0')
+            ->textProperty('PRODID', $this->name)
+            ->subComponent(...$this->events);
     }
 }

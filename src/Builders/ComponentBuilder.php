@@ -1,31 +1,27 @@
 <?php
 
-namespace Spatie\Calendar;
+namespace Spatie\Calendar\Builders;
 
-class Builder
+use Spatie\Calendar\ComponentPayload;
+
+class ComponentBuilder
 {
     /** @var \Spatie\Calendar\ComponentPayload */
     protected $componentPayload;
-
-    public static function new(ComponentPayload $componentPayload): Builder
-    {
-        return new self($componentPayload);
-    }
 
     public function __construct(ComponentPayload $componentPayload)
     {
         $this->componentPayload = $componentPayload;
     }
 
-
     public function build(): string
     {
-        return implode('/n', $this->buildComponent());
+        return implode('\r\n', $this->buildComponent());
     }
 
     public function buildComponent(): array
     {
-        $lines[] = "BEGIN:V{$this->componentPayload->getIdentifier()}";
+        $lines[] = "BEGIN:V{$this->componentPayload->getType()}";
 
         $lines = array_merge(
             $lines,
@@ -33,7 +29,7 @@ class Builder
             $this->buildSubComponents()
         );
 
-        $lines[] = "END:V{$this->componentPayload->getIdentifier()}";
+        $lines[] = "END:V{$this->componentPayload->getType()}";
 
         return $lines;
     }
@@ -43,9 +39,11 @@ class Builder
         $lines = [];
 
         foreach ($this->componentPayload->getProperties() as $key => $property) {
+            $line = (new PropertyBuilder($property))->build();
+
             $lines = array_merge(
                 $lines,
-                $this->chipLine("{$key}:{$property}")
+                $this->chipLine($line)
             );
         }
 
@@ -57,10 +55,12 @@ class Builder
         $lines = [];
 
         /** @var \Spatie\Calendar\Components\Component $component */
-        foreach ($this->componentPayload->getComponents() as $component) {
+        foreach ($this->componentPayload->getSubComponents() as $component) {
+            $builder = new ComponentBuilder($component->getPayload());
+
             $lines = array_merge(
                 $lines,
-                Builder::new($component->getPayload())->buildComponent()
+                $builder->buildComponent()
             );
         }
 

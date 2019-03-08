@@ -2,67 +2,72 @@
 
 namespace Spatie\Calendar;
 
-use DateTime;
+use DateTimeInterface;
 use Spatie\Calendar\Components\Component;
+use Spatie\Calendar\PropertyTypes\DateTimeProperty;
+use Spatie\Calendar\PropertyTypes\Property;
+use Spatie\Calendar\PropertyTypes\TextProperty;
 
 class ComponentPayload
 {
     /** @var string */
-    protected $identifier;
+    protected $type;
 
     /** @var array */
     protected $properties = [];
 
     /** @var array */
-    protected $components = [];
+    protected $subComponents = [];
 
-    public static function new(string $identifier): ComponentPayload
+    public static function new(string $type): ComponentPayload
     {
-        return new self($identifier);
+        return new self($type);
     }
 
-    public function __construct(string $identifier)
+    public function __construct(string $type)
     {
-        $this->identifier = $identifier;
+        $this->type = $type;
     }
 
-    public function add(string $key, $item): ComponentPayload
+    public function property(Property ...$properties): ComponentPayload
     {
-        if ($this instanceof DateTime) {
-            return $this->addDateTime($key, $item);
+        foreach ($properties as $property) {
+            $this->properties[] = $property;
         }
 
-        $this->properties[$key] = $item;
-
         return $this;
     }
 
-    public function addDateTime(string $key, DateTime $item): ComponentPayload
+    public function dateTimeProperty(string $name, ?DateTimeInterface $value): ComponentPayload
     {
-        $this->properties[$key] = $item->format('Ymd\THis');
+        if ($value === null) {
+            return $this;
+        }
 
-        return $this;
+        return $this->property(new DateTimeProperty($name, $value));
     }
 
-    public function addComponent(Component $component): ComponentPayload
+    public function textProperty(string $name, ?string $value): ComponentPayload
     {
-        $this->components[] = $component;
+        if ($value === null) {
+            return $this;
+        }
 
-        return $this;
+        return $this->property(new TextProperty($name, $value));
     }
 
-    public function addComponents(array $components): ComponentPayload
+    public function subComponent(Component ...$components): ComponentPayload
     {
         foreach ($components as $component) {
-            $this->addComponent($component);
+            $this->subComponents[] = $component;
         }
 
         return $this;
     }
 
-    public function getIdentifier(): string
+    public function getType(): string
     {
-        return $this->identifier;
+        return $this->type;
     }
 
     public function getProperties(): array
@@ -70,8 +75,8 @@ class ComponentPayload
         return $this->properties;
     }
 
-    public function getComponents(): array
+    public function getSubComponents(): array
     {
-        return $this->components;
+        return $this->subComponents;
     }
 }

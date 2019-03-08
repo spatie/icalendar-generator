@@ -5,7 +5,7 @@ namespace Spatie\Calendar\Components;
 use DateTime;
 use Spatie\Calendar\ComponentPayload;
 
-class Event implements Component
+class Event extends Component
 {
     /** @var DateTime */
     protected $starts;
@@ -14,10 +14,13 @@ class Event implements Component
     protected $ends;
 
     /** @var string */
+    protected $name;
+
+    /** @var string|null */
     protected $description;
 
-    /** @var string */
-    protected $name;
+    /** @var string|null */
+    protected $location;
 
     /** @var string */
     protected $uuid;
@@ -25,13 +28,30 @@ class Event implements Component
     /** @var DateTime */
     protected $created;
 
-    public static function create(): Event
+    /** @var bool */
+    protected $withTimezone;
+
+    public function getComponentType(): string
     {
-        return new self();
+        return 'EVENT';
     }
 
-    public function __construct()
+    public function getRequiredProperties(): array
     {
+        return [
+            'name',
+            'uuid',
+        ];
+    }
+
+    public static function name(?string $name = null): Event
+    {
+        return new self($name);
+    }
+
+    public function __construct(?string $name = null)
+    {
+        $this->name = $name;
         $this->uuid = uniqid();
         $this->created = new DateTime();
     }
@@ -65,21 +85,38 @@ class Event implements Component
         return $this;
     }
 
-    public function name(string $name): Event
+    public function location(string $location): Event
     {
-        $this->name = $name;
+        $this->location = $location;
+
+        return $this;
+    }
+
+    public function uuid(string $uuid): Event
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function withTimezone(): Event
+    {
+        $this->withTimezone = true;
 
         return $this;
     }
 
     public function getPayload(): ComponentPayload
     {
-        return ComponentPayload::new('EVENT')
-            ->add('UID', $this->uuid)
-            ->add('SUMMARY', $this->name)
-            ->add('DESCRIPTION', $this->description)
-            ->addDateTime('DTSTART', $this->starts)
-            ->addDateTime('DTEND', $this->ends)
-            ->addDateTime('DTSTAMP', $this->created);
+        $this->ensureRequiredPropertiesAreSet();
+
+        return ComponentPayload::new($this->getComponentType())
+            ->textProperty('UID', $this->uuid)
+            ->textProperty('SUMMARY', $this->name)
+            ->textProperty('DESCRIPTION', $this->description)
+            ->textProperty('LOCATION', $this->location)
+            ->dateTimeProperty('DTSTART', $this->starts)
+            ->dateTimeProperty('DTEND', $this->ends)
+            ->dateTimeProperty('DTSTAMP', $this->created);
     }
 }
