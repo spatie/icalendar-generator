@@ -24,4 +24,9 @@ class DummyProperty extends Property
     {
         return $this->value;
     }
+
+    public function getOriginalValue() : string
+    {
+        return $this->value;
+    }
 }

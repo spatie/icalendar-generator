@@ -7,7 +7,7 @@ use DateTimeInterface;
 
 class DateTimeProperty extends Property
 {
-    /** @var \DateTime */
+    /** @var \DateTimeImmutable */
     protected $dateTime;
 
     /** @var bool */
@@ -46,5 +46,10 @@ class DateTimeProperty extends Property
         $format = $this->withTime ? 'Ymd\THis' : 'Ymd';
 
         return $this->dateTime->format($format);
+    }
+
+    public function getOriginalValue() : DateTime
+    {
+        return $this->dateTime;
     }
 }

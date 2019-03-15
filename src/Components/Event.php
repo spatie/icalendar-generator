@@ -3,14 +3,16 @@
 namespace Spatie\Calendar\Components;
 
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
 
 class Event extends Component
 {
-    /** @var DateTime */
+    /** @var DateTimeInterface */
     protected $starts;
 
-    /** @var DateTime */
+    /** @var DateTimeInterface */
     protected $ends;
 
     /** @var string */
@@ -23,9 +25,9 @@ class Event extends Component
     protected $location;
 
     /** @var string */
-    protected $uuid;
+    protected $uid;
 
-    /** @var DateTime */
+    /** @var DateTimeInterface */
     protected $created;
 
     /** @var bool */
@@ -53,25 +55,25 @@ class Event extends Component
     public function __construct(?string $name = null)
     {
         $this->name = $name;
-        $this->uuid = uniqid();
-        $this->created = new DateTime();
+        $this->uid = uniqid();
+        $this->created = new DateTimeImmutable();
     }
 
-    public function starts(DateTime $starts): Event
+    public function starts(DateTimeInterface $starts): Event
     {
         $this->starts = $starts;
 
         return $this;
     }
 
-    public function ends(DateTime $ends): Event
+    public function ends(DateTimeInterface $ends): Event
     {
         $this->ends = $ends;
 
         return $this;
     }
 
-    public function period(DateTime $starts, DateTime $ends): Event
+    public function period(DateTimeInterface $starts, DateTimeInterface $ends): Event
     {
         $this->starts = $starts;
         $this->ends = $ends;
@@ -101,14 +103,14 @@ class Event extends Component
         return $this;
     }
 
-    public function uuid(string $uuid): Event
+    public function uniqueIdentifier(string $uid): Event
     {
-        $this->uuid = $uuid;
+        $this->uid = $uid;
 
         return $this;
     }
 
-    public function created(DateTime $created): Event
+    public function created(DateTimeInterface $created): Event
     {
         $this->created = $created;
 
@@ -125,7 +127,7 @@ class Event extends Component
     public function getPayload(): ComponentPayload
     {
         return ComponentPayload::new($this->getComponentType())
-            ->textProperty('UID', $this->uuid)
+            ->textProperty('UID', $this->uid)
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->textProperty('LOCATION', $this->location)

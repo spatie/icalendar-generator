@@ -4,7 +4,7 @@ namespace Spatie\Calendar\PropertyTypes;
 
 class TextProperty extends Property
 {
-    /** @var string */
+    /** @var string  */
     protected $text;
 
     public function __construct(string $name, string $text)
@@ -24,5 +24,10 @@ class TextProperty extends Property
         ];
 
         return str_replace(array_keys($replacements), $replacements, $this->text);
+    }
+
+    public function getOriginalValue() : string
+    {
+       return $this->text;
     }
 }

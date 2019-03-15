@@ -17,4 +17,9 @@ class BooleanProperty extends Property
     {
         return $this->boolean ? 'TRUE' : 'FALSE';
     }
+
+    public function getOriginalValue() : bool
+    {
+        return $this->boolean;
+    }
 }

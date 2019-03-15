@@ -14,14 +14,12 @@ class CalendarTest extends TestCase
     {
         $payload = Calendar::new()->getPayload();
 
-        $properties = $payload->getProperties();
-
         $this->assertEquals('CALENDAR', $payload->getType());
 
-        $this->assertEquals(2, count($properties));
+        $this->assertEquals(2, count($payload->getProperties()));
 
-        $this->assertInArray(new TextProperty('VERSION', '2.0'), $properties);
-        $this->assertInArray(new TextProperty('PRODID', 'Spatie/iCalendar-generator'), $properties);
+        $this->assertPropertyEqualsInPayload('VERSION', '2.0', $payload);
+        $this->assertPropertyEqualsInPayload('PRODID', 'Spatie/iCalendar-generator', $payload);
     }
 
     /** @test */
@@ -32,12 +30,10 @@ class CalendarTest extends TestCase
             ->description('What events are going to happen?')
             ->getPayload();
 
-        $properties = $payload->getProperties();
+        $this->assertEquals(4, count($payload->getProperties()));
 
-        $this->assertEquals(4, count($properties));
-
-        $this->assertInArray(new TextProperty('NAME', 'Full Stack Europe Schedule'), $properties);
-        $this->assertInArray(new TextProperty('DESCRIPTION', 'What events are going to happen?'), $properties);
+        $this->assertPropertyEqualsInPayload('NAME', 'Full Stack Europe Schedule', $payload);
+        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'What events are going to happen?', $payload);
     }
 
     /** @test */
@@ -67,10 +63,7 @@ class CalendarTest extends TestCase
         $subComponents = $payload->getSubComponents();
 
         $this->assertEquals(1, count($subComponents));
-
-        $eventPayload = $subComponents[0]->getPayload();
-
-        $this->assertInArray(new TextProperty('SUMMARY', 'An introduction to event sourcing'), $eventPayload->getProperties());
+        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
     }
 
     /** @test */
@@ -88,5 +81,26 @@ class CalendarTest extends TestCase
         $this->assertEquals(2, count($subComponents));
         $this->assertEquals($subComponents[0], $firstEvent);
         $this->assertEquals($subComponents[1], $secondEvent);
+    }
+
+    /** @test */
+    public function it_can_add_multiple_events_by_closure_to_a_calendar()
+    {
+        $payload = Calendar::new()
+            ->event([
+                function (Event $event) {
+                    $event->name('An introduction to event sourcing');
+                },
+                function (Event $event) {
+                    $event->name('Websockets what are they?');
+                }
+            ])
+            ->getPayload();
+
+        $subComponents = $payload->getSubComponents();
+
+        $this->assertEquals(2, count($subComponents));
+        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
+        $this->assertPropertyEqualsInPayload('SUMMARY', 'Websockets what are they?', $subComponents[1]->getPayload());
     }
 }

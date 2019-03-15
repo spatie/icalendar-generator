@@ -73,8 +73,23 @@ Calendar::new('My new fantastic calendar')
 ```
 
 ### Event
+An event can be created, a name is not required, but a start date should always be given
+``` php
+Event::new('My awesome event')
+    ->starts(new DateTime('16 may 2019'));
+```
 
-
+You can set following properties on a event
+``` php
+Event::new()
+    ->name('My awesome event')
+    ->description('An awesome event with awesome activities')
+    ->uniqueIdentifier('A unique identifier can be set here')
+    ->location('Antwerp')
+    ->created(new DateTime('10 may 2019'))
+    ->starts(new DateTime('16 may 2019'))
+    ->ends(new DateTime('17 may 2019'));
+```
 ### Testing
 
 ``` bash

@@ -14,6 +14,8 @@ abstract class Property
 
     public abstract function getValue(): string;
 
+    public abstract function getOriginalValue();
+
     public function getName(): string
     {
         return $this->name;
