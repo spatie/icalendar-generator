@@ -2,11 +2,11 @@
 
 namespace Spatie\Calendar\Tests\Builders;
 
-use PHPUnit\Framework\TestCase;
 use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
 use Spatie\Calendar\Tests\Dummy\DummyProperty;
+use Spatie\Calendar\Tests\TestCase;
 
 class ComponentBuilderTest extends TestCase
 {
@@ -35,7 +35,7 @@ class ComponentBuilderTest extends TestCase
         $builder = new ComponentBuilder($payload);
 
         $this->assertEquals(
-            'BEGIN:VTEST\r\nBEGIN:VDUMMY\r\nEND:VDUMMY\r\nEND:VTEST',
+            'BEGIN:VTEST\r\nBEGIN:VDUMMY\r\nname:SUBCOMPONENT\r\nEND:VDUMMY\r\nEND:VTEST',
             $builder->build()
         );
     }

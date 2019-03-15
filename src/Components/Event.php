@@ -39,12 +39,13 @@ class Event extends Component
     public function getRequiredProperties(): array
     {
         return [
-            'name',
-            'uuid',
+            'UID',
+            'DTSTAMP',
+            'DTSTART'
         ];
     }
 
-    public static function name(?string $name = null): Event
+    public static function new(?string $name = null): Event
     {
         return new self($name);
     }
@@ -78,6 +79,14 @@ class Event extends Component
         return $this;
     }
 
+
+    public function name(string $name): Event
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function description(string $description): Event
     {
         $this->description = $description;
@@ -99,6 +108,13 @@ class Event extends Component
         return $this;
     }
 
+    public function created(DateTime $created): Event
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
     public function withTimezone(): Event
     {
         $this->withTimezone = true;
@@ -108,8 +124,6 @@ class Event extends Component
 
     public function getPayload(): ComponentPayload
     {
-        $this->ensureRequiredPropertiesAreSet();
-
         return ComponentPayload::new($this->getComponentType())
             ->textProperty('UID', $this->uuid)
             ->textProperty('SUMMARY', $this->name)

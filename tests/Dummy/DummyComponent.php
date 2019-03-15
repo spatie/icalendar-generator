@@ -10,6 +10,9 @@ class DummyComponent extends Component
     /** @var string */
     public $name;
 
+    /** @var string */
+    public $description;
+
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -23,14 +26,14 @@ class DummyComponent extends Component
     public function getRequiredProperties(): array
     {
         return [
-            'name'
+            'name',
         ];
     }
 
     public function getPayload(): ComponentPayload
     {
-        $this->ensureRequiredPropertiesAreSet();
-
-        return ComponentPayload::new($this->getComponentType());
+        return ComponentPayload::new($this->getComponentType())
+            ->textProperty('name', $this->name)
+            ->textProperty('description', $this->description);
     }
 }

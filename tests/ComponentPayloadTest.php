@@ -3,7 +3,6 @@
 namespace Spatie\Calendar\Tests;
 
 use DateTime;
-use PHPUnit\Framework\TestCase;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\PropertyTypes\DateTimeProperty;
 use Spatie\Calendar\PropertyTypes\TextProperty;
@@ -35,16 +34,16 @@ class ComponentPayloadTest extends TestCase
     }
 
     /** @test */
-    public function a_payload_includes_subcomponents()
+    public function a_payload_includes_sub_components()
     {
-        $subcomponents = [
-            new DummyComponent('subcomponent1'),
-            new DummyComponent('subcomponent2'),
+        $subComponents = [
+            new DummyComponent('subComponent1'),
+            new DummyComponent('subComponent1'),
         ];
 
         $payload = (new ComponentPayload('TESTCOMPONENT'))
-            ->subComponent(...$subcomponents);
+            ->subComponent(...$subComponents);
 
-        $this->assertEquals($subcomponents, $payload->getSubComponents());
+        $this->assertEquals($subComponents, $payload->getSubComponents());
     }
 }

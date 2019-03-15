@@ -7,10 +7,12 @@ use Spatie\Calendar\Components\Component;
 
 class PropertyIsRequired extends Exception
 {
-    public static function create(string $property, Component $component): PropertyIsRequired
+    public static function create(array $properties, Component $component): PropertyIsRequired
     {
         $type = ucfirst(strtolower($component->getComponentType()));
 
-        return new self("Property {$property} is required when creating an {$type}.");
+        $properties = implode(', ', $properties);
+
+        return new self("Properties {$properties} is required when creating an {$type}.");
     }
 }

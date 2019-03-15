@@ -2,7 +2,7 @@
 
 namespace Spatie\Calendar\Tests\PropertyTypes;
 
-use PHPUnit\Framework\TestCase;
+use Spatie\Calendar\Tests\TestCase;
 use Spatie\Calendar\PropertyTypes\TextProperty;
 
 class TextPropertyTest extends TestCase

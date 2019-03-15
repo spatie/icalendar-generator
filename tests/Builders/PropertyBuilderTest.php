@@ -2,7 +2,7 @@
 
 namespace Spatie\Calendar\Tests\Builders;
 
-use PHPUnit\Framework\TestCase;
+use Spatie\Calendar\Tests\TestCase;
 use Spatie\Calendar\Builders\PropertyBuilder;
 use Spatie\Calendar\PropertyTypes\TextProperty;
 use Spatie\Calendar\Tests\Dummy\DummyProperty;

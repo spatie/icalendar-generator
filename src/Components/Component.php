@@ -2,11 +2,10 @@
 
 namespace Spatie\Calendar\Components;
 
-use ReflectionClass;
-use ReflectionObject;
 use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Exceptions\PropertyIsRequired;
+use Spatie\Calendar\PropertyTypes\Property;
 
 abstract class Component
 {
@@ -18,17 +17,29 @@ abstract class Component
 
     public function toString(): string
     {
-        $builder = new ComponentBuilder($this->getPayload());
+        $payload = $this->getPayload();
+
+        $this->ensureRequiredPropertiesAreSet($payload);
+
+        $builder = new ComponentBuilder($payload);
 
         return $builder->build();
     }
 
-    public function ensureRequiredPropertiesAreSet()
+    protected function ensureRequiredPropertiesAreSet(ComponentPayload $componentPayload)
     {
-        foreach ($this->getRequiredProperties() as $requiredProperty) {
-            if ($this->$requiredProperty === null) {
-                throw PropertyIsRequired::create($requiredProperty, $this);
-            }
+        $requiredProperties = $this->getRequiredProperties();
+
+        $providedProperties = array_map(function (Property $property) {
+            return $property->getName();
+        }, $componentPayload->getProperties());
+
+        $intersection = array_intersect($requiredProperties, $providedProperties);
+
+        if (count($intersection) !== count($requiredProperties)) {
+            $notProvidedProperties = array_diff($requiredProperties, $intersection);
+
+            throw PropertyIsRequired::create($notProvidedProperties, $this);
         }
     }
 }

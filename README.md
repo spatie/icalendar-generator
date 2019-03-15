@@ -1,12 +1,26 @@
-# Very short description of the package
+# Build calendars in the iCalendar format
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/Calendar.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
-[![Build Status](https://img.shields.io/travis/spatie/Calendar/master.svg?style=flat-square)](https://travis-ci.org/spatie/:package_name)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/Calendar.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/:package_name)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/Calendar.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/Calendar.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
+[![Build Status](https://img.shields.io/travis/spatie/Calendar/master.svg?style=flat-square)](https://travis-ci.org/spatie/icalendar-generator)
+[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/Calendar.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/icalendar-generator)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/Calendar.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
 
-This is where your description should go. Try and limit it to a paragraph or two.
+With this package you can generate calendars for applications like Apple's Calendar and Google Calendar.
+These calendars are generated in the iCalendar format and can be loaded by application that have support for iCalendar(RFC 5545).
+This package tries to implement a minimal version of  [RFC 5545](https://tools.ietf.org/html/rfc5545) for a straightforward api.
+
+## Example
+```php
+use Spatie\Calendar\Components\Calendar;
+use Spatie\Calendar\Components\Event;
+
+Calendar::new('My new fantastic calendar')
+    ->event(Event::new('My new fantastic event')
+        ->starts(new DateTime('16 may 2019'))
+        ->ends(new DateTime('17 may 2019'))
+    )->get();
+```
 
 ## Installation
 
@@ -18,10 +32,48 @@ composer require spatie/Calendar
 
 ## Usage
 
+### Calendars
+You can create a calendar as such, it is not required to pass in a name
 ``` php
-$skeleton = new Spatie\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+$calendar = Calendar::new('My new fantastic calendar');
 ```
+A calendar can have a description
+``` php
+$calendar = Calendar::new()
+    ->name('My new fantastic calendar')
+    ->description('With the best events arround town');
+```
+You can get a textual version of the calendar as follows
+``` php
+Calendar::new('My new fantastic calendar')->get(); // BEGIN:VCALENDAR ...
+```
+There are multiple ways to add an event
+``` php
+// By parameter
+$event = Event::new('Something great');
+
+Calendar::new('My new fantastic calendar')
+    ->event($event)
+    ...
+    
+// By closure
+Calendar::new('My new fantastic calendar')
+    ->event(function(Event $event){
+        $event->name('Something great');
+    })
+    ...
+    
+// By array
+Calendar::new('My new fantastic calendar')
+    ->event([
+        Event::new('Something great'),
+        Event::new('Another great event'),
+    ])
+    ...
+```
+
+### Event
+
 
 ### Testing
 

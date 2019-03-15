@@ -10,8 +10,11 @@ class Calendar extends Component
     /** @var array */
     protected $events = [];
 
-    /** @var string */
+    /** @var string|null */
     protected $name;
+
+    /** @var string|null */
+    protected $description;
 
     public function getComponentType(): string
     {
@@ -21,38 +24,70 @@ class Calendar extends Component
     public function getRequiredProperties(): array
     {
         return [
-            'name'
+            'VERSION',
+            'PRODID',
         ];
     }
 
-    public function __construct(string $name)
+    public static function new(): Calendar
     {
-        $this->name = $name;
+        return new self();
     }
 
-    public static function name(string $name): Calendar
+    public function name(string $name): Calendar
     {
-        return new self($name);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function description(string $description): Calendar
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
     public function event($event): Calendar
     {
+        if (is_array($event)) {
+            foreach ($event as $item) {
+                $this->addEvent($item);
+            }
+        } else {
+            $this->addEvent($event);
+        }
+
+        return $this;
+    }
+
+    public function get(): string
+    {
+        return $this->toString();
+    }
+
+    public function getPayload(): ComponentPayload
+    {
+        return ComponentPayload::new($this->getComponentType())
+            ->textProperty('VERSION', '2.0')
+            ->textProperty('PRODID', 'Spatie/iCalendar-generator')
+            ->textProperty('NAME', $this->name)
+            ->textProperty('DESCRIPTION', $this->description)
+            ->subComponent(...$this->events);
+    }
+
+    protected function addEvent($event)
+    {
         if ($event instanceof Closure) {
-            $event = $event(new Event());
+            $injectedEvent = new Event();
+
+            $event($injectedEvent);
+
+            $event = $injectedEvent;
         }
 
         $this->events[] = $event;
 
         return $this;
-    }
-
-    public function getPayload(): ComponentPayload
-    {
-        $this->ensureRequiredPropertiesAreSet();
-
-        return ComponentPayload::new($this->getComponentType())
-            ->textProperty('VERSION', '2.0')
-            ->textProperty('PRODID', $this->name)
-            ->subComponent(...$this->events);
     }
 }
