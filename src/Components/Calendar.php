@@ -2,11 +2,13 @@
 
 namespace Spatie\Calendar\Components;
 
-use Closure;
 use Spatie\Calendar\ComponentPayload;
+use Spatie\Calendar\HasSubComponents;
 
 class Calendar extends Component
 {
+    use HasSubComponents;
+
     /** @var array */
     protected $events = [];
 
@@ -50,13 +52,7 @@ class Calendar extends Component
 
     public function event($event): Calendar
     {
-        if (is_array($event)) {
-            foreach ($event as $item) {
-                $this->addEvent($item);
-            }
-        } else {
-            $this->addEvent($event);
-        }
+        $this->addSubComponent($event);
 
         return $this;
     }
@@ -73,21 +69,6 @@ class Calendar extends Component
             ->textProperty('PRODID', 'Spatie/iCalendar-generator')
             ->textProperty('NAME', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
-            ->subComponent(...$this->events);
-    }
-
-    protected function addEvent($event)
-    {
-        if ($event instanceof Closure) {
-            $injectedEvent = new Event();
-
-            $event($injectedEvent);
-
-            $event = $injectedEvent;
-        }
-
-        $this->events[] = $event;
-
-        return $this;
+            ->subComponent(...$this->subComponents);
     }
 }

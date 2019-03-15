@@ -15,11 +15,6 @@ class DummyProperty extends Property
         $this->value = $value;
     }
 
-    public function addParameter(Property $parameter)
-    {
-        $this->parameters[] = $parameter;
-    }
-
     public function getValue(): string
     {
         return $this->value;

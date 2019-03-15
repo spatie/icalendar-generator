@@ -26,19 +26,12 @@ class DateTimeProperty extends Property
         $this->dateTime = $dateTime;
         $this->withTime = $withTime;
         $this->withTimeZone = $withTimeZone;
-    }
 
-    public function getParameters(): array
-    {
-        if(! $this->withTimeZone){
-            return [];
+        if ($this->withTimeZone) {
+            $timezone = $this->dateTime->getTimezone()->getName();
+
+            $this->addParameter(new TextProperty('TZID', $timezone));
         }
-
-        $timezone = $this->dateTime->getTimezone()->getName();
-
-        return [
-            new TextProperty('TZID', $timezone),
-        ];
     }
 
     public function getValue(): string
@@ -48,7 +41,7 @@ class DateTimeProperty extends Property
         return $this->dateTime->format($format);
     }
 
-    public function getOriginalValue() : DateTime
+    public function getOriginalValue(): DateTimeInterface
     {
         return $this->dateTime;
     }

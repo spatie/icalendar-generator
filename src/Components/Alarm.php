@@ -4,14 +4,29 @@ namespace Spatie\Calendar\Components;
 
 use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
+use Spatie\Calendar\Duration;
+use Spatie\Calendar\PropertyTypes\DateTimeProperty;
+use Spatie\Calendar\PropertyTypes\TextProperty;
 
 class Alarm extends Component
 {
     /** @var null|string */
     protected $description;
 
-    /** @var string|DateTimeInterface */
+    /** @var Duration|DateTimeInterface */
     protected $trigger;
+
+    /** @var int */
+    protected $repeatTimes;
+
+    /** @var Duration */
+    protected $repeatAfter;
+
+    /** @var bool */
+    protected $triggerBeforeEvent = false;
+
+    /** @var bool */
+    protected $triggerAfterEvent = false;
 
     public function __construct(?string $description = null)
     {
@@ -44,45 +59,67 @@ class Alarm extends Component
         return $this;
     }
 
-    public function triggerAtStartOfEvent(): Alarm
+    public function triggerBeforeEvent(Duration $duration): Alarm
     {
-        $this->trigger = 'START';
+        $this->trigger = $duration;
+        $this->triggerBeforeEvent = true;
 
         return $this;
     }
 
-    public function triggerAtEndOfEvent(): Alarm
+    public function triggerAfterEvent(Duration $duration): Alarm
     {
-        $this->trigger = 'END';
+        $this->trigger = $duration;
+        $this->triggerAfterEvent = true;
 
         return $this;
     }
 
-    public function triggerAt(DateTimeInterface $dateTime)
+    public function triggerAt(DateTimeInterface $triggerAt): Alarm
     {
-        $this->trigger = $dateTime;
+        $this->trigger = $triggerAt;
 
         return $this;
     }
 
-    public function repeat()
+    public function repeat(Duration $after, int $times = 1): Alarm
     {
+        $this->repeatAfter = $after;
+        $this->repeatTimes = $times;
 
+        return $this;
     }
 
     public function getPayload(): ComponentPayload
     {
-        $payload =  ComponentPayload::new($this->getComponentType())
+        $payload = ComponentPayload::new($this->getComponentType())
             ->textProperty('ACTION', 'DISPLAY')
             ->textProperty('DESCRIPTION', $this->description);
 
-        if(is_string($this->trigger)){
-            $payload->textProperty('TRIGGER', $this->trigger);
+        if ($this->trigger instanceof DateTimeInterface) {
+            $payload->property(
+                (new DateTimeProperty('TRIGGER', $this->trigger))
+                    ->addParameter(new TextProperty('VALUE', 'DATE-TIME'))
+            );
         }
 
-        if($this->trigger instanceof DateTimeInterface){
-            // TODO: should be something like this: TRIGGER;VALUE=DATE-TIME:19970317T133000Z
-            $payload->dateTimeProperty('TRIGGER', $this->trigger);
+        if ($this->trigger instanceof Duration) {
+            $triggerProperty = new TextProperty('TRIGGER', $this->trigger->build());
+
+            if ($this->triggerBeforeEvent) {
+                $triggerProperty->addParameter(new TextProperty('RELATED', 'START'));
+            }
+
+            if ($this->triggerAfterEvent) {
+                $triggerProperty->addParameter(new TextProperty('RELATED', 'END'));
+            }
+
+            $payload->property($triggerProperty);
+        }
+
+        if ($this->repeatAfter && $this->repeatTimes) {
+            $payload->textProperty('DURATION', $this->repeatAfter->build());
+            $payload->textProperty('REPEAT', $this->repeatTimes);
         }
 
         return $payload;

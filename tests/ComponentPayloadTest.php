@@ -3,6 +3,7 @@
 namespace Spatie\Calendar\Tests;
 
 use DateTime;
+use Exception;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\PropertyTypes\DateTimeProperty;
 use Spatie\Calendar\PropertyTypes\TextProperty;
@@ -45,5 +46,26 @@ class ComponentPayloadTest extends TestCase
             ->subComponent(...$subComponents);
 
         $this->assertEquals($subComponents, $payload->getSubComponents());
+    }
+
+    /** @test */
+    public function a_payload_can_give_a_specified_property()
+    {
+        $payload = (new ComponentPayload('TESTCOMPONENT'))
+            ->textProperty('text', 'Some text here');
+
+        $property = $payload->getProperty('text');
+
+        $this->assertEquals('Some text here', $property->getOriginalValue());
+    }
+
+    /** @test */
+    public function an_exception_will_be_thrown_when_an_property_does_not_exist()
+    {
+        $this->expectException(Exception::class);
+
+        $payload = (new ComponentPayload('TESTCOMPONENT'));
+
+        $payload->getProperty('text');
     }
 }

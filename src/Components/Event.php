@@ -6,9 +6,12 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
+use Spatie\Calendar\HasSubComponents;
 
 class Event extends Component
 {
+    use HasSubComponents;
+
     /** @var DateTimeInterface */
     protected $starts;
 
@@ -43,7 +46,7 @@ class Event extends Component
         return [
             'UID',
             'DTSTAMP',
-            'DTSTART'
+            'DTSTART',
         ];
     }
 
@@ -80,7 +83,6 @@ class Event extends Component
 
         return $this;
     }
-
 
     public function name(string $name): Event
     {
@@ -124,6 +126,13 @@ class Event extends Component
         return $this;
     }
 
+    public function alarm($alarm): Event
+    {
+        $this->addSubComponent($alarm);
+
+        return $this;
+    }
+
     public function getPayload(): ComponentPayload
     {
         return ComponentPayload::new($this->getComponentType())
@@ -133,6 +142,7 @@ class Event extends Component
             ->textProperty('LOCATION', $this->location)
             ->dateTimeProperty('DTSTART', $this->starts)
             ->dateTimeProperty('DTEND', $this->ends)
-            ->dateTimeProperty('DTSTAMP', $this->created);
+            ->dateTimeProperty('DTSTAMP', $this->created)
+            ->subComponent(...$this->subComponents);
     }
 }

@@ -2,7 +2,10 @@
 
 namespace Spatie\Calendar;
 
+use Closure;
 use DateTimeInterface;
+use Exception;
+use http\Exception\RuntimeException;
 use Spatie\Calendar\Components\Component;
 use Spatie\Calendar\PropertyTypes\DateTimeProperty;
 use Spatie\Calendar\PropertyTypes\Property;
@@ -29,17 +32,17 @@ class ComponentPayload
         $this->type = $type;
     }
 
-    public function property(Property ...$properties): ComponentPayload
+    public function property(Property $property): ComponentPayload
     {
-        foreach ($properties as $property) {
-            $this->properties[] = $property;
-        }
+        $this->properties[] = $property;
 
         return $this;
     }
 
-    public function dateTimeProperty(string $name, ?DateTimeInterface $value): ComponentPayload
-    {
+    public function dateTimeProperty(
+        string $name,
+        ?DateTimeInterface $value
+    ): ComponentPayload {
         if ($value === null) {
             return $this;
         }
@@ -47,8 +50,10 @@ class ComponentPayload
         return $this->property(new DateTimeProperty($name, $value));
     }
 
-    public function textProperty(string $name, ?string $value): ComponentPayload
-    {
+    public function textProperty(
+        string $name,
+        ?string $value
+    ): ComponentPayload {
         if ($value === null) {
             return $this;
         }
@@ -73,6 +78,22 @@ class ComponentPayload
     public function getProperties(): array
     {
         return $this->properties;
+    }
+
+    public function getProperty(string $name): Property
+    {
+        $properties = array_values(array_filter(
+            $this->properties,
+            function (Property $property) use ($name) {
+                return $property->getName() === $name;
+            }
+        ));
+
+        if(count($properties) === 0){
+            throw new Exception('Property does not exist');
+        }
+
+        return $properties[0];
     }
 
     public function getSubComponents(): array
