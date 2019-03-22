@@ -33,53 +33,64 @@ composer require spatie/Calendar
 ## Usage
 
 ### Calendars
-You can create a calendar as such, it is not required to pass in a name
+You can create a new calendar as follows, it is not required to, pass in a name
+
 ``` php
 $calendar = Calendar::new('My new fantastic calendar');
 ```
-A calendar can have a description
+
+A description can be added to an calendar
+
 ``` php
 $calendar = Calendar::new()
     ->name('My new fantastic calendar')
     ->description('With the best events arround town');
 ```
-You can get a textual version of the calendar as follows
+
+At the the end of building the calendar you can get a textual representation. You should set the correct headers when returning the calendar as an http response, more info here.
+
 ``` php
 Calendar::new('My new fantastic calendar')->get(); // BEGIN:VCALENDAR ...
 ```
+
 There are multiple ways to add an event
+
 ``` php
-// By parameter
+// As single event parameter
 $event = Event::new('Something great');
 
 Calendar::new('My new fantastic calendar')
     ->event($event)
     ...
+
+// As an array of events
+Calendar::new('My new fantastic calendar')
+    ->event([
+        Event::new('Something great'),
+        Event::new('Another great event'),
+    ])
+    ...    
     
-// By closure
+// As a closure
 Calendar::new('My new fantastic calendar')
     ->event(function(Event $event){
         $event->name('Something great');
     })
     ...
     
-// By array
-Calendar::new('My new fantastic calendar')
-    ->event([
-        Event::new('Something great'),
-        Event::new('Another great event'),
-    ])
-    ...
+
 ```
 
 ### Event
-An event can be created, a name is not required, but a start date should always be given
+An event can be created as follows. A name is not required, but a start date should always be given
+
 ``` php
 Event::new('My awesome event')
     ->starts(new DateTime('16 may 2019'));
 ```
 
 You can set following properties on a event
+
 ``` php
 Event::new()
     ->name('My awesome event')
@@ -89,6 +100,40 @@ Event::new()
     ->created(new DateTime('10 may 2019'))
     ->starts(new DateTime('16 may 2019'))
     ->ends(new DateTime('17 may 2019'));
+```
+
+#### Timezones
+By default your event will not use timezones, this will add the possibility for an event to happen at different times in different timezones. An example of this can be the possibility to add an event at noon.
+
+If you want to use timezones in your calendar, then you should add following to the event. The event will check the dates provided if a timezone is provided. Check out PHP's DateTime and DateTimeZone for more information or use a library like Carbon.
+
+``` php
+Event::new()
+    ->name('My awesome event')
+    ->withTimezones();
+```
+
+
+### Alarm
+Alarms allow calendars to send reminders about certain events. 
+An alarm has a description that's required:
+
+``` php
+Alarm('The awesome event is staring');
+```
+
+There are 3 few ways to trigger an alert
+
+``` php
+// At a specified datetimestamp
+Alarm('The awesome event is staring')
+    ->triggerAt(new DateTime('16 may 2019'));
+    
+// A period before or after the starting of the event
+$duration = Duration::new()->minutes(5)->backInTime()
+
+Alarm('The awesome event is staring')
+    ->triggerBeforeEvent(new DateTime('16 may 2019'));
 ```
 ### Testing
 

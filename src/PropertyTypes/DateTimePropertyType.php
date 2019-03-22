@@ -5,7 +5,7 @@ namespace Spatie\Calendar\PropertyTypes;
 use DateTime;
 use DateTimeInterface;
 
-class DateTimeProperty extends Property
+class DateTimePropertyType extends PropertyType
 {
     /** @var \DateTimeImmutable */
     protected $dateTime;
@@ -27,10 +27,10 @@ class DateTimeProperty extends Property
         $this->withTime = $withTime;
         $this->withTimeZone = $withTimeZone;
 
-        if ($this->withTimeZone) {
+        if ($this->withTime && $this->withTimeZone) {
             $timezone = $this->dateTime->getTimezone()->getName();
 
-            $this->addParameter(new TextProperty('TZID', $timezone));
+            $this->addParameter(new Parameter('TZID', $timezone));
         }
     }
 

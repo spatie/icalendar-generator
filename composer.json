@@ -1,5 +1,5 @@
 {
-    "name": "spatie/Calendar",
+    "name": "spatie/calendar",
     "description": "A simple calendar",
     "keywords": [
         "spatie",
@@ -44,11 +44,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Calendar\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "Spatie\\Calendar\\SkeletonFacade"
-            }
+                "Spatie\\Calendar\\CalendarServiceProvider"
+            ]
         }
     }
 }

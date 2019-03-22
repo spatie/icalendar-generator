@@ -1,11 +1,12 @@
 <?php
 
-namespace Spatie\Calendar\Tests\Dummy;
+namespace Spatie\Calendar\PropertyTypes;
 
-use Spatie\Calendar\PropertyTypes\Property;
-
-class DummyProperty extends Property
+class Parameter
 {
+    /** @var string */
+    protected $name;
+
     /** @var string */
     protected $value;
 
@@ -15,12 +16,12 @@ class DummyProperty extends Property
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function getName(): string
     {
-        return $this->value;
+        return $this->name;
     }
 
-    public function getOriginalValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }

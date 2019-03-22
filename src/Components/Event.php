@@ -36,6 +36,9 @@ class Event extends Component
     /** @var bool */
     protected $withTimezone;
 
+    /** @var bool */
+    protected $isFullDay = false;
+
     public function getComponentType(): string
     {
         return 'EVENT';
@@ -126,6 +129,13 @@ class Event extends Component
         return $this;
     }
 
+    public function fullDay() : Event
+    {
+        $this->isFullDay = true;
+
+        return $this;
+    }
+
     public function alarm($alarm): Event
     {
         $this->addSubComponent($alarm);
@@ -140,9 +150,9 @@ class Event extends Component
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->textProperty('LOCATION', $this->location)
-            ->dateTimeProperty('DTSTART', $this->starts)
-            ->dateTimeProperty('DTEND', $this->ends)
-            ->dateTimeProperty('DTSTAMP', $this->created)
+            ->dateTimeProperty('DTSTART', $this->starts, !$this->isFullDay)
+            ->dateTimeProperty('DTEND', $this->ends, !$this->isFullDay)
+            ->dateTimeProperty('DTSTAMP', $this->created, true)
             ->subComponent(...$this->subComponents);
     }
 }

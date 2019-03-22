@@ -5,7 +5,7 @@ namespace Spatie\Calendar\Tests\Components;
 use Spatie\Calendar\Tests\TestCase;
 use Spatie\Calendar\Components\Calendar;
 use Spatie\Calendar\Components\Event;
-use Spatie\Calendar\PropertyTypes\TextProperty;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 class CalendarTest extends TestCase
 {

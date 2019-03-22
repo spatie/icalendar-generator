@@ -31,9 +31,14 @@ class Calendar extends Component
         ];
     }
 
-    public static function new(): Calendar
+    public function __construct(?string $name = null)
     {
-        return new self();
+        $this->name = $name;
+    }
+
+    public static function new(?string $name = null): Calendar
+    {
+        return new self($name);
     }
 
     public function name(string $name): Calendar
@@ -68,6 +73,7 @@ class Calendar extends Component
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', 'Spatie/iCalendar-generator')
             ->textProperty('NAME', $this->name)
+            ->textProperty('X-WR-CALNAME', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->subComponent(...$this->subComponents);
     }

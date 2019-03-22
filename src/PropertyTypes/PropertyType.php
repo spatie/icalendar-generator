@@ -6,7 +6,7 @@ namespace Spatie\Calendar\PropertyTypes;
 
 use Exception;
 
-abstract class Property
+abstract class PropertyType
 {
     /** @var string */
     protected $name;
@@ -28,25 +28,25 @@ abstract class Property
         return $this->parameters;
     }
 
-    public function getParameter(string $name): Property
+    public function getParameter(string $name): Parameter
     {
         $parameters = array_values(array_filter(
             $this->parameters,
-            function (Property $property) use ($name) {
+            function (Parameter $property) use ($name) {
                 return $property->getName() === $name;
             }
         ));
 
-        if(count($parameters) === 0){
+        if (count($parameters) === 0) {
             throw new Exception('Parameter does not exist');
         }
 
         return $parameters[0];
     }
 
-    public function addParameter(Property $property): Property
+    public function addParameter(Parameter $parameter): PropertyType
     {
-        $this->parameters[] = $property;
+        $this->parameters[] = $parameter;
 
         return $this;
     }

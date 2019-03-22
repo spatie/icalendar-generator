@@ -2,7 +2,7 @@
 
 namespace Spatie\Calendar\PropertyTypes;
 
-class TextProperty extends Property
+class TextPropertyType extends PropertyType
 {
     /** @var string  */
     protected $text;

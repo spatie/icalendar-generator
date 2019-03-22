@@ -5,8 +5,9 @@ namespace Spatie\Calendar\Components;
 use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Duration;
-use Spatie\Calendar\PropertyTypes\DateTimeProperty;
-use Spatie\Calendar\PropertyTypes\TextProperty;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\Calendar\PropertyTypes\Parameter;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 class Alarm extends Component
 {
@@ -98,20 +99,20 @@ class Alarm extends Component
 
         if ($this->trigger instanceof DateTimeInterface) {
             $payload->property(
-                (new DateTimeProperty('TRIGGER', $this->trigger))
-                    ->addParameter(new TextProperty('VALUE', 'DATE-TIME'))
+                (new DateTimePropertyType('TRIGGER', $this->trigger))
+                    ->addParameter(new Parameter('VALUE', 'DATE-TIME'))
             );
         }
 
         if ($this->trigger instanceof Duration) {
-            $triggerProperty = new TextProperty('TRIGGER', $this->trigger->build());
+            $triggerProperty = new TextPropertyType('TRIGGER', $this->trigger->build());
 
             if ($this->triggerBeforeEvent) {
-                $triggerProperty->addParameter(new TextProperty('RELATED', 'START'));
+                $triggerProperty->addParameter(new Parameter('RELATED', 'START'));
             }
 
             if ($this->triggerAfterEvent) {
-                $triggerProperty->addParameter(new TextProperty('RELATED', 'END'));
+                $triggerProperty->addParameter(new Parameter('RELATED', 'END'));
             }
 
             $payload->property($triggerProperty);

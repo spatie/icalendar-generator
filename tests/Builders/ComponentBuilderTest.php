@@ -5,7 +5,7 @@ namespace Spatie\Calendar\Tests\Builders;
 use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
-use Spatie\Calendar\Tests\Dummy\DummyProperty;
+use Spatie\Calendar\Tests\Dummy\DummyPropertyType;
 use Spatie\Calendar\Tests\TestCase;
 
 class ComponentBuilderTest extends TestCase
@@ -15,12 +15,17 @@ class ComponentBuilderTest extends TestCase
     {
         $payload = ComponentPayload::new('TEST');
 
-        $payload->property(new DummyProperty('location', 'Antwerp'));
+        $payload->property(new DummyPropertyType('location', 'Antwerp'));
 
         $builder = new ComponentBuilder($payload);
 
         $this->assertEquals(
-            'BEGIN:VTEST\r\nlocation:Antwerp\r\nEND:VTEST',
+            <<<EOT
+BEGIN:VTEST
+location:Antwerp
+END:VTEST
+EOT
+            ,
             $builder->build()
         );
     }
@@ -35,7 +40,14 @@ class ComponentBuilderTest extends TestCase
         $builder = new ComponentBuilder($payload);
 
         $this->assertEquals(
-            'BEGIN:VTEST\r\nBEGIN:VDUMMY\r\nname:SUBCOMPONENT\r\nEND:VDUMMY\r\nEND:VTEST',
+            <<<EOT
+BEGIN:VTEST
+BEGIN:VDUMMY
+name:SUBCOMPONENT
+END:VDUMMY
+END:VTEST
+EOT
+            ,
             $builder->build()
         );
     }
@@ -45,12 +57,19 @@ class ComponentBuilderTest extends TestCase
     {
         $payload = ComponentPayload::new('TEST');
 
-        $payload->property(new DummyProperty('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
+        $payload->property(new DummyPropertyType('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
 
         $builder = new ComponentBuilder($payload);
 
         $this->assertEquals(
-            'BEGIN:VTEST\r\nlocation:This is a really long text. Possibly you will never write a text l\r\n ike this in a property. But hey we support the RFC so let us chip it! You \r\n can maybe write some HTML in here that will make it longer than usual.\r\nEND:VTEST',
+            <<<EOT
+BEGIN:VTEST
+location:This is a really long text. Possibly you will never write a text l
+ ike this in a property. But hey we support the RFC so let us chip it! You 
+ can maybe write some HTML in here that will make it longer than usual.
+END:VTEST
+EOT
+            ,
             $builder->build()
         );
     }

@@ -7,9 +7,9 @@ use DateTimeInterface;
 use Exception;
 use http\Exception\RuntimeException;
 use Spatie\Calendar\Components\Component;
-use Spatie\Calendar\PropertyTypes\DateTimeProperty;
-use Spatie\Calendar\PropertyTypes\Property;
-use Spatie\Calendar\PropertyTypes\TextProperty;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\Calendar\PropertyTypes\PropertyType;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 class ComponentPayload
 {
@@ -32,7 +32,7 @@ class ComponentPayload
         $this->type = $type;
     }
 
-    public function property(Property $property): ComponentPayload
+    public function property(PropertyType $property): ComponentPayload
     {
         $this->properties[] = $property;
 
@@ -41,13 +41,15 @@ class ComponentPayload
 
     public function dateTimeProperty(
         string $name,
-        ?DateTimeInterface $value
+        ?DateTimeInterface $value,
+        bool $withTime = false,
+        bool $withTimeZone = false
     ): ComponentPayload {
         if ($value === null) {
             return $this;
         }
 
-        return $this->property(new DateTimeProperty($name, $value));
+        return $this->property(new DateTimePropertyType($name, $value, $withTime, $withTimeZone));
     }
 
     public function textProperty(
@@ -58,7 +60,7 @@ class ComponentPayload
             return $this;
         }
 
-        return $this->property(new TextProperty($name, $value));
+        return $this->property(new TextPropertyType($name, $value));
     }
 
     public function subComponent(Component ...$components): ComponentPayload
@@ -80,11 +82,11 @@ class ComponentPayload
         return $this->properties;
     }
 
-    public function getProperty(string $name): Property
+    public function getProperty(string $name): PropertyType
     {
         $properties = array_values(array_filter(
             $this->properties,
-            function (Property $property) use ($name) {
+            function (PropertyType $property) use ($name) {
                 return $property->getName() === $name;
             }
         ));

@@ -5,8 +5,8 @@ namespace Spatie\Calendar\Tests;
 use DateTime;
 use Exception;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\DateTimeProperty;
-use Spatie\Calendar\PropertyTypes\TextProperty;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
 
 class ComponentPayloadTest extends TestCase
@@ -29,8 +29,8 @@ class ComponentPayloadTest extends TestCase
             ->dateTimeProperty('date', $date);
 
         $this->assertEquals([
-            new TextProperty('text', 'Some text here'),
-            new DateTimeProperty('date', $date),
+            new TextPropertyType('text', 'Some text here'),
+            new DateTimePropertyType('date', $date),
         ], $payload->getProperties());
     }
 

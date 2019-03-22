@@ -63,4 +63,21 @@ class EventTest extends TestCase
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
     }
 
+    // TODO: test this
+    public function an_event_can_be_a_full_day()
+    {
+        $dateStarts = new DateTime('17 may 2019');
+        $dateEnds = new DateTime('18 may 2019');
+
+        $payload = Event::new('An introduction into event sourcing')
+            ->fullDay()
+            ->period($dateStarts, $dateEnds)
+            ->getPayload();
+
+        $payload->getProperty('DTSTART');
+
+        $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
+        $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
+    }
+
 }

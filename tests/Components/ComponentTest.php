@@ -3,7 +3,7 @@
 namespace Spatie\Calendar\Tests\Components;
 
 use Spatie\Calendar\Exceptions\PropertyIsRequired;
-use Spatie\Calendar\PropertyTypes\TextProperty;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
 use Spatie\Calendar\Tests\TestCase;
 

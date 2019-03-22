@@ -5,7 +5,7 @@ namespace Spatie\Calendar\Components;
 use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Exceptions\PropertyIsRequired;
-use Spatie\Calendar\PropertyTypes\Property;
+use Spatie\Calendar\PropertyTypes\PropertyType;
 
 abstract class Component
 {
@@ -30,7 +30,7 @@ abstract class Component
     {
         $requiredProperties = $this->getRequiredProperties();
 
-        $providedProperties = array_map(function (Property $property) {
+        $providedProperties = array_map(function (PropertyType $property) {
             return $property->getName();
         }, $componentPayload->getProperties());
 

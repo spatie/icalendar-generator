@@ -2,14 +2,14 @@
 
 namespace Spatie\Calendar\Builders;
 
-use Spatie\Calendar\PropertyTypes\Property;
+use Spatie\Calendar\PropertyTypes\PropertyType;
 
 class PropertyBuilder
 {
-    /** @var \Spatie\Calendar\PropertyTypes\Property */
+    /** @var \Spatie\Calendar\PropertyTypes\PropertyType */
     protected $property;
 
-    public function __construct(Property $property)
+    public function __construct(PropertyType $property)
     {
         $this->property = $property;
     }
@@ -18,7 +18,9 @@ class PropertyBuilder
     {
         $parameters = $this->resolveParameters();
 
-        return "{$this->property->getName()}{$parameters}:{$this->property->getValue()}";
+        $value = $this->property->getValue();
+
+        return "{$this->property->getName()}{$parameters}:{$value}";
     }
 
     protected function resolveParameters(): string
@@ -26,7 +28,7 @@ class PropertyBuilder
         $parameters = '';
 
         foreach ($this->property->getParameters() as $parameter) {
-            /** @var \Spatie\Calendar\PropertyTypes\Property $parameter */
+            /** @var \Spatie\Calendar\PropertyTypes\PropertyType $parameter */
             $name = $parameter->getName();
             $value = $parameter->getValue();
 

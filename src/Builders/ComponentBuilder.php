@@ -16,7 +16,7 @@ class ComponentBuilder
 
     public function build(): string
     {
-        return implode('\r\n', $this->buildComponent());
+        return implode("\r\n", $this->buildComponent());
     }
 
     public function buildComponent(): array
