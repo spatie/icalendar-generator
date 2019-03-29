@@ -95,6 +95,7 @@ You can set following properties on a event
 Event::new()
     ->name('My awesome event')
     ->description('An awesome event with awesome activities')
+    ->refreshInterval(Duration::new()->minutes(5))
     ->uniqueIdentifier('A unique identifier can be set here')
     ->location('Antwerp')
     ->created(new DateTime('10 may 2019'))
@@ -103,16 +104,25 @@ Event::new()
 ```
 
 #### Timezones
-By default your event will not use timezones, this will add the possibility for an event to happen at different times in different timezones. An example of this can be the possibility to add an event at noon.
+By default your event will not use timezones, this will add the possibility for an event to happen at different times in different timezones. 
+An example of this can be the possibility to add an event at noon.
+It won't matter if someone is in New York or in Sydney opening a calendar app, there will be an event at twelve o'clock.
 
 If you want to use timezones in your calendar, then you should add following to the event. The event will check the dates provided if a timezone is provided. Check out PHP's DateTime and DateTimeZone for more information or use a library like Carbon.
 
 ``` php
 Event::new()
-    ->name('My awesome event')
-    ->withTimezones();
+    ->withTimezones()
+    ...
 ```
 
+Want timezones in each event of the calendar?
+
+``` php
+Calendar::new()
+    ->withTimezones()
+    ....
+```
 
 ### Alarm
 Alarms allow calendars to send reminders about certain events. 

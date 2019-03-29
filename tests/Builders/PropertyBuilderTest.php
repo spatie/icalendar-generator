@@ -46,4 +46,15 @@ class PropertyBuilderTest extends TestCase
             (new PropertyBuilder($property))->build()
         );
     }
+
+    /** @test */
+    public function it_will_use_the_alias_of_a_property_when_given()
+    {
+        $property = new TextPropertyType('location', 'Antwerp, Belgium');
+
+        $this->assertEquals(
+            'geo:Antwerp\, Belgium',
+            (new PropertyBuilder($property))->build('geo')
+        );
+    }
 }

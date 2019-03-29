@@ -5,6 +5,7 @@ namespace Spatie\Calendar\Tests;
 use Exception;
 use \PHPUnit\Framework\TestCase as BaseTestCase;
 use Spatie\Calendar\ComponentPayload;
+use Spatie\Calendar\PropertyTypes\PropertyType;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -15,27 +16,21 @@ abstract class TestCase extends BaseTestCase
 
     public function assertPropertyExistInPayload(string $name, ComponentPayload $componentPayload): void
     {
-        foreach ($componentPayload->getProperties() as $property) {
-            if ($property->getName() === $name) {
-                $this->assertTrue(true);
-
-                return;
-            }
-        }
-
-        $this->assertTrue(false);
+        $this->assertNotNull($componentPayload->getProperty($name));
     }
 
     public function assertPropertyEqualsInPayload(string $name, $value, ComponentPayload $componentPayload): void
     {
-        foreach ($componentPayload->getProperties() as $property) {
-            if ($property->getName() === $name) {
-                $this->assertEquals($property->getOriginalValue(), $value);
+        $this->assertEquals($value, $componentPayload->getProperty($name)->getOriginalValue());
+    }
 
-                return;
-            }
-        }
+    public function assertAliasEqualsForProperty(string $propertyName, array $aliases, ComponentPayload $componentPayload): void
+    {
+        $this->assertEquals($aliases, $componentPayload->getAliasesForProperty($propertyName));
+    }
 
-        throw new Exception("Property {$name} not found!");
+    public function assertParameterEqualsInProperty(string $name, $value, PropertyType $propertyType): void
+    {
+        $this->assertEquals($value, $propertyType->getParameter($name)->getValue());
     }
 }

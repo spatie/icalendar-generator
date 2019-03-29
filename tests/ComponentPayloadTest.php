@@ -6,8 +6,10 @@ use DateTime;
 use Exception;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
+use Spatie\Calendar\Tests\Dummy\DummyPropertyType;
 
 class ComponentPayloadTest extends TestCase
 {
@@ -54,9 +56,7 @@ class ComponentPayloadTest extends TestCase
         $payload = (new ComponentPayload('TESTCOMPONENT'))
             ->textProperty('text', 'Some text here');
 
-        $property = $payload->getProperty('text');
-
-        $this->assertEquals('Some text here', $property->getOriginalValue());
+        $this->assertPropertyEqualsInPayload('text', 'Some text here', $payload);
     }
 
     /** @test */
@@ -67,5 +67,46 @@ class ComponentPayloadTest extends TestCase
         $payload = (new ComponentPayload('TESTCOMPONENT'));
 
         $payload->getProperty('text');
+    }
+
+    /** @test */
+    public function a_when_will_only_be_executed_when_the_condition_is_true()
+    {
+        $payload = (new ComponentPayload('TESTCOMPONENT'));
+
+        $payload->when(false, function (ComponentPayload $componentPayload) {
+            $componentPayload->textProperty('text', 'Some text here');
+        });
+
+        $payload->when(true, function (ComponentPayload $componentPayload) {
+            $componentPayload->textProperty('text', 'Other text here');
+        });
+
+        $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
+    }
+
+    /** @test */
+    public function a_property_can_be_added_with_parameters()
+    {
+        $property = new DummyPropertyType('name', 'TESTPROPERTY');
+
+        $parameters = [
+            new Parameter('hello', 'world'),
+        ];
+
+        $payload = (new ComponentPayload('TESTCOMPONENT'))
+            ->property($property, $parameters);
+
+        $this->assertEquals($parameters, $payload->getProperty('name')->getParameters());
+    }
+
+    /** @test */
+    public function a_property_can_be_aliased()
+    {
+        $payload = (new ComponentPayload('TESTCOMPONENT'))
+            ->textProperty('alpha', 'Some text here')
+            ->alias('alpha', ['beta']);
+
+        $this->assertEquals(['beta'], $payload->getAliasesForProperty('alpha'));
     }
 }

@@ -3,10 +3,10 @@
 namespace Spatie\Calendar;
 
 use Closure;
+use Exception;
 use ReflectionFunction;
 use Spatie\Calendar\Components\Component;
 
-// Todo: this should be tested + we should add some extra checks
 trait HasSubComponents
 {
     /** @var array */
@@ -28,11 +28,13 @@ trait HasSubComponents
     protected function resolveSubComponent($subComponent)
     {
         if ($subComponent instanceof Closure) {
-            $freshSubComponent = $this->buildFreshSubComponent($subComponent);
+            $reflection = new ReflectionFunction($subComponent);
 
-            $subComponent($freshSubComponent);
+            $this->ensureAComponentIsInjected($reflection);
 
-            $subComponent = $freshSubComponent;
+            $newComponent = $this->buildFreshSubComponent($reflection);
+
+            $subComponent = $reflection->invoke($newComponent) ?? $newComponent;
         }
 
         $this->subComponents[] = $subComponent;
@@ -40,10 +42,21 @@ trait HasSubComponents
         return $this;
     }
 
-    protected function buildFreshSubComponent(Closure $closure) : Component
+    protected function ensureAComponentIsInjected(ReflectionFunction $reflection) : bool
     {
-        $reflection = new ReflectionFunction($closure);
+        if (count($reflection->getParameters()) !== 1) {
+            throw new Exception('Exactly one parameter should be used with closure');
+        }
 
+        if (! $reflection->getParameters()[0]->getClass()->isSubclassOf(Component::class)) {
+            throw new Exception('A component should be given to the closure\'s parameter');
+        }
+
+        return true;
+    }
+
+    protected function buildFreshSubComponent(ReflectionFunction $reflection): Component
+    {
         return $reflection->getParameters()[0]->getClass()->newInstance();
     }
 }

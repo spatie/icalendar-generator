@@ -21,8 +21,30 @@ class ComponentBuilderTest extends TestCase
 
         $this->assertEquals(
             <<<EOT
-BEGIN:VTEST
-location:Antwerp
+BEGIN:VTEST\r
+location:Antwerp\r
+END:VTEST
+EOT
+            ,
+            $builder->build()
+        );
+    }
+
+    /** @test */
+    public function it_can_build_a_component_payload_with_property_alias()
+    {
+        $payload = ComponentPayload::new('TEST');
+
+        $payload->property(new DummyPropertyType('location', 'Antwerp'));
+        $payload->alias('location', ['geo']);
+
+        $builder = new ComponentBuilder($payload);
+
+        $this->assertEquals(
+            <<<EOT
+BEGIN:VTEST\r
+location:Antwerp\r
+geo:Antwerp\r
 END:VTEST
 EOT
             ,
@@ -41,10 +63,10 @@ EOT
 
         $this->assertEquals(
             <<<EOT
-BEGIN:VTEST
-BEGIN:VDUMMY
-name:SUBCOMPONENT
-END:VDUMMY
+BEGIN:VTEST\r
+BEGIN:VDUMMY\r
+name:SUBCOMPONENT\r
+END:VDUMMY\r
 END:VTEST
 EOT
             ,
@@ -63,10 +85,10 @@ EOT
 
         $this->assertEquals(
             <<<EOT
-BEGIN:VTEST
-location:This is a really long text. Possibly you will never write a text l
- ike this in a property. But hey we support the RFC so let us chip it! You 
- can maybe write some HTML in here that will make it longer than usual.
+BEGIN:VTEST\r
+location:This is a really long text. Possibly you will never write a text l\r
+ ike this in a property. But hey we support the RFC so let us chip it! You \r
+ can maybe write some HTML in here that will make it longer than usual.\r
 END:VTEST
 EOT
             ,

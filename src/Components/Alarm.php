@@ -3,6 +3,7 @@
 namespace Spatie\Calendar\Components;
 
 use DateTimeInterface;
+use function foo\func;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Duration;
 use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
@@ -93,36 +94,31 @@ class Alarm extends Component
 
     public function getPayload(): ComponentPayload
     {
-        $payload = ComponentPayload::new($this->getComponentType())
+        return ComponentPayload::new($this->getComponentType())
             ->textProperty('ACTION', 'DISPLAY')
-            ->textProperty('DESCRIPTION', $this->description);
+            ->textProperty('DESCRIPTION', $this->description)
+            ->when($this->trigger instanceof DateTimeInterface, function (ComponentPayload $payload) {
+                $payload->property(
+                    new DateTimePropertyType('TRIGGER', $this->trigger),
+                    [new Parameter('VALUE', 'DATE-TIME')]
+                );
+            })
+            ->when($this->trigger instanceof Duration, function (ComponentPayload $payload) {
+                $triggerProperty = new TextPropertyType('TRIGGER', $this->trigger->build());
 
-        if ($this->trigger instanceof DateTimeInterface) {
-            $payload->property(
-                (new DateTimePropertyType('TRIGGER', $this->trigger))
-                    ->addParameter(new Parameter('VALUE', 'DATE-TIME'))
-            );
-        }
+                if ($this->triggerBeforeEvent) {
+                    $triggerProperty->addParameter(new Parameter('RELATED', 'START'));
+                }
 
-        if ($this->trigger instanceof Duration) {
-            $triggerProperty = new TextPropertyType('TRIGGER', $this->trigger->build());
+                if ($this->triggerAfterEvent) {
+                    $triggerProperty->addParameter(new Parameter('RELATED', 'END'));
+                }
 
-            if ($this->triggerBeforeEvent) {
-                $triggerProperty->addParameter(new Parameter('RELATED', 'START'));
-            }
-
-            if ($this->triggerAfterEvent) {
-                $triggerProperty->addParameter(new Parameter('RELATED', 'END'));
-            }
-
-            $payload->property($triggerProperty);
-        }
-
-        if ($this->repeatAfter && $this->repeatTimes) {
-            $payload->textProperty('DURATION', $this->repeatAfter->build());
-            $payload->textProperty('REPEAT', $this->repeatTimes);
-        }
-
-        return $payload;
+                $payload->property($triggerProperty);
+            })
+            ->when($this->repeatAfter && $this->repeatTimes, function (ComponentPayload $payload) {
+                $payload->textProperty('DURATION', $this->repeatAfter->build());
+                $payload->textProperty('REPEAT', $this->repeatTimes);
+            });
     }
 }

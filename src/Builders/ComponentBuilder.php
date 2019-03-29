@@ -3,6 +3,7 @@
 namespace Spatie\Calendar\Builders;
 
 use Spatie\Calendar\ComponentPayload;
+use Spatie\Calendar\PropertyTypes\PropertyType;
 
 class ComponentBuilder
 {
@@ -39,15 +40,33 @@ class ComponentBuilder
         $lines = [];
 
         foreach ($this->componentPayload->getProperties() as $key => $property) {
-            $line = (new PropertyBuilder($property))->build();
+            $propertyBuilder = new PropertyBuilder($property);
 
             $lines = array_merge(
                 $lines,
-                $this->chipLine($line)
+                $this->chipLine($propertyBuilder->build()),
+                $this->buildAliasesForProperty($property, $propertyBuilder)
             );
         }
 
         return $lines;
+    }
+
+    protected function buildAliasesForProperty(
+        PropertyType $property,
+        PropertyBuilder $propertyBuilder
+    ): array {
+        $properties = [];
+
+        foreach ($this->componentPayload->getAliasesForProperty($property->getName()) as $alias) {
+
+            $properties = array_merge(
+                $properties,
+                $this->chipLine($propertyBuilder->build($alias))
+            );
+        }
+
+        return $properties;
     }
 
     protected function buildSubComponents(): array

@@ -8,6 +8,7 @@ use Exception;
 use http\Exception\RuntimeException;
 use Spatie\Calendar\Components\Component;
 use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\PropertyType;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
@@ -22,6 +23,9 @@ class ComponentPayload
     /** @var array */
     protected $subComponents = [];
 
+    /** @var array */
+    protected $aliases = [];
+
     public static function new(string $type): ComponentPayload
     {
         return new self($type);
@@ -32,8 +36,14 @@ class ComponentPayload
         $this->type = $type;
     }
 
-    public function property(PropertyType $property): ComponentPayload
+    public function property(PropertyType $property, array $parameters = null): ComponentPayload
     {
+        if ($parameters) {
+            array_walk($parameters, function (Parameter $parameter) use ($property) {
+                $property->addParameter($parameter);
+            });
+        }
+
         $this->properties[] = $property;
 
         return $this;
@@ -72,6 +82,22 @@ class ComponentPayload
         return $this;
     }
 
+    public function alias(string $propertyName, array $aliases): ComponentPayload
+    {
+        $this->aliases[$propertyName] = $aliases;
+
+        return $this;
+    }
+
+    public function when(bool $condition, Closure $closure): ComponentPayload
+    {
+        if ($condition) {
+            $closure($this);
+        }
+
+        return $this;
+    }
+
     public function getType(): string
     {
         return $this->type;
@@ -91,11 +117,22 @@ class ComponentPayload
             }
         ));
 
-        if(count($properties) === 0){
-            throw new Exception('Property does not exist');
+        if (count($properties) === 0) {
+            throw new Exception("Property {$name} does not exist in the payload");
         }
 
         return $properties[0];
+    }
+
+    public function getAliasesForProperty(string $name): array
+    {
+        foreach ($this->aliases as $propertyName => $aliases) {
+            if ($name === $propertyName) {
+                return $aliases;
+            }
+        }
+
+        return [];
     }
 
     public function getSubComponents(): array

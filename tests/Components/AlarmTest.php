@@ -30,12 +30,8 @@ class AlarmTest extends TestCase
 
         $payload = Alarm::new()->triggerBeforeEvent($duration)->getPayload();
 
-        $property = $payload->getProperty('TRIGGER');
-        $parameters = $property->getParameters();
-
-        $this->assertEquals($duration->build(), $property->getOriginalValue());
-        $this->assertEquals(1, count($parameters));
-        $this->assertEquals(new Parameter('RELATED', 'START'), $parameters[0]);
+        $this->assertPropertyEqualsInPayload('TRIGGER', $duration->build(), $payload);
+        $this->assertParameterEqualsInProperty('RELATED', 'START', $payload->getProperty('TRIGGER'));
     }
 
     /** @test */
@@ -45,12 +41,8 @@ class AlarmTest extends TestCase
 
         $payload = Alarm::new()->triggerAfterEvent($duration)->getPayload();
 
-        $property = $payload->getProperty('TRIGGER');
-        $parameters = $property->getParameters();
-
-        $this->assertEquals($duration->build(), $property->getOriginalValue());
-        $this->assertEquals(1, count($parameters));
-        $this->assertEquals(new Parameter('RELATED', 'END'), $parameters[0]);
+        $this->assertPropertyEqualsInPayload('TRIGGER', $duration->build(), $payload);
+        $this->assertParameterEqualsInProperty('RELATED', 'END', $payload->getProperty('TRIGGER'));
     }
 
     /** @test */
@@ -60,12 +52,8 @@ class AlarmTest extends TestCase
 
         $payload = Alarm::new()->triggerAt($date)->getPayload();
 
-        $property = $payload->getProperty('TRIGGER');
-        $parameters = $property->getParameters();
-
-        $this->assertEquals($date, $property->getOriginalValue());
-        $this->assertEquals(1, count($parameters));
-        $this->assertEquals(new Parameter('VALUE', 'DATE-TIME'), $parameters[0]);
+        $this->assertPropertyEqualsInPayload('TRIGGER', $date, $payload);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
     }
 
     /** @test */
@@ -77,5 +65,8 @@ class AlarmTest extends TestCase
 
         $this->assertEquals($duration->build(), $payload->getProperty('DURATION')->getOriginalValue());
         $this->assertEquals(2, $payload->getProperty('REPEAT')->getOriginalValue());
+
+        $this->assertPropertyEqualsInPayload('DURATION', $duration->build(), $payload);
+        $this->assertPropertyEqualsInPayload('REPEAT', 2, $payload);
     }
 }

@@ -8,19 +8,24 @@ class PropertyBuilder
 {
     /** @var \Spatie\Calendar\PropertyTypes\PropertyType */
     protected $property;
+    /** @var string */
+    protected $alias;
 
-    public function __construct(PropertyType $property)
+    public function __construct(PropertyType $property, string $alias = null)
     {
         $this->property = $property;
+        $this->alias = $alias;
     }
 
-    public function build(): string
+    public function build($name = null): string
     {
+        $name = $name ?? $this->property->getName();
+
         $parameters = $this->resolveParameters();
 
         $value = $this->property->getValue();
 
-        return "{$this->property->getName()}{$parameters}:{$value}";
+        return "{$name}{$parameters}:{$value}";
     }
 
     protected function resolveParameters(): string

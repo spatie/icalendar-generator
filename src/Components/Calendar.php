@@ -3,7 +3,10 @@
 namespace Spatie\Calendar\Components;
 
 use Spatie\Calendar\ComponentPayload;
+use Spatie\Calendar\Duration;
 use Spatie\Calendar\HasSubComponents;
+use Spatie\Calendar\PropertyTypes\Parameter;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 class Calendar extends Component
 {
@@ -17,6 +20,12 @@ class Calendar extends Component
 
     /** @var string|null */
     protected $description;
+
+    /** @var bool */
+    protected $withTimezone = false;
+
+    /** @var \Spatie\Calendar\Duration|null */
+    protected $refreshInterval;
 
     public function getComponentType(): string
     {
@@ -62,19 +71,68 @@ class Calendar extends Component
         return $this;
     }
 
+    public function withTimezone(): Calendar
+    {
+        $this->withTimezone = true;
+
+        return $this;
+    }
+
+    public function refreshInterval(Duration $duration): Calendar
+    {
+        $this->refreshInterval = $duration;
+
+        return $this;
+    }
+
     public function get(): string
     {
         return $this->toString();
     }
 
+    public function stream()
+    {
+        http_response_code(200);
+        header('Content-Type:text/calendar;charset=utf-8');
+
+        echo $this->get();
+    }
+
+    public function download(string $filename = null)
+    {
+        $filename = $filename ?? 'calendar.ics';
+
+        http_response_code(200);
+        header('Content-Type:text/calendar;charset=utf-8');
+        header("Content-Disposition:attachment;filename={$filename}");
+
+        echo $this->get();
+    }
+
     public function getPayload(): ComponentPayload
     {
+        $subComponents = $this->subComponents;
+
+        if ($this->withTimezone) {
+            array_walk($subComponents, function (Component $subComponent) {
+                return $subComponent instanceof Event
+                    ? $subComponent->withTimezone()
+                    : $subComponent;
+            });
+        }
+
         return ComponentPayload::new($this->getComponentType())
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', 'Spatie/iCalendar-generator')
             ->textProperty('NAME', $this->name)
-            ->textProperty('X-WR-CALNAME', $this->name)
+            ->alias('NAME', ['X-WR-CALNAME'])
             ->textProperty('DESCRIPTION', $this->description)
-            ->subComponent(...$this->subComponents);
+            ->when($this->refreshInterval !== null, function (ComponentPayload $payload) {
+                $payload->property(
+                    new TextPropertyType('REFRESH-INTERVAL', $this->refreshInterval->build()),
+                    [new Parameter('VALUE', 'DURATION')]
+                );
+            })
+            ->subComponent(...$subComponents);
     }
 }

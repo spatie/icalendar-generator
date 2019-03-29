@@ -38,7 +38,7 @@ abstract class PropertyType
         ));
 
         if (count($parameters) === 0) {
-            throw new Exception('Parameter does not exist');
+            throw new Exception("Parameter {$name} does not exist in the property.");
         }
 
         return $parameters[0];

@@ -2,6 +2,9 @@
 
 namespace Spatie\Calendar\Tests\Components;
 
+use DateTime;
+use DateTimeZone;
+use Spatie\Calendar\Duration;
 use Spatie\Calendar\Tests\TestCase;
 use Spatie\Calendar\Components\Calendar;
 use Spatie\Calendar\Components\Event;
@@ -33,6 +36,7 @@ class CalendarTest extends TestCase
         $this->assertEquals(4, count($payload->getProperties()));
 
         $this->assertPropertyEqualsInPayload('NAME', 'Full Stack Europe Schedule', $payload);
+        $this->assertAliasEqualsForProperty('NAME', ['X-WR-CALNAME'], $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'What events are going to happen?', $payload);
     }
 
@@ -93,7 +97,7 @@ class CalendarTest extends TestCase
                 },
                 function (Event $event) {
                     $event->name('Websockets what are they?');
-                }
+                },
             ])
             ->getPayload();
 
@@ -102,5 +106,42 @@ class CalendarTest extends TestCase
         $this->assertEquals(2, count($subComponents));
         $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
         $this->assertPropertyEqualsInPayload('SUMMARY', 'Websockets what are they?', $subComponents[1]->getPayload());
+    }
+
+    /** @test */
+    public function when_setting_with_timezones_events_will_be_added_with_timezones()
+    {
+        $timezone = new DateTimeZone('Europe/Brussels');
+        $date = new DateTime('16 may 2019');
+
+        $date->setTimezone($timezone);
+
+        $payload = Calendar::new()
+            ->withTimezone()
+            ->event(function (Event $event) use ($date) {
+                $event->starts($date);
+            })
+            ->getPayload();
+
+        $eventTimezone = $payload->getSubComponents()[0]
+            ->getPayload()
+            ->getProperty('DTSTART')
+            ->getOriginalValue()
+            ->getTimezone();
+
+        $this->assertEquals($timezone, $eventTimezone);
+    }
+    
+    /** @test */
+    public function a_refresh_rate_can_be_set()
+    {
+        $duration = Duration::new()->minutes(5);
+
+        $payload = Calendar::new()
+            ->refreshInterval($duration)
+            ->getPayload();
+
+        $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', $duration->build(), $payload);
+        $this->assertParameterEqualsInProperty('VALUE', 'DURATION', $payload->getProperty('REFRESH-INTERVAL'));
     }
 }
