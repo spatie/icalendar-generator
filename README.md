@@ -17,9 +17,9 @@ use Spatie\Calendar\Components\Calendar;
 use Spatie\Calendar\Components\Event;
 
 Calendar::new('Laracon online')
-    ->event(Event::new('Event sourcing by Freek Murze')
-        ->starts(new DateTime('6 march 2019 15:00'))
-        ->ends(new DateTime('6 march 2019 16:00'))
+    ->event(Event::new('Creating calender feeds by Ruben Van Assche')
+        ->starts(new DateTime('6 March 2019 15:00'))
+        ->ends(new DateTime('6 March 2019 16:00'))
     )->stream();
 ```
 
@@ -34,13 +34,20 @@ composer require spatie/Calendar
 ## Usage
 
 ### Calendars
-You can create a new calendar as follows. It is not required to, pass in a name
+
+Here's how you can create a calendar. 
+
+``` php
+$calendar = Calendar::new();
+```
+
+You can also give a name to a calendar
 
 ``` php
 $calendar = Calendar::new('Laracon Online');
 ```
 
-A description can be added to an calendar
+A description can be added to an calendar.
 
 ``` php
 $calendar = Calendar::new()
@@ -52,7 +59,7 @@ There are multiple ways to add an event.
 
 ``` php
 // As single event parameter
-$event = Event::new('Event sourcing by Freek Murze');
+$event = Event::new('Creating calender feeds by Ruben Van Assche');
 
 Calendar::new('Laracon Online')
     ->event($event)
@@ -61,7 +68,7 @@ Calendar::new('Laracon Online')
 // As an array of events
 Calendar::new('Laracon Online')
     ->event([
-        Event::new('Event sourcing by Freek Murze'),
+        Event::new('Creating calender feeds by Ruben Van Assche'),
         Event::new('Websockets by Marcel Pociot'),
     ])
     ...    
@@ -69,12 +76,12 @@ Calendar::new('Laracon Online')
 // As a closure
 Calendar::new('Laracon Online')
     ->event(function(Event $event){
-        $event->name('Event sourcing by Freek Murze');
+        $event->name('Creating calender feeds by Ruben Van Assche');
     })
     ...
 ```
 
-When you've crafted your calendar, a textual representation can be obtained as such.
+Here's how you can convert the calendar to text.
 
 ``` php
 Calendar::new('Laracon Online')->get(); // BEGIN:VCALENDAR ...
@@ -88,19 +95,21 @@ Calendar::new('Laracon Online')->stream();
 
 When streaming a calendar, it is possible to set the refresh interval for the calendar by a [duration](#Durations). 
 The calendar client application will always check your server after the specified duration for changes in the calendar.
+
 ``` php
 Calendar::new('Laracon Online')
     ->refreshInterval(Duration::new()->minutes(5))
     ->stream();
 ```
 
-Lastly, if you want to add the possibility for users to download a calendar and import it into an application
+If you want to add the possibility for users to download a calendar and import it into an application
 
 ``` php
 Calendar::new('Laracon Online')->download();
 ```
 
 ### Event
+
 An event can be created as follows. A name is not required, but a start date should always be given.
 
 ``` php
@@ -123,10 +132,10 @@ Event::new()
 
 #### Using Carbon
 
-Since this package expects a DateTimeInterface for properties related to date and time, it is possible to use the popular Carbon library without a hassle.
+Since this package expects a DateTimeInterface for properties related to date and time, it is possible to use the popular [Carbon library](https://carbon.nesbot.com/).
 
 ``` php
-import Carbon\Carbon;
+use Carbon\Carbon;
 
 Event::new('Laracon Online')
     ->starts(Carbon::now())
@@ -134,12 +143,14 @@ Event::new('Laracon Online')
 ```
 
 #### Timezones
+
 By default events will not use timezones, this means an event like noon at 12 o'clock will be shown for someone in New York
 at a different time then for someone in Sydney.
 
 If you want to show an event at the exact time it is happening, for example, a talk at a conference then you should consider using timezones.
 
 This package relies on the timezones provided by [PHP DateTime](https://www.php.net/manual/en/datetime.settimezone.php) if you want to include these timezones in an event you can do the following.
+
 ``` php
 $start = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 
@@ -158,34 +169,36 @@ Calendar::new()
 ```
 
 ### Alarm
+
 Alarms allow calendar clients to send reminders about certain events. For example, Apple Mail on an iPhone will send users a push notification about the event.
 
 ``` php
-Alarm:: new('Event Sourcing by Freek Murze is starting soon');
+Alarm::new('Event Sourcing by Freek Murze is starting soon');
 ```
-An Alarm always has a description and should be added to an event. It is possible to add multiple alarms to one event.
+
+An alarm always has a description and should be added to an event. It is possible to add multiple alarms to one event.
  
 Adding an alarm to an event can be done as such:
 
 ``` php
-$alarm = Alarm::new('Event Sourcing by Freek Murze is starting soon');
+$alarm = Alarm::new('Creating calender feeds by Ruben Van Assche');
 
 Calendar::event('Event Sourcing by Freek Murze')
     ->alarm($alarm)
     ...
 
 // As an array of events
-Calendar::event('Event Sourcing by Freek Murze')
+Calendar::event('Creating calender feeds by Ruben Van Assche')
     ->alarm([
-        Alarm::new('Event Sourcing by Freek Murze is staring soon'),
-        Event::new('Event Sourcing by Freek Murze is staring realy soon'),
+        Alarm::new('The talk by Ruben is staring soon'),
+        Event::new('The talk by Ruben is staring realy soon'),
     ])
     ...    
     
 // As a closure
-Calendar::event('Event Sourcing by Freek Murze')
+Calendar::event('Creating calender feeds by Ruben Van Assche')
     ->alarm(function(Alarm $alarm){
-        $alarm->name('Event Sourcing by Freek Murze is staring soon');
+        $alarm->name('The talk by ruben is staring soon');
     })
     ...
 ```
@@ -194,39 +207,43 @@ There are three possible approaches to trigger an alarm
 
 ``` php
 // At a specified date timestamp
-Alarm('Event Sourcing by Freek Murze is starting soon')
+
+Alarm::new('The talk by Ruben is starting soon')
     ->triggerAt(new DateTime('6 march 2019 14:55));
     
 // A period after the starting of the event
 $duration = Duration::new()->minutes(5);
 
-Alarm('Event Sourcing by Freek Murze is starting soon')
+Alarm::new('The talk by Ruben is starting soon')
     ->triggerBeforeEvent($duration);
     
 // A period before the starting of the event
 $duration = Duration::new()->minutes(5)->backInTime()
 
-Alarm('Event Sourcing by Freek Murze has ended')
-    ->triggerBeforeEvent($duration);
+Alarm::new('The talk by Ruben has ended')
+    ->triggerAfterEvent($duration);
 ```
 
 In the last example we give a negative duration hence: `->backInTime()`, without this negative duration the alarm would trigger 5 minutes after the event had started.
 Want to trigger an alarm 5 minutes before the event has ended, then use `->backInTime()` with `triggerBeforeEvent`.
 
 An alarm can be repeated for a number of times after an interval, by default an alarm will be repeated once
+
 ``` php
-Alarm('Event Sourcing by Freek Murze is starting soon')
+Alarm::new('The talk by Ruben is starting soon')
     ->triggerAt(new DateTime('6 march 2019 14:55));
     ->repeat(Duration::new()->minutes(2))
 
 // Repeating multiple times
-Alarm('Event Sourcing by Freek Murze is starting soon')
+Alarm::new('The talk by Ruben is starting soon')
     ->triggerAt(new DateTime('6 march 2019 14:55));
     ->repeat(Duration::new()->minutes(1), 5)
 ```
 
 ### Durations
-A duration can be constructed as such
+
+A duration can be constructed like this:
+
 ``` php
 Duration::new()
     ->weeks(3)
@@ -236,7 +253,8 @@ Duration::new()
     ->seconds(5)
 ```
 
-Durations can also be negative
+Durations can also be negative.
+
 ``` php
 Duration::new()
     ->backInTime()
