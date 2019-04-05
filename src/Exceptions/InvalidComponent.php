@@ -5,9 +5,9 @@ namespace Spatie\Calendar\Exceptions;
 use Exception;
 use Spatie\Calendar\Components\Component;
 
-final class PropertyIsRequired extends Exception
+final class InvalidComponent extends Exception
 {
-    public static function create(array $properties, Component $component): PropertyIsRequired
+    public static function requiredPropertyMissing(array $properties, Component $component): InvalidComponent
     {
         $type = ucfirst(strtolower($component->getComponentType()));
 

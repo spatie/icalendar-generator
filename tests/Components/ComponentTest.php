@@ -2,7 +2,7 @@
 
 namespace Spatie\Calendar\Tests\Components;
 
-use Spatie\Calendar\Exceptions\PropertyIsRequired;
+use Spatie\Calendar\Exceptions\InvalidComponent;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
 use Spatie\Calendar\Tests\TestCase;
@@ -23,7 +23,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function it_will_throw_an_exception_when_a_required_property_is_not_set()
     {
-        $this->expectException(PropertyIsRequired::class);
+        $this->expectException(InvalidComponent::class);
 
         $dummy = new DummyComponent('Dummy');
 
@@ -35,7 +35,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function it_will_throw_an_exception_when_a_required_property_is_not_set_but_another_is()
     {
-        $this->expectException(PropertyIsRequired::class);
+        $this->expectException(InvalidComponent::class);
 
         $dummy = new DummyComponent('Dummy');
 

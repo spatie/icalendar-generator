@@ -4,7 +4,7 @@ namespace Spatie\Calendar\Components;
 
 use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\Exceptions\PropertyIsRequired;
+use Spatie\Calendar\Exceptions\InvalidComponent;
 use Spatie\Calendar\PropertyTypes\PropertyType;
 
 abstract class Component
@@ -39,7 +39,7 @@ abstract class Component
         if (count($intersection) !== count($requiredProperties)) {
             $notProvidedProperties = array_diff($requiredProperties, $intersection);
 
-            throw PropertyIsRequired::create($notProvidedProperties, $this);
+            throw InvalidComponent::requiredPropertyMissing($notProvidedProperties, $this);
         }
     }
 }
