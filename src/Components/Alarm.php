@@ -30,14 +30,14 @@ class Alarm extends Component
     /** @var bool */
     protected $triggerAfterEvent = false;
 
-    public function __construct(?string $description = null)
-    {
-        $this->description = $description;
-    }
-
     public static function create(?string $description = null): Alarm
     {
         return new self($description);
+    }
+
+    public function __construct(?string $description = null)
+    {
+        $this->description = $description;
     }
 
     public function getComponentType(): string

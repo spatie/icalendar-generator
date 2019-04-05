@@ -27,6 +27,16 @@ class Calendar extends Component
     /** @var \Spatie\Calendar\Duration|null */
     protected $refreshInterval;
 
+    public static function create(?string $name = null): Calendar
+    {
+        return new self($name);
+    }
+
+    public function __construct(?string $name = null)
+    {
+        $this->name = $name;
+    }
+
     public function getComponentType(): string
     {
         return 'CALENDAR';
@@ -38,16 +48,6 @@ class Calendar extends Component
             'VERSION',
             'PRODID',
         ];
-    }
-
-    public function __construct(?string $name = null)
-    {
-        $this->name = $name;
-    }
-
-    public static function create(?string $name = null): Calendar
-    {
-        return new self($name);
     }
 
     public function name(string $name): Calendar

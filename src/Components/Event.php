@@ -39,6 +39,18 @@ class Event extends Component
     /** @var bool */
     protected $isFullDay = false;
 
+    public static function create(?string $name = null): Event
+    {
+        return new self($name);
+    }
+
+    public function __construct(?string $name = null)
+    {
+        $this->name = $name;
+        $this->uid = uniqid();
+        $this->created = new DateTimeImmutable();
+    }
+
     public function getComponentType(): string
     {
         return 'EVENT';
@@ -53,17 +65,8 @@ class Event extends Component
         ];
     }
 
-    public static function create(?string $name = null): Event
-    {
-        return new self($name);
-    }
 
-    public function __construct(?string $name = null)
-    {
-        $this->name = $name;
-        $this->uid = uniqid();
-        $this->created = new DateTimeImmutable();
-    }
+
 
     public function starts(DateTimeInterface $starts): Event
     {
