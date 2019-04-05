@@ -158,7 +158,7 @@ Calendar::create()
 
 ### Alarm
 
-Alarms allow calendar clients to send reminders about certain events. For example, Apple Mail on an iPhone will send users a push notification about the event.
+Alarms allow calendar clients to send reminders about certain events. For example, Apple Mail on an iPhone will send users a notification about the event.
 
 ``` php
 Alarm::create('Event Sourcing by Freek Murze is starting soon');
