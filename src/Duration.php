@@ -22,7 +22,7 @@ final class Duration
     /** @var bool */
     private $backInTime = false;
 
-    public static function new(): Duration
+    public static function create(): Duration
     {
         return new self();
     }

@@ -9,7 +9,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_create_a_duration_with_weeks()
     {
-        $duration = Duration::new()->weeks(7);
+        $duration = Duration::create()->weeks(7);
 
         $this->assertEquals('P7W', $duration->build());
     }
@@ -17,7 +17,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_create_a_duration_with_days_and_time()
     {
-        $duration = Duration::new()
+        $duration = Duration::create()
             ->days(15)
             ->hours(5)
             ->seconds(20);
@@ -28,7 +28,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_create_a_duration_with_time()
     {
-        $duration = Duration::new()
+        $duration = Duration::create()
             ->hours(5)
             ->minutes(3)
             ->seconds(20);
@@ -39,7 +39,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_create_a_duration_with_a_day()
     {
-        $duration = Duration::new()
+        $duration = Duration::create()
             ->days(10);
 
         $this->assertEquals('P10D', $duration->build());
@@ -48,7 +48,7 @@ class DurationTest extends TestCase
     /** @test */
     public function it_can_create_negative_durations()
     {
-        $duration = Duration::new()
+        $duration = Duration::create()
             ->days(15)
             ->hours(5)
             ->seconds(20)

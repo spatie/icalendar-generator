@@ -3,7 +3,6 @@
 namespace Spatie\Calendar\Components;
 
 use DateTimeInterface;
-use function foo\func;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Duration;
 use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
@@ -30,7 +29,7 @@ final class Alarm extends Component
     /** @var bool */
     private $triggerAfterEvent = false;
 
-    public static function new(string $description = null): Alarm
+    public static function create(string $description = null): Alarm
     {
         return new self($description);
     }

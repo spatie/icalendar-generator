@@ -39,7 +39,7 @@ final class Event extends Component
     /** @var bool */
     private $isFullDay = false;
 
-    public static function new(string $name = null): Event
+    public static function create(string $name = null): Event
     {
         return new self($name);
     }
