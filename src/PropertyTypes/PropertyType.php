@@ -43,6 +43,15 @@ abstract class PropertyType
         return $parameters[0];
     }
 
+    public function addParameters(array $parameters): PropertyType
+    {
+        foreach($parameters as $parameter) {
+            $this->addParameter($parameter);
+        }
+
+        return $this;
+    }
+
     public function addParameter(Parameter $parameter): PropertyType
     {
         $this->parameters[] = $parameter;

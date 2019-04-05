@@ -38,11 +38,7 @@ final class ComponentPayload
 
     public function property(PropertyType $property, array $parameters = null): ComponentPayload
     {
-        if ($parameters) {
-            array_walk($parameters, function (Parameter $parameter) use ($property) {
-                $property->addParameter($parameter);
-            });
-        }
+        $property->addParameters($parameters ?? []);
 
         $this->properties[] = $property;
 
