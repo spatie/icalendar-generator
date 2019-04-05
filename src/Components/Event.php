@@ -12,10 +12,10 @@ final class Event extends Component
 {
     use HasSubComponents;
 
-    /** @var DateTimeInterface */
+    /** @var \DateTimeInterface */
     private $starts;
 
-    /** @var DateTimeInterface */
+    /** @var \DateTimeInterface */
     private $ends;
 
     /** @var string */
@@ -30,7 +30,7 @@ final class Event extends Component
     /** @var string */
     private $uid;
 
-    /** @var DateTimeInterface */
+    /** @var \DateTimeInterface */
     private $created;
 
     /** @var bool */
