@@ -3,7 +3,6 @@
 namespace Spatie\Calendar\Components;
 
 use DateTimeInterface;
-use function foo\func;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Duration;
 use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
