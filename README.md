@@ -161,7 +161,7 @@ Calendar::create()
 Alarms allow calendar clients to send reminders about certain events. For example, Apple Mail on an iPhone will send users a notification about the event.
 
 ``` php
-Alarm::create('Event Sourcing by Freek Murze is starting soon');
+Alarm::create('Creating calender feeds by Ruben Van Assche');
 ```
 
 An alarm always has a description and should be added to an event. It is possible to add multiple alarms to one event.
