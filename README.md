@@ -113,7 +113,7 @@ Calendar::create('Laracon Online')->download();
 An event can be created as follows. A name is not required, but a start date should always be given.
 
 ``` php
-Event::new('Laracon Online')
+Event::create('Laracon Online')
     ->startsAt(new DateTime('6 march 2019'));
 ```
 
@@ -137,7 +137,7 @@ Since this package expects a DateTimeInterface for properties related to date an
 ``` php
 use Carbon\Carbon;
 
-Event::new('Laracon Online')
+Event::create('Laracon Online')
     ->startsAt(Carbon::now())
     ...
 ```
@@ -154,7 +154,7 @@ This package relies on the timezones provided by [PHP DateTime](https://www.php.
 ``` php
 $start = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 
-Event::new()
+Event::create()
     ->startsAt($starts)
     ->withTimezones()
     ...
