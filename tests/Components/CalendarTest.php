@@ -135,7 +135,7 @@ class CalendarTest extends TestCase
     /** @test */
     public function a_refresh_rate_can_be_set()
     {
-        $duration = Duration::new()->minutes(5);
+        $duration = Duration::create()->minutes(5);
 
         $payload = Calendar::create()
             ->refreshInterval($duration)

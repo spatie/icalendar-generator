@@ -26,7 +26,7 @@ class AlarmTest extends TestCase
     /** @test */
     public function it_can_trigger_before_an_event()
     {
-        $duration = Duration::new()->minutes(5)->backInTime();
+        $duration = Duration::create()->minutes(5)->backInTime();
 
         $payload = Alarm::create()->triggerBeforeEvent($duration)->getPayload();
 
@@ -37,7 +37,7 @@ class AlarmTest extends TestCase
     /** @test */
     public function it_can_trigger_after_an_event()
     {
-        $duration = Duration::new()->hours(2);
+        $duration = Duration::create()->hours(2);
 
         $payload = Alarm::create()->triggerAfterEvent($duration)->getPayload();
 
@@ -59,7 +59,7 @@ class AlarmTest extends TestCase
     /** @test */
     public function it_can_repeat_an_alarm_several_times()
     {
-        $duration = Duration::new()->hours(2);
+        $duration = Duration::create()->hours(2);
 
         $payload = Alarm::create()->repeat($duration, 2)->getPayload();
 
