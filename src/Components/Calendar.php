@@ -27,22 +27,12 @@ final class Calendar extends Component
     /** @var \Spatie\Calendar\Duration|null */
     private $refreshInterval;
 
-    public static function new(string $name = null): Calendar
+    public static function create(string $name = null): Calendar
     {
         return new self($name);
     }
 
     public function __construct(string $name = null)
-    {
-        $this->name = $name;
-    }
-
-    public static function create(?string $name = null): Calendar
-    {
-        return new self($name);
-    }
-
-    public function __construct(?string $name = null)
     {
         $this->name = $name;
     }
