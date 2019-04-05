@@ -49,7 +49,7 @@ trait HasSubComponents
         }
 
         if (! $reflection->getParameters()[0]->getClass()->isSubclassOf(Component::class)) {
-            throw new Exception('A component should be given to the closure\'s parameter');
+            throw new Exception('A component should be given to the closures parameter');
         }
 
         return true;
