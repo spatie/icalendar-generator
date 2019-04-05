@@ -20,7 +20,7 @@ final class Duration
     private $seconds = 0;
 
     /** @var bool */
-    private $backInTime = false;
+    private $ago = false;
 
     public static function create(): Duration
     {
@@ -62,9 +62,9 @@ final class Duration
         return $this;
     }
 
-    public function backInTime(): Duration
+    public function ago(): Duration
     {
-        $this->backInTime = true;
+        $this->ago = true;
 
         return $this;
     }
@@ -73,7 +73,7 @@ final class Duration
     {
         $duration = '';
 
-        if ($this->backInTime) {
+        if ($this->ago) {
             $duration .= '-';
         }
 

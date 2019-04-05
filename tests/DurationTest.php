@@ -52,7 +52,7 @@ class DurationTest extends TestCase
             ->days(15)
             ->hours(5)
             ->seconds(20)
-            ->backInTime();
+            ->ago();
 
         $this->assertEquals('-P15DT5H0M20S', $duration->build());
     }

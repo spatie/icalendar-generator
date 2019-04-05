@@ -206,14 +206,14 @@ Alarm::create('The talk by Ruben is starting soon')
     ->triggerBeforeEvent($duration);
     
 // A period before the starting of the event
-$duration = Duration::create()->minutes(5)->backInTime()
+$duration = Duration::create()->minutes(5)->ago()
 
 Alarm::create('The talk by Ruben has ended')
     ->triggerAfterEvent($duration);
 ```
 
-In the last example we give a negative duration hence: `->backInTime()`, without this negative duration the alarm would trigger 5 minutes after the event had started.
-Want to trigger an alarm 5 minutes before the event has ended, then use `->backInTime()` with `triggerBeforeEvent`.
+In the last example we give a negative duration hence: `->ago()`, without this negative duration the alarm would trigger 5 minutes after the event had started.
+Want to trigger an alarm 5 minutes before the event has ended, then use `->ago()` with `triggerBeforeEvent`.
 
 An alarm can be repeated for a number of times after an interval, by default an alarm will be repeated once
 
@@ -245,7 +245,8 @@ Durations can also be negative.
 
 ``` php
 Duration::create()
-    ->backInTime()
+    ->days(1)
+    ->ago()
 ```
 
 ### Use with Laravel

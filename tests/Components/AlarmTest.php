@@ -26,7 +26,7 @@ class AlarmTest extends TestCase
     /** @test */
     public function it_can_trigger_before_an_event()
     {
-        $duration = Duration::create()->minutes(5)->backInTime();
+        $duration = Duration::create()->minutes(5)->ago();
 
         $payload = Alarm::create()->triggerBeforeEvent($duration)->getPayload();
 
