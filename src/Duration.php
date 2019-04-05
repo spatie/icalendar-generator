@@ -73,21 +73,21 @@ class Duration
     {
         $duration = '';
 
-        if($this->backInTime){
+        if ($this->backInTime) {
             $duration .= '-';
         }
 
         $duration .= 'P';
 
-        if($this->weeks > 0){
+        if ($this->weeks > 0) {
             return $duration . "{$this->weeks}W";
         }
 
-        if($this->days > 0){
+        if ($this->days > 0) {
             $duration .= "{$this->days}D";
         }
 
-        if($this->hours > 0 || $this->minutes > 0 || $this->seconds > 0){
+        if ($this->hours > 0 || $this->minutes > 0 || $this->seconds > 0) {
             $duration .= "T{$this->hours}H{$this->minutes}M{$this->seconds}S";
         }
 

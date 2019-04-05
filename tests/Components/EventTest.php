@@ -79,5 +79,4 @@ class EventTest extends TestCase
         $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
     }
-
 }

@@ -28,6 +28,6 @@ class TextPropertyType extends PropertyType
 
     public function getOriginalValue() : string
     {
-       return $this->text;
+        return $this->text;
     }
 }

@@ -64,6 +64,7 @@ class HasSubComponentsTest extends TestCase
 
         $component = new DummyComponent('U2');
 
-        $component->subComponent(function (DummyPropertyType $propertyType) {});
+        $component->subComponent(function (DummyPropertyType $propertyType) {
+        });
     }
 }

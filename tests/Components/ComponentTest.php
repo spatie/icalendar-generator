@@ -7,7 +7,8 @@ use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
 use Spatie\Calendar\Tests\TestCase;
 
-class ComponentTest extends TestCase {
+class ComponentTest extends TestCase
+{
 
     /** @test */
     public function it_will_check_if_all_required_properties_are_set()

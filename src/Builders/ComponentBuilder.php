@@ -59,7 +59,6 @@ class ComponentBuilder
         $properties = [];
 
         foreach ($this->componentPayload->getAliasesForProperty($property->getName()) as $alias) {
-
             $properties = array_merge(
                 $properties,
                 $this->chipLine($propertyBuilder->build($alias))

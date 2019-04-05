@@ -3,7 +3,6 @@
 
 namespace Spatie\Calendar\PropertyTypes;
 
-
 use Exception;
 
 abstract class PropertyType
@@ -14,9 +13,9 @@ abstract class PropertyType
     /** @var array */
     protected $parameters = [];
 
-    public abstract function getValue(): string;
+    abstract public function getValue(): string;
 
-    public abstract function getOriginalValue();
+    abstract public function getOriginalValue();
 
     public function getName(): string
     {
