@@ -259,7 +259,7 @@ use Illuminate\Http\Response;
 $calendar = Calendar::create('Laracon Online');
 
 Response::create($calendar->get())->headers([
-    'Content-Type:text/calendar;charset=utf-8'
+    'Content-Type:text/calendar;charset=utf-8',
 ]);
 ```
 
@@ -272,7 +272,7 @@ $calendar = Calendar::create('Laracon Online');
 $filename = 'my-awesome-calendar.ics';
 
 Response::create($calendar->get())->headers([
-    'Content-Type:text/calendar;charset=utf-8'
+    'Content-Type:text/calendar;charset=utf-8',
 ])->download($filename);
 ```
 
