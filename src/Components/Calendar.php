@@ -104,7 +104,7 @@ final class Calendar extends Component
 
         return ComponentPayload::create($this->getComponentType())
             ->textProperty('VERSION', '2.0')
-            ->textProperty('PRODID', 'Spatie/iCalendar-generator')
+            ->textProperty('PRODID', 'spatie/icalendar-generator')
             ->textProperty('NAME', $this->name)
             ->alias('NAME', ['X-WR-CALNAME'])
             ->textProperty('DESCRIPTION', $this->description)
