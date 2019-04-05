@@ -19,15 +19,15 @@ trait HasSubComponents
      */
     private function addSubComponent($subComponent): Component
     {
-        if($subComponent === null){
+        if(is_null($subComponent)){
             return $this;
         }
 
         $subcomponents = is_array($subComponent) ? $subComponent : [$subComponent];
 
-        array_walk($subcomponents, function($component){
-            $this->resolveSubComponent($component);
-        });
+        $this->subComponents = array_map(function($component){
+            return $this->resolveSubComponent($component);
+        }, $subcomponents);
 
         return $this;
     }
@@ -35,10 +35,10 @@ trait HasSubComponents
     /**
      * @param $subComponent Component|Closure
      *
-     * @return $this
+     * @return Component
      * @throws \ReflectionException
      */
-    private function resolveSubComponent($subComponent)
+    private function resolveSubComponent($subComponent): Component
     {
         if ($subComponent instanceof Closure) {
             $reflection = new ReflectionFunction($subComponent);
@@ -50,9 +50,7 @@ trait HasSubComponents
             $subComponent = $reflection->invoke($newComponent) ?? $newComponent;
         }
 
-        $this->subComponents[] = $subComponent;
-
-        return $this;
+        return $subComponent;
     }
 
     private function ensureAComponentIsInjected(ReflectionFunction $reflection): bool

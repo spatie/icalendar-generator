@@ -13,6 +13,6 @@ final class PropertyIsRequired extends Exception
 
         $properties = implode(', ', $properties);
 
-        return new self("Properties {$properties} is required when creating an {$type}.");
+        return new self("Properties `{$properties}` is required when creating an `{$type}`.");
     }
 }
