@@ -42,7 +42,7 @@ class DummyComponent extends Component
 
     public function getPayload(): ComponentPayload
     {
-        return ComponentPayload::new($this->getComponentType())
+        return ComponentPayload::create($this->getComponentType())
             ->textProperty('name', $this->name)
             ->textProperty('description', $this->description)
             ->subComponent(...$this->subComponents);

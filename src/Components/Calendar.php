@@ -102,7 +102,7 @@ final class Calendar extends Component
             });
         }
 
-        return ComponentPayload::new($this->getComponentType())
+        return ComponentPayload::create($this->getComponentType())
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', 'Spatie/iCalendar-generator')
             ->textProperty('NAME', $this->name)

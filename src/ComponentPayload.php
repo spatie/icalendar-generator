@@ -26,7 +26,7 @@ final class ComponentPayload
     /** @var array */
     private $aliases = [];
 
-    public static function new(string $type): ComponentPayload
+    public static function create(string $type): ComponentPayload
     {
         return new self($type);
     }

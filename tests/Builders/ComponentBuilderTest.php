@@ -13,7 +13,7 @@ class ComponentBuilderTest extends TestCase
     /** @test */
     public function it_can_build_a_component_payload_with_properties()
     {
-        $payload = ComponentPayload::new('TEST');
+        $payload = ComponentPayload::create('TEST');
 
         $payload->property(new DummyPropertyType('location', 'Antwerp'));
 
@@ -33,7 +33,7 @@ EOT
     /** @test */
     public function it_can_build_a_component_payload_with_property_alias()
     {
-        $payload = ComponentPayload::new('TEST');
+        $payload = ComponentPayload::create('TEST');
 
         $payload->property(new DummyPropertyType('location', 'Antwerp'));
         $payload->alias('location', ['geo']);
@@ -55,7 +55,7 @@ EOT
     /** @test */
     public function it_can_build_a_component_payload_with_subcomponents()
     {
-        $payload = ComponentPayload::new('TEST');
+        $payload = ComponentPayload::create('TEST');
 
         $payload->subComponent(new DummyComponent('SUBCOMPONENT'));
 
@@ -77,7 +77,7 @@ EOT
     /** @test */
     public function it_will_chip_a_line_when_it_becomes_too_long()
     {
-        $payload = ComponentPayload::new('TEST');
+        $payload = ComponentPayload::create('TEST');
 
         $payload->property(new DummyPropertyType('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
 

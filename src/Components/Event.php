@@ -145,7 +145,7 @@ final class Event extends Component
 
     public function getPayload(): ComponentPayload
     {
-        return ComponentPayload::new($this->getComponentType())
+        return ComponentPayload::create($this->getComponentType())
             ->textProperty('UID', $this->uid)
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)

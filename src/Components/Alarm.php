@@ -93,7 +93,7 @@ final class Alarm extends Component
 
     public function getPayload(): ComponentPayload
     {
-        return ComponentPayload::new($this->getComponentType())
+        return ComponentPayload::create($this->getComponentType())
             ->textProperty('ACTION', 'DISPLAY')
             ->textProperty('DESCRIPTION', $this->description)
             ->when($this->trigger instanceof DateTimeInterface, function (ComponentPayload $payload) {
