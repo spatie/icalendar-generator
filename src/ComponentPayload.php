@@ -106,12 +106,14 @@ final class ComponentPayload
 
     public function getProperty(string $name): PropertyType
     {
-        $properties = array_values(array_filter(
+        $filteredProperties = array_filter(
             $this->properties,
             function (PropertyType $property) use ($name) {
                 return $property->getName() === $name;
             }
-        ));
+        );
+
+        $properties = array_values($filteredProperties);
 
         if (count($properties) === 0) {
             throw new Exception("Property {$name} does not exist in the payload");
