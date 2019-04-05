@@ -45,7 +45,7 @@ class Calendar extends Component
         $this->name = $name;
     }
 
-    public static function new(?string $name = null): Calendar
+    public static function create(?string $name = null): Calendar
     {
         return new self($name);
     }

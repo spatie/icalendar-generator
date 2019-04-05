@@ -15,7 +15,7 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_create_a_calendar()
     {
-        $payload = Calendar::new()->getPayload();
+        $payload = Calendar::create()->getPayload();
 
         $this->assertEquals('CALENDAR', $payload->getType());
 
@@ -28,7 +28,7 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_set_calendar_properties()
     {
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->name('Full Stack Europe Schedule')
             ->description('What events are going to happen?')
             ->getPayload();
@@ -43,9 +43,9 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_add_an_event_to_a_calendar()
     {
-        $event = Event::new('An introduction to event sourcing');
+        $event = Event::create('An introduction to event sourcing');
 
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->event($event)
             ->getPayload();
 
@@ -58,7 +58,7 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_add_an_event_by_closure_to_a_calendar()
     {
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->event(function (Event $event) {
                 $event->name('An introduction to event sourcing');
             })
@@ -73,10 +73,10 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_add_multiple_events_to_a_calendar()
     {
-        $firstEvent = Event::new('An introduction to event sourcing');
-        $secondEvent = Event::new('Websockets what are they?');
+        $firstEvent = Event::create('An introduction to event sourcing');
+        $secondEvent = Event::create('Websockets what are they?');
 
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->event([$firstEvent, $secondEvent])
             ->getPayload();
 
@@ -90,7 +90,7 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_add_multiple_events_by_closure_to_a_calendar()
     {
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->event([
                 function (Event $event) {
                     $event->name('An introduction to event sourcing');
@@ -116,7 +116,7 @@ class CalendarTest extends TestCase
 
         $date->setTimezone($timezone);
 
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->withTimezone()
             ->event(function (Event $event) use ($date) {
                 $event->starts($date);
@@ -137,7 +137,7 @@ class CalendarTest extends TestCase
     {
         $duration = Duration::new()->minutes(5);
 
-        $payload = Calendar::new()
+        $payload = Calendar::create()
             ->refreshInterval($duration)
             ->getPayload();
 

@@ -14,7 +14,7 @@ class AlarmTest extends TestCase
     /** @test */
     public function it_can_create_an_alarm()
     {
-        $payload = Alarm::new('It is time')->getPayload();
+        $payload = Alarm::create('It is time')->getPayload();
 
         $this->assertEquals('ALARM', $payload->getType());
         $this->assertEquals(2, count($payload->getProperties()));
@@ -28,7 +28,7 @@ class AlarmTest extends TestCase
     {
         $duration = Duration::new()->minutes(5)->backInTime();
 
-        $payload = Alarm::new()->triggerBeforeEvent($duration)->getPayload();
+        $payload = Alarm::create()->triggerBeforeEvent($duration)->getPayload();
 
         $this->assertPropertyEqualsInPayload('TRIGGER', $duration->build(), $payload);
         $this->assertParameterEqualsInProperty('RELATED', 'START', $payload->getProperty('TRIGGER'));
@@ -39,7 +39,7 @@ class AlarmTest extends TestCase
     {
         $duration = Duration::new()->hours(2);
 
-        $payload = Alarm::new()->triggerAfterEvent($duration)->getPayload();
+        $payload = Alarm::create()->triggerAfterEvent($duration)->getPayload();
 
         $this->assertPropertyEqualsInPayload('TRIGGER', $duration->build(), $payload);
         $this->assertParameterEqualsInProperty('RELATED', 'END', $payload->getProperty('TRIGGER'));
@@ -50,7 +50,7 @@ class AlarmTest extends TestCase
     {
         $date = new DateTime('16 may 2019');
 
-        $payload = Alarm::new()->triggerAt($date)->getPayload();
+        $payload = Alarm::create()->triggerAt($date)->getPayload();
 
         $this->assertPropertyEqualsInPayload('TRIGGER', $date, $payload);
         $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
@@ -61,7 +61,7 @@ class AlarmTest extends TestCase
     {
         $duration = Duration::new()->hours(2);
 
-        $payload = Alarm::new()->repeat($duration, 2)->getPayload();
+        $payload = Alarm::create()->repeat($duration, 2)->getPayload();
 
         $this->assertEquals($duration->build(), $payload->getProperty('DURATION')->getOriginalValue());
         $this->assertEquals(2, $payload->getProperty('REPEAT')->getOriginalValue());

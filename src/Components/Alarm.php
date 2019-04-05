@@ -35,7 +35,7 @@ class Alarm extends Component
         $this->description = $description;
     }
 
-    public static function new(?string $description = null): Alarm
+    public static function create(?string $description = null): Alarm
     {
         return new self($description);
     }

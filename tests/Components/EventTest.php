@@ -11,7 +11,7 @@ class EventTest extends TestCase
     /** @test */
     public function it_can_create_an_event()
     {
-        $payload = Event::new()->getPayload();
+        $payload = Event::create()->getPayload();
 
         $properties = $payload->getProperties();
 
@@ -29,7 +29,7 @@ class EventTest extends TestCase
         $dateStarts = new DateTime('17 may 2019');
         $dateEnds = new DateTime('18 may 2019');
 
-        $payload = Event::new('An introduction into event sourcing')
+        $payload = Event::create('An introduction into event sourcing')
             ->description('By Freek Murze')
             ->created($dateCreated)
             ->uniqueIdentifier('Identifier here')
@@ -55,7 +55,7 @@ class EventTest extends TestCase
         $dateStarts = new DateTime('17 may 2019');
         $dateEnds = new DateTime('18 may 2019');
 
-        $payload = Event::new('An introduction into event sourcing')
+        $payload = Event::create('An introduction into event sourcing')
             ->period($dateStarts, $dateEnds)
             ->getPayload();
 
@@ -69,7 +69,7 @@ class EventTest extends TestCase
         $dateStarts = new DateTime('17 may 2019');
         $dateEnds = new DateTime('18 may 2019');
 
-        $payload = Event::new('An introduction into event sourcing')
+        $payload = Event::create('An introduction into event sourcing')
             ->fullDay()
             ->period($dateStarts, $dateEnds)
             ->getPayload();

@@ -53,7 +53,7 @@ class Event extends Component
         ];
     }
 
-    public static function new(?string $name = null): Event
+    public static function create(?string $name = null): Event
     {
         return new self($name);
     }
