@@ -8,36 +8,48 @@ use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\HasSubComponents;
 
-class Event extends Component
+final class Event extends Component
 {
     use HasSubComponents;
 
     /** @var DateTimeInterface */
-    protected $starts;
+    private $starts;
 
     /** @var DateTimeInterface */
-    protected $ends;
+    private $ends;
 
     /** @var string */
-    protected $name;
+    private $name;
 
     /** @var string|null */
-    protected $description;
+    private $description;
 
     /** @var string|null */
-    protected $location;
+    private $location;
 
     /** @var string */
-    protected $uid;
+    private $uid;
 
     /** @var DateTimeInterface */
-    protected $created;
+    private $created;
 
     /** @var bool */
-    protected $withTimezone = false;
+    private $withTimezone = false;
 
     /** @var bool */
-    protected $isFullDay = false;
+    private $isFullDay = false;
+
+    public static function new(string $name = null): Event
+    {
+        return new self($name);
+    }
+
+    public function __construct(string $name = null)
+    {
+        $this->name = $name;
+        $this->uid = uniqid();
+        $this->created = new DateTimeImmutable();
+    }
 
     public function getComponentType(): string
     {
@@ -53,26 +65,14 @@ class Event extends Component
         ];
     }
 
-    public static function new(?string $name = null): Event
-    {
-        return new self($name);
-    }
-
-    public function __construct(?string $name = null)
-    {
-        $this->name = $name;
-        $this->uid = uniqid();
-        $this->created = new DateTimeImmutable();
-    }
-
-    public function starts(DateTimeInterface $starts): Event
+    public function startsAt(DateTimeInterface $starts): Event
     {
         $this->starts = $starts;
 
         return $this;
     }
 
-    public function ends(DateTimeInterface $ends): Event
+    public function endsAt(DateTimeInterface $ends): Event
     {
         $this->ends = $ends;
 
@@ -115,7 +115,7 @@ class Event extends Component
         return $this;
     }
 
-    public function created(DateTimeInterface $created): Event
+    public function createdAt(DateTimeInterface $created): Event
     {
         $this->created = $created;
 

@@ -2,10 +2,10 @@
 
 namespace Spatie\Calendar\PropertyTypes;
 
-class TextPropertyType extends PropertyType
+final class TextPropertyType extends PropertyType
 {
     /** @var string  */
-    protected $text;
+    private $text;
 
     public function __construct(string $name, string $text)
     {

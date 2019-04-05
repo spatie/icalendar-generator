@@ -2,13 +2,13 @@
 
 namespace Spatie\Calendar\PropertyTypes;
 
-class Parameter
+final class Parameter
 {
     /** @var string */
-    protected $name;
+    private $name;
 
     /** @var string */
-    protected $value;
+    private $value;
 
     public function __construct(string $name, string $value)
     {

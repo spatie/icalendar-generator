@@ -10,22 +10,35 @@ use Spatie\Calendar\Components\Component;
 trait HasSubComponents
 {
     /** @var array */
-    protected $subComponents = [];
+    private $subComponents = [];
 
-    protected function addSubComponent($subComponent): Component
+    /**
+     * @param $subComponent \Spatie\Calendar\Components\Component|array|Closure
+     *
+     * @return \Spatie\Calendar\Components\Component
+     */
+    private function addSubComponent($subComponent): Component
     {
-        if (is_array($subComponent)) {
-            foreach ($subComponent as $item) {
-                $this->resolveSubComponent($item);
-            }
-        } else {
-            $this->resolveSubComponent($subComponent);
+        if($subComponent === null){
+            return $this;
         }
+
+        $subcomponents = is_array($subComponent) ? $subComponent : [$subComponent];
+
+        array_walk($subcomponents, function($component){
+            $this->resolveSubComponent($component);
+        });
 
         return $this;
     }
 
-    protected function resolveSubComponent($subComponent)
+    /**
+     * @param $subComponent Component|Closure
+     *
+     * @return $this
+     * @throws \ReflectionException
+     */
+    private function resolveSubComponent($subComponent)
     {
         if ($subComponent instanceof Closure) {
             $reflection = new ReflectionFunction($subComponent);
@@ -42,7 +55,7 @@ trait HasSubComponents
         return $this;
     }
 
-    protected function ensureAComponentIsInjected(ReflectionFunction $reflection) : bool
+    private function ensureAComponentIsInjected(ReflectionFunction $reflection): bool
     {
         if (count($reflection->getParameters()) !== 1) {
             throw new Exception('Exactly one parameter should be used with closure');
@@ -55,7 +68,7 @@ trait HasSubComponents
         return true;
     }
 
-    protected function buildFreshSubComponent(ReflectionFunction $reflection): Component
+    private function buildFreshSubComponent(ReflectionFunction $reflection): Component
     {
         return $reflection->getParameters()[0]->getClass()->newInstance();
     }

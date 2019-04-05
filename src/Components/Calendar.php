@@ -8,24 +8,34 @@ use Spatie\Calendar\HasSubComponents;
 use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
-class Calendar extends Component
+final class Calendar extends Component
 {
     use HasSubComponents;
 
     /** @var array */
-    protected $events = [];
+    private $events = [];
 
     /** @var string|null */
-    protected $name;
+    private $name;
 
     /** @var string|null */
-    protected $description;
+    private $description;
 
     /** @var bool */
-    protected $withTimezone = false;
+    private $withTimezone = false;
 
     /** @var \Spatie\Calendar\Duration|null */
-    protected $refreshInterval;
+    private $refreshInterval;
+
+    public static function new(string $name = null): Calendar
+    {
+        return new self($name);
+    }
+
+    public function __construct(string $name = null)
+    {
+        $this->name = $name;
+    }
 
     public function getComponentType(): string
     {
@@ -38,16 +48,6 @@ class Calendar extends Component
             'VERSION',
             'PRODID',
         ];
-    }
-
-    public function __construct(?string $name = null)
-    {
-        $this->name = $name;
-    }
-
-    public static function new(?string $name = null): Calendar
-    {
-        return new self($name);
     }
 
     public function name(string $name): Calendar

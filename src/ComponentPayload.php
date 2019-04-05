@@ -12,19 +12,19 @@ use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\PropertyType;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
-class ComponentPayload
+final class ComponentPayload
 {
     /** @var string */
-    protected $type;
+    private $type;
 
     /** @var array */
-    protected $properties = [];
+    private $properties = [];
 
     /** @var array */
-    protected $subComponents = [];
+    private $subComponents = [];
 
     /** @var array */
-    protected $aliases = [];
+    private $aliases = [];
 
     public static function new(string $type): ComponentPayload
     {

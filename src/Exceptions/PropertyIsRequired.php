@@ -5,7 +5,7 @@ namespace Spatie\Calendar\Exceptions;
 use Exception;
 use Spatie\Calendar\Components\Component;
 
-class PropertyIsRequired extends Exception
+final class PropertyIsRequired extends Exception
 {
     public static function create(array $properties, Component $component): PropertyIsRequired
     {

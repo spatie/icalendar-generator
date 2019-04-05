@@ -2,25 +2,25 @@
 
 namespace Spatie\Calendar;
 
-class Duration
+final class Duration
 {
     /** @var int */
-    protected $weeks = 0;
+    private $weeks = 0;
 
     /** @var int */
-    protected $days = 0;
+    private $days = 0;
 
     /** @var int */
-    protected $hours = 0;
+    private $hours = 0;
 
     /** @var int */
-    protected $minutes = 0;
+    private $minutes = 0;
 
     /** @var int */
-    protected $seconds = 0;
+    private $seconds = 0;
 
     /** @var bool */
-    protected $backInTime = false;
+    private $backInTime = false;
 
     public static function new(): Duration
     {

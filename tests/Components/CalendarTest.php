@@ -119,7 +119,7 @@ class CalendarTest extends TestCase
         $payload = Calendar::new()
             ->withTimezone()
             ->event(function (Event $event) use ($date) {
-                $event->starts($date);
+                $event->startsAt($date);
             })
             ->getPayload();
 

@@ -10,34 +10,34 @@ use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
-class Alarm extends Component
+final class Alarm extends Component
 {
     /** @var null|string */
-    protected $description;
+    private $description;
 
-    /** @var Duration|DateTimeInterface */
-    protected $trigger;
+    /** @var \Spatie\Calendar\Duration|DateTimeInterface */
+    private $trigger;
 
     /** @var int */
-    protected $repeatTimes;
+    private $repeatTimes;
 
-    /** @var Duration */
-    protected $repeatAfter;
-
-    /** @var bool */
-    protected $triggerBeforeEvent = false;
+    /** @var \Spatie\Calendar\Duration */
+    private $repeatAfter;
 
     /** @var bool */
-    protected $triggerAfterEvent = false;
+    private $triggerBeforeEvent = false;
 
-    public function __construct(?string $description = null)
-    {
-        $this->description = $description;
-    }
+    /** @var bool */
+    private $triggerAfterEvent = false;
 
-    public static function new(?string $description = null): Alarm
+    public static function new(string $description = null): Alarm
     {
         return new self($description);
+    }
+
+    public function __construct(string $description = null)
+    {
+        $this->description = $description;
     }
 
     public function getComponentType(): string

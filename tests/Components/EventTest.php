@@ -31,10 +31,10 @@ class EventTest extends TestCase
 
         $payload = Event::new('An introduction into event sourcing')
             ->description('By Freek Murze')
-            ->created($dateCreated)
+            ->createdAt($dateCreated)
             ->uniqueIdentifier('Identifier here')
-            ->starts($dateStarts)
-            ->ends($dateEnds)
+            ->startsAt($dateStarts)
+            ->endsAt($dateEnds)
             ->location('Antwerp')
             ->getPayload();
 

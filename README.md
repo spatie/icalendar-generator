@@ -18,8 +18,8 @@ use Spatie\Calendar\Components\Event;
 
 Calendar::new('Laracon online')
     ->event(Event::new('Event sourcing by Freek Murze')
-        ->starts(new DateTime('6 march 2019 15:00'))
-        ->ends(new DateTime('6 march 2019 16:00'))
+        ->startsAt(new DateTime('6 march 2019 15:00'))
+        ->endsAt(new DateTime('6 march 2019 16:00'))
     )->stream();
 ```
 
@@ -105,7 +105,7 @@ An event can be created as follows. A name is not required, but a start date sho
 
 ``` php
 Event::new('Laracon Online')
-    ->starts(new DateTime('6 march 2019'));
+    ->startsAt(new DateTime('6 march 2019'));
 ```
 
 You can set following properties on an event
@@ -116,9 +116,9 @@ Event::new()
     ->description('Experience Laracon all around the world')
     ->uniqueIdentifier('A unique identifier can be set here')
     ->location('Antwerp')
-    ->created(new DateTime('6 march 2019'))
-    ->starts(new DateTime('6 march 2019 15:00))
-    ->ends(new DateTime('6 march 2019 16:00'));
+    ->createdAt(new DateTime('6 march 2019'))
+    ->startsAt(new DateTime('6 march 2019 15:00))
+    ->endsAt(new DateTime('6 march 2019 16:00'));
 ```
 
 #### Using Carbon
@@ -129,7 +129,7 @@ Since this package expects a DateTimeInterface for properties related to date an
 import Carbon\Carbon;
 
 Event::new('Laracon Online')
-    ->starts(Carbon::now())
+    ->startsAt(Carbon::now())
     ...
 ```
 
@@ -144,7 +144,7 @@ This package relies on the timezones provided by [PHP DateTime](https://www.php.
 $start = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 
 Event::new()
-    ->starts($starts)
+    ->startsAt($starts)
     ->withTimezones()
     ...
 ```

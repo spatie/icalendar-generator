@@ -2,10 +2,10 @@
 
 namespace Spatie\Calendar\PropertyTypes;
 
-class BooleanPropertyType extends PropertyType
+final class BooleanPropertyType extends PropertyType
 {
     /** @var bool */
-    protected $boolean;
+    private $boolean;
 
     public function __construct(string $name, bool $boolean)
     {

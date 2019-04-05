@@ -5,10 +5,10 @@ namespace Spatie\Calendar\Builders;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\PropertyTypes\PropertyType;
 
-class ComponentBuilder
+final class ComponentBuilder
 {
     /** @var \Spatie\Calendar\ComponentPayload */
-    protected $componentPayload;
+    private $componentPayload;
 
     public function __construct(ComponentPayload $componentPayload)
     {
@@ -35,7 +35,7 @@ class ComponentBuilder
         return $lines;
     }
 
-    protected function buildProperties(): array
+    private function buildProperties(): array
     {
         $lines = [];
 
@@ -52,7 +52,7 @@ class ComponentBuilder
         return $lines;
     }
 
-    protected function buildAliasesForProperty(
+    private function buildAliasesForProperty(
         PropertyType $property,
         PropertyBuilder $propertyBuilder
     ): array {
@@ -68,7 +68,7 @@ class ComponentBuilder
         return $properties;
     }
 
-    protected function buildSubComponents(): array
+    private function buildSubComponents(): array
     {
         $lines = [];
 
@@ -85,7 +85,7 @@ class ComponentBuilder
         return $lines;
     }
 
-    protected function chipLine(string $line): array
+    private function chipLine(string $line): array
     {
         $chippedLines = [];
 

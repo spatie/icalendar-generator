@@ -5,16 +5,16 @@ namespace Spatie\Calendar\PropertyTypes;
 use DateTime;
 use DateTimeInterface;
 
-class DateTimePropertyType extends PropertyType
+final class DateTimePropertyType extends PropertyType
 {
-    /** @var \DateTimeImmutable */
-    protected $dateTime;
+    /** @var \DateTimeInterface */
+    private $dateTime;
 
     /** @var bool */
-    protected $withTime;
+    private $withTime;
 
     /** @var bool */
-    protected $withTimeZone;
+    private $withTimeZone;
 
     public function __construct(
         string $name,

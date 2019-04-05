@@ -4,12 +4,13 @@ namespace Spatie\Calendar\Builders;
 
 use Spatie\Calendar\PropertyTypes\PropertyType;
 
-class PropertyBuilder
+final class PropertyBuilder
 {
     /** @var \Spatie\Calendar\PropertyTypes\PropertyType */
-    protected $property;
+    private $property;
+
     /** @var string */
-    protected $alias;
+    private $alias;
 
     public function __construct(PropertyType $property, string $alias = null)
     {
@@ -28,7 +29,7 @@ class PropertyBuilder
         return "{$name}{$parameters}:{$value}";
     }
 
-    protected function resolveParameters(): string
+    private function resolveParameters(): string
     {
         $parameters = '';
 
