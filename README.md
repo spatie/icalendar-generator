@@ -87,25 +87,13 @@ Here's how you can convert the calendar to text.
 Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...
 ```
 
-Streaming the calendar to clients like Apple Mail over the https protocol can be done as follows.
-
-``` php
-Calendar::create('Laracon Online')->stream();
-```
-
-When streaming a calendar, it is possible to set the refresh interval for the calendar by a [duration](#Durations). 
-The calendar client application will always check your server after the specified duration for changes in the calendar.
+When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the refresh interval for the calendar by a [duration](#Durations). 
+The calendar application will always check your server after the specified duration for changes in the calendar.
 
 ``` php
 Calendar::create('Laracon Online')
     ->refreshInterval(Duration::create()->minutes(5))
-    ->stream();
-```
-
-If you want to add the possibility for users to download a calendar and import it into an application
-
-``` php
-Calendar::create('Laracon Online')->download();
+    ...
 ```
 
 ### Event
@@ -259,6 +247,34 @@ Durations can also be negative.
 Duration::create()
     ->backInTime()
 ```
+
+### Use with Laravel
+
+You can use Laravel Responses to stream the calendar to clients like Apple Mail as follows
+
+``` php
+use Illuminate\Http\Response;
+
+$calendar = Calendar::create('Laracon Online');
+
+Response::create($calendar->get())->headers([
+    'Content-Type:text/calendar;charset=utf-8'
+]);
+```
+
+If you want to add the possibility for users to download a calendar and import it into an application
+
+``` php
+use Illuminate\Http\Response;
+
+$calendar = Calendar::create('Laracon Online');
+$filename = 'my-awesome-calendar.ics';
+
+Response::create($calendar->get())->headers([
+    'Content-Type:text/calendar;charset=utf-8'
+])->download($filename);
+```
+
 ### Testing
 
 ``` bash

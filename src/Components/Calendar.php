@@ -90,25 +90,6 @@ final class Calendar extends Component
         return $this->toString();
     }
 
-    public function stream()
-    {
-        http_response_code(200);
-        header('Content-Type:text/calendar;charset=utf-8');
-
-        echo $this->get();
-    }
-
-    public function download(string $filename = null)
-    {
-        $filename = $filename ?? 'calendar.ics';
-
-        http_response_code(200);
-        header('Content-Type:text/calendar;charset=utf-8');
-        header("Content-Disposition:attachment;filename={$filename}");
-
-        echo $this->get();
-    }
-
     public function getPayload(): ComponentPayload
     {
         $subComponents = $this->subComponents;
