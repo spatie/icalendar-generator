@@ -23,8 +23,11 @@ final class DateTimePropertyType extends PropertyType
         bool $withTimeZone = false
     ) {
         $this->name = $name;
+
         $this->dateTime = $dateTime;
+
         $this->withTime = $withTime;
+
         $this->withTimeZone = $withTimeZone;
 
         if ($this->withTime && $this->withTimeZone) {

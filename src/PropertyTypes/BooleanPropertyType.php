@@ -10,6 +10,7 @@ final class BooleanPropertyType extends PropertyType
     public function __construct(string $name, bool $boolean)
     {
         $this->name = $name;
+
         $this->boolean = $boolean;
     }
 
