@@ -108,7 +108,7 @@ final class Calendar extends Component
             ->textProperty('NAME', $this->name)
             ->alias('NAME', ['X-WR-CALNAME'])
             ->textProperty('DESCRIPTION', $this->description)
-            ->when($this->refreshInterval !== null, function (ComponentPayload $payload) {
+            ->when(! is_null($this->refreshInterval), function (ComponentPayload $payload) {
                 $payload->property(
                     new TextPropertyType('REFRESH-INTERVAL', $this->refreshInterval->build()),
                     [new Parameter('VALUE', 'DURATION')]
