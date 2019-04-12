@@ -2,6 +2,7 @@
 
 namespace Spatie\Calendar\Tests\Components;
 
+use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Spatie\Calendar\Duration;
@@ -22,7 +23,7 @@ class CalendarTest extends TestCase
         $this->assertEquals(2, count($payload->getProperties()));
 
         $this->assertPropertyEqualsInPayload('VERSION', '2.0', $payload);
-        $this->assertPropertyEqualsInPayload('PRODID', 'Spatie/iCalendar-generator', $payload);
+        $this->assertPropertyEqualsInPayload('PRODID', 'spatie/icalendar-generator', $payload);
     }
 
     /** @test */
@@ -135,13 +136,11 @@ class CalendarTest extends TestCase
     /** @test */
     public function a_refresh_rate_can_be_set()
     {
-        $duration = Duration::create()->minutes(5);
-
         $payload = Calendar::create()
-            ->refreshInterval($duration)
+            ->refreshInterval(5)
             ->getPayload();
 
-        $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', $duration->build(), $payload);
+        $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', 5, $payload);
         $this->assertParameterEqualsInProperty('VALUE', 'DURATION', $payload->getProperty('REFRESH-INTERVAL'));
     }
 }

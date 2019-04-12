@@ -2,6 +2,7 @@
 
 namespace Spatie\Calendar\Components;
 
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -10,7 +11,8 @@ use Spatie\Calendar\HasSubComponents;
 
 final class Event extends Component
 {
-    use HasSubComponents;
+    /** @var array */
+    private $alerts = [];
 
     /** @var \DateTimeInterface */
     private $starts;
@@ -136,11 +138,14 @@ final class Event extends Component
         return $this;
     }
 
-    public function alarm($alarm): Event
+    public function alertMinutesBefore(int $minutes, string $message = null): Event
     {
-        $this->addSubComponent($alarm);
+        $trigger = new DateTime($this->starts);
 
-        return $this;
+        $this->alerts[] = Alert::create(
+            $trigger->add(new DateInterval("PT${$minutes}M")),
+            $message ?? $this->name
+        );
     }
 
     public function getPayload(): ComponentPayload
@@ -168,6 +173,6 @@ final class Event extends Component
                 true,
                 $this->withTimezone
             )
-            ->subComponent(...$this->subComponents);
+            ->subComponent(...$this->alerts);
     }
 }

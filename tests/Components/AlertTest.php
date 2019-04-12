@@ -1,0 +1,29 @@
+<?php
+
+namespace Spatie\Calendar\Tests\Components;
+
+use DateTime;
+use Spatie\Calendar\Components\Alert;
+use Spatie\Calendar\Duration;
+use Spatie\Calendar\PropertyTypes\Parameter;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
+use Spatie\Calendar\Tests\TestCase;
+
+class AlertTest extends TestCase
+{
+    /** @test */
+    public function it_can_create_an_alert()
+    {
+        $trigger = new DateTime('16 may 2019');
+
+        $payload = Alert::create($trigger, 'It is time')->getPayload();
+
+        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals(3, count($payload->getProperties()));
+
+        $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
+        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is time', $payload);
+        $this->assertPropertyEqualsInPayload('TRIGGER', $trigger, $payload);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
+    }
+}

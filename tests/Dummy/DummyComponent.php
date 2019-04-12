@@ -8,7 +8,8 @@ use Spatie\Calendar\HasSubComponents;
 
 class DummyComponent extends Component
 {
-    use HasSubComponents;
+    /** @var array  */
+    public $subComponents = [];
 
     /** @var string */
     public $name;
@@ -23,7 +24,7 @@ class DummyComponent extends Component
 
     public function subComponent($subComponent): DummyComponent
     {
-        $this->addSubComponent($subComponent);
+        $this->subComponents[] = $subComponent;
 
         return $this;
     }

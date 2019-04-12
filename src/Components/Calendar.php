@@ -2,16 +2,17 @@
 
 namespace Spatie\Calendar\Components;
 
+use Closure;
+use DateInterval;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Duration;
 use Spatie\Calendar\HasSubComponents;
+use Spatie\Calendar\PropertyTypes\DurationPropertyType;
 use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 final class Calendar extends Component
 {
-    use HasSubComponents;
-
     /** @var array */
     private $events = [];
 
@@ -24,7 +25,7 @@ final class Calendar extends Component
     /** @var bool */
     private $withTimezone = false;
 
-    /** @var \Spatie\Calendar\Duration|null */
+    /** @var int|null */
     private $refreshInterval;
 
     public static function create(string $name = null): Calendar
@@ -64,9 +65,30 @@ final class Calendar extends Component
         return $this;
     }
 
+    /**
+     * @param $event \Spatie\Calendar\Components\Event|array|Closure
+     *
+     * @return \Spatie\Calendar\Components\Calendar
+     */
     public function event($event): Calendar
     {
-        $this->addSubComponent($event);
+        if (is_null($event)) {
+            return $this;
+        }
+
+        $events = is_array($event) ? $event : [$event];
+
+        $this->events = array_map(function ($eventToResolve) {
+            if(! is_callable($eventToResolve)){
+                return $eventToResolve;
+            }
+
+            $newEvent = new Event();
+
+            $eventToResolve($newEvent);
+
+            return $newEvent;
+        }, $events);
 
         return $this;
     }
@@ -78,9 +100,9 @@ final class Calendar extends Component
         return $this;
     }
 
-    public function refreshInterval(Duration $duration): Calendar
+    public function refreshInterval(int $minutes): Calendar
     {
-        $this->refreshInterval = $duration;
+        $this->refreshInterval = $minutes;
 
         return $this;
     }
@@ -92,13 +114,11 @@ final class Calendar extends Component
 
     public function getPayload(): ComponentPayload
     {
-        $subComponents = $this->subComponents;
+        $events = $this->events;
 
         if ($this->withTimezone) {
-            array_walk($subComponents, function (Component $subComponent) {
-                return $subComponent instanceof Event
-                    ? $subComponent->withTimezone()
-                    : $subComponent;
+            array_walk($events, function (Event $event) {
+                $event->withTimezone();
             });
         }
 
@@ -110,10 +130,10 @@ final class Calendar extends Component
             ->textProperty('DESCRIPTION', $this->description)
             ->when(! is_null($this->refreshInterval), function (ComponentPayload $payload) {
                 $payload->property(
-                    new TextPropertyType('REFRESH-INTERVAL', $this->refreshInterval->build()),
+                    new DurationPropertyType('REFRESH-INTERVAL', $this->refreshInterval),
                     [new Parameter('VALUE', 'DURATION')]
                 );
             })
-            ->subComponent(...$subComponents);
+            ->subComponent(...$events);
     }
 }
