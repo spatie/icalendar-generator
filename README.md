@@ -17,7 +17,7 @@ use Spatie\Calendar\Components\Calendar;
 use Spatie\Calendar\Components\Event;
 
 Calendar::create('Laracon online')
-    ->event(Event::create('Creating calender feeds by Ruben Van Assche')
+    ->event(Event::create('Creating calender feeds')
         ->starts(new DateTime('6 March 2019 15:00'))
         ->ends(new DateTime('6 March 2019 16:00'))
     )->stream();
@@ -59,7 +59,7 @@ There are multiple ways to add an event.
 
 ``` php
 // As single event parameter
-$event = Event::create('Creating calender feeds by Ruben Van Assche');
+$event = Event::create('Creating calender feeds');
 
 Calendar::create('Laracon Online')
     ->event($event)
@@ -68,15 +68,15 @@ Calendar::create('Laracon Online')
 // As an array of events
 Calendar::create('Laracon Online')
     ->event([
-        Event::create('Creating calender feeds by Ruben Van Assche'),
-        Event::create('Websockets by Marcel Pociot'),
+        Event::create('Creating calender feeds'),
+        Event::create('Creating contact lists'),
     ])
     ...    
     
 // As a closure
 Calendar::create('Laracon Online')
     ->event(function(Event $event){
-        $event->name('Creating calender feeds by Ruben Van Assche');
+        $event->name('Creating calender feeds');
     })
     ...
 ```
@@ -87,12 +87,12 @@ Here's how you can convert the calendar to text.
 Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...
 ```
 
-When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the refresh interval for the calendar by a [duration](#Durations). 
-The calendar application will always check your server after the specified duration for changes in the calendar.
+When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the refresh interval for the calendar by duration in minutes.
+When setting this, the calendar application will check your server every time after the specified duration for changes to the calendar.
 
 ``` php
 Calendar::create('Laracon Online')
-    ->refreshInterval(Duration::create()->minutes(5))
+    ->refreshInterval(5)
     ...
 ```
 
@@ -118,6 +118,12 @@ Event::create()
     ->endsAt(new DateTime('6 march 2019 16:00'));
 ```
 
+Want to create an event quickly with start and end date?
+``` php
+Event::create('Laracon Online')
+    ->period(new DateTime('6 march 2019'), new DateTime('7 march 2019'));
+```
+
 #### Using Carbon
 
 Since this package expects a DateTimeInterface for properties related to date and time, it is possible to use the popular [Carbon library](https://carbon.nesbot.com/).
@@ -133,9 +139,9 @@ Event::create('Laracon Online')
 #### Timezones
 
 By default events will not use timezones, this means an event like noon at 12 o'clock will be shown for someone in New York
-at a different time then for someone in Sydney.
+at a different time than for someone in Sydney.
 
-If you want to show an event at the exact time it is happening, for example, a talk at a conference then you should consider using timezones.
+If you want to show an event at the exact time it is happening, for example, a talk at an online conference streamed around the world. Then you should consider using timezones.
 
 This package relies on the timezones provided by [PHP DateTime](https://www.php.net/manual/en/datetime.settimezone.php) if you want to include these timezones in an event you can do the following.
 
@@ -156,102 +162,20 @@ Calendar::create()
     ....
 ```
 
-### Alarm
+### Alerts
 
-Alarms allow calendar clients to send reminders about certain events. For example, Apple Mail on an iPhone will send users a notification about the event.
+Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event.
+An alert always belongs to an event and has a description and the number of minutes before the event when it is triggered. 
 
-``` php
-Alarm::create('Creating calender feeds by Ruben Van Assche');
-```
-
-An alarm always has a description and should be added to an event. It is possible to add multiple alarms to one event.
- 
-Adding an alarm to an event can be done as such:
 
 ``` php
-$alarm = Alarm::create('Creating calender feeds by Ruben Van Assche');
-
-Calendar::event('Event Sourcing by Freek Murze')
-    ->alarm($alarm)
-    ...
-
-// As an array of events
-Calendar::event('Creating calender feeds by Ruben Van Assche')
-    ->alarm([
-        Alarm::create('The talk by Ruben is staring soon'),
-        Event::create('The talk by Ruben is staring realy soon'),
-    ])
-    ...    
-    
-// As a closure
-Calendar::event('Creating calender feeds by Ruben Van Assche')
-    ->alarm(function(Alarm $alarm){
-        $alarm->name('The talk by ruben is staring soon');
-    })
-    ...
-```
-
-There are three possible approaches to trigger an alarm
-
-``` php
-// At a specified date timestamp
-
-Alarm::create('The talk by Ruben is starting soon')
-    ->triggerAt(new DateTime('6 march 2019 14:55));
-    
-// A period after the starting of the event
-$duration = Duration::create()->minutes(5);
-
-Alarm::create('The talk by Ruben is starting soon')
-    ->triggerBeforeEvent($duration);
-    
-// A period before the starting of the event
-$duration = Duration::create()->minutes(5)->ago()
-
-Alarm::create('The talk by Ruben has ended')
-    ->triggerAfterEvent($duration);
-```
-
-In the last example we give a negative duration hence: `->ago()`, without this negative duration the alarm would trigger 5 minutes after the event had started.
-Want to trigger an alarm 5 minutes before the event has ended, then use `->ago()` with `triggerBeforeEvent`.
-
-An alarm can be repeated for a number of times after an interval, by default an alarm will be repeated once
-
-``` php
-Alarm::create('The talk by Ruben is starting soon')
-    ->triggerAt(new DateTime('6 march 2019 14:55));
-    ->repeat(Duration::create()->minutes(2))
-
-// Repeating multiple times
-Alarm::create('The talk by Ruben is starting soon')
-    ->triggerAt(new DateTime('6 march 2019 14:55));
-    ->repeat(Duration::create()->minutes(1), 5)
-```
-
-### Durations
-
-A duration can be constructed like this:
-
-``` php
-Duration::create()
-    ->weeks(3)
-    ->days(1)
-    ->hours(4)
-    ->minutes(1)
-    ->seconds(5)
-```
-
-Durations can also be negative.
-
-``` php
-Duration::create()
-    ->days(1)
-    ->ago()
+Event::create('Laracon Online')
+    ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes')
 ```
 
 ### Use with Laravel
 
-You can use Laravel Responses to stream the calendar to clients like Apple Mail as follows
+You can use Laravel Responses to stream to calendar applications
 
 ``` php
 use Illuminate\Http\Response;
@@ -263,17 +187,16 @@ Response::create($calendar->get())->headers([
 ]);
 ```
 
-If you want to add the possibility for users to download a calendar and import it into an application
+If you want to add the possibility for users to download a calendar and import it into a calendar application
 
 ``` php
 use Illuminate\Http\Response;
 
 $calendar = Calendar::create('Laracon Online');
-$filename = 'my-awesome-calendar.ics';
 
 Response::create($calendar->get())->headers([
     'Content-Type:text/calendar;charset=utf-8',
-])->download($filename);
+])->download('my-awesome-calendar.ics');
 ```
 
 ### Testing

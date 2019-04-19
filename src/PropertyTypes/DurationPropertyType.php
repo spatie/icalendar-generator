@@ -12,6 +12,8 @@ final class DurationPropertyType extends PropertyType
         $this->name = $name;
 
         $this->minutes = $minutes;
+
+        $this->parameters = [new Parameter('VALUE', 'DURATION')];
     }
 
     public function getValue(): string

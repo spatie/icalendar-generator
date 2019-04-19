@@ -11,10 +11,10 @@ use Spatie\Calendar\PropertyTypes\Parameter;
 final class Alert extends Component
 {
     /** @var \DateTimeInterface */
-    protected $triggerAt;
+    private $triggerAt;
 
     /** @var null|string */
-    private $description;
+    private $message;
 
     public static function create(DateTimeInterface $triggerAt, string $description = null): Alert
     {
@@ -24,7 +24,7 @@ final class Alert extends Component
     public function __construct(DateTimeInterface $triggerAt, string $description = null)
     {
         $this->triggerAt = $triggerAt;
-        $this->description = $description;
+        $this->message = $description;
     }
 
     public function getComponentType(): string
@@ -41,9 +41,9 @@ final class Alert extends Component
         ];
     }
 
-    public function description(string $description): Alert
+    public function message(string $message): Alert
     {
-        $this->description = $description;
+        $this->message = $message;
 
         return $this;
     }
@@ -59,7 +59,7 @@ final class Alert extends Component
     {
         return ComponentPayload::create($this->getComponentType())
             ->textProperty('ACTION', 'DISPLAY')
-            ->textProperty('DESCRIPTION', $this->description)
+            ->textProperty('DESCRIPTION', $this->message)
             ->property(
                 new DateTimePropertyType('TRIGGER', $this->triggerAt),
                 [new Parameter('VALUE', 'DATE-TIME')]

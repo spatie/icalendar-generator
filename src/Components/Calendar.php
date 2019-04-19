@@ -3,13 +3,9 @@
 namespace Spatie\Calendar\Components;
 
 use Closure;
-use DateInterval;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\Duration;
-use Spatie\Calendar\HasSubComponents;
 use Spatie\Calendar\PropertyTypes\DurationPropertyType;
 use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 final class Calendar extends Component
 {
@@ -79,7 +75,7 @@ final class Calendar extends Component
         $events = is_array($event) ? $event : [$event];
 
         $this->events = array_map(function ($eventToResolve) {
-            if(! is_callable($eventToResolve)){
+            if (! is_callable($eventToResolve)) {
                 return $eventToResolve;
             }
 
@@ -129,10 +125,7 @@ final class Calendar extends Component
             ->alias('NAME', ['X-WR-CALNAME'])
             ->textProperty('DESCRIPTION', $this->description)
             ->when(! is_null($this->refreshInterval), function (ComponentPayload $payload) {
-                $payload->property(
-                    new DurationPropertyType('REFRESH-INTERVAL', $this->refreshInterval),
-                    [new Parameter('VALUE', 'DURATION')]
-                );
+                $payload->property(new DurationPropertyType('REFRESH-INTERVAL', $this->refreshInterval));
             })
             ->subComponent(...$events);
     }

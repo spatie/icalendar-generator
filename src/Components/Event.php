@@ -7,7 +7,6 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\HasSubComponents;
 
 final class Event extends Component
 {
@@ -155,24 +154,9 @@ final class Event extends Component
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->textProperty('LOCATION', $this->location)
-            ->dateTimeProperty(
-                'DTSTART',
-                $this->starts,
-                ! $this->isFullDay,
-                $this->withTimezone
-            )
-            ->dateTimeProperty(
-                'DTEND',
-                $this->ends,
-                ! $this->isFullDay,
-                $this->withTimezone
-            )
-            ->dateTimeProperty(
-                'DTSTAMP',
-                $this->created,
-                true,
-                $this->withTimezone
-            )
+            ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
+            ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
+            ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
             ->subComponent(...$this->alerts);
     }
 }

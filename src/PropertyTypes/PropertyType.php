@@ -45,7 +45,7 @@ abstract class PropertyType
 
     public function addParameters(array $parameters): PropertyType
     {
-        foreach($parameters as $parameter) {
+        foreach ($parameters as $parameter) {
             $this->addParameter($parameter);
         }
 
