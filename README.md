@@ -20,7 +20,7 @@ Calendar::create('Laracon online')
     ->event(Event::create('Creating calender feeds')
         ->starts(new DateTime('6 March 2019 15:00'))
         ->ends(new DateTime('6 March 2019 16:00'))
-    )->stream();
+    )->get();
 ```
 
 ## Installation
