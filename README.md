@@ -41,13 +41,13 @@ Here's how you can create a calendar
 $calendar = Calendar::create();
 ```
 
-You can also give a name to a calendar
+You can give a name to a calendar:
 
 ``` php
 $calendar = Calendar::create('Laracon Online');
 ```
 
-A description can be added to an calendar
+A description can be added to an calendar:
 
 ``` php
 $calendar = Calendar::create()
@@ -55,7 +55,7 @@ $calendar = Calendar::create()
     ->description('Experience Laracon all around the world');
 ```
 
-There are multiple ways to add an event
+There are multiple ways to add an event:
 
 ``` php
 // As single event parameter
@@ -81,7 +81,7 @@ Calendar::create('Laracon Online')
     ...
 ```
 
-Here's how you can convert the calendar to text
+Here's how you can convert the calendar to text:
 
 ``` php
 Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...

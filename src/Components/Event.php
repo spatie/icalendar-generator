@@ -29,7 +29,7 @@ final class Event extends Component
     private $location;
 
     /** @var string */
-    private $uid;
+    private $uuid;
 
     /** @var \DateTimeInterface */
     private $created;
@@ -48,7 +48,7 @@ final class Event extends Component
     public function __construct(string $name = null)
     {
         $this->name = $name;
-        $this->uid = uniqid();
+        $this->uuid = uniqid();
         $this->created = new DateTimeImmutable();
     }
 
@@ -111,7 +111,7 @@ final class Event extends Component
 
     public function uniqueIdentifier(string $uid): Event
     {
-        $this->uid = $uid;
+        $this->uuid = $uid;
 
         return $this;
     }
@@ -150,7 +150,7 @@ final class Event extends Component
     public function getPayload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
-            ->textProperty('UID', $this->uid)
+            ->textProperty('UID', $this->uuid)
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->textProperty('LOCATION', $this->location)
