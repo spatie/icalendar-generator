@@ -10,7 +10,8 @@ Calendars will be generated in the iCalendar format (RFC 5545) which is a textua
 This package tries to implement a minimal version of  [RFC 5545](https://tools.ietf.org/html/rfc5545) with some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986).
 It's not our intention to implement these RFC's entirely but to provide a straightforward API that's easy to use.
 
-## Example
+Here's an example of how to use it:
+
 ```php
 use Spatie\Calendar\Components\Calendar;
 use Spatie\Calendar\Components\Event;
