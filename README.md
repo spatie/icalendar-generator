@@ -1,4 +1,4 @@
-# Build calendars in the iCalendar format
+# Generate calendars in the iCalendar format
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/Calendar.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 [![Build Status](https://img.shields.io/travis/spatie/Calendar/master.svg?style=flat-square)](https://travis-ci.org/spatie/icalendar-generator)
@@ -162,7 +162,7 @@ Calendar::create()
     ....
 ```
 
-### Alerts
+#### Alerts
 
 Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event.
 An alert always belongs to an event and has a description and the number of minutes before the event when it is triggered. 
