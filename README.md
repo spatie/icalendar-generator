@@ -132,7 +132,7 @@ Event::create()
     ->uniqueIdentifier('A unique identifier can be set here')
     ->location('Antwerp')
     ->createdAt(new DateTime('6 march 2019'))
-    ->startsAt(new DateTime('6 march 2019 15:00))
+    ->startsAt(new DateTime('6 march 2019 15:00'))
     ->endsAt(new DateTime('6 march 2019 16:00'));
 ```
 
