@@ -3,14 +3,12 @@
 namespace Spatie\Calendar;
 
 use Closure;
-use DateTimeInterface;
 use Exception;
-use http\Exception\RuntimeException;
+use DateTimeInterface;
 use Spatie\Calendar\Components\Component;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
-use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\PropertyTypes\PropertyType;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 
 final class ComponentPayload
 {

@@ -2,10 +2,10 @@
 
 namespace Spatie\Calendar\Components;
 
-use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\Exceptions\InvalidComponent;
+use Spatie\Calendar\Builders\ComponentBuilder;
 use Spatie\Calendar\PropertyTypes\PropertyType;
+use Spatie\Calendar\Exceptions\InvalidComponent;
 
 abstract class Component
 {

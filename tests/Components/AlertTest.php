@@ -3,11 +3,8 @@
 namespace Spatie\Calendar\Tests\Components;
 
 use DateTime;
-use Spatie\Calendar\Components\Alert;
-use Spatie\Calendar\Duration;
-use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\TestCase;
+use Spatie\Calendar\Components\Alert;
 
 class AlertTest extends TestCase
 {

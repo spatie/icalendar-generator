@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Spatie\Calendar\PropertyTypes;
 
 use Exception;

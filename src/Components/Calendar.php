@@ -5,7 +5,6 @@ namespace Spatie\Calendar\Components;
 use Closure;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\PropertyTypes\DurationPropertyType;
-use Spatie\Calendar\PropertyTypes\Parameter;
 
 final class Calendar extends Component
 {

@@ -2,20 +2,18 @@
 
 namespace Spatie\Calendar\Tests\Components;
 
-use Spatie\Calendar\Exceptions\InvalidComponent;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
-use Spatie\Calendar\Tests\Dummy\DummyComponent;
 use Spatie\Calendar\Tests\TestCase;
+use Spatie\Calendar\Tests\Dummy\DummyComponent;
+use Spatie\Calendar\Exceptions\InvalidComponent;
 
 class ComponentTest extends TestCase
 {
-
     /** @test */
     public function it_will_check_if_all_required_properties_are_set()
     {
         $dummy = new DummyComponent('Dummy');
 
-        $payloadString =  $dummy->toString();
+        $payloadString = $dummy->toString();
 
         $this->assertNotNull($payloadString);
     }

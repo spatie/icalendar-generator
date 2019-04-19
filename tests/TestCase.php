@@ -2,9 +2,8 @@
 
 namespace Spatie\Calendar\Tests;
 
-use Exception;
-use \PHPUnit\Framework\TestCase as BaseTestCase;
 use Spatie\Calendar\ComponentPayload;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use Spatie\Calendar\PropertyTypes\PropertyType;
 
 abstract class TestCase extends BaseTestCase
