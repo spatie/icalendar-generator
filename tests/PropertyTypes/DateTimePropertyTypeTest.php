@@ -4,8 +4,8 @@ namespace Spatie\Calendar\Tests\PropertyTypes;
 
 use DateTime;
 use DateTimeZone;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 use Spatie\Calendar\Tests\TestCase;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 
 class DateTimePropertyTypeTest extends TestCase
 {

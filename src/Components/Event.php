@@ -2,8 +2,8 @@
 
 namespace Spatie\Calendar\Components;
 
-use DateInterval;
 use DateTime;
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;

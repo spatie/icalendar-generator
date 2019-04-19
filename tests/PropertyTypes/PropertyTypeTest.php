@@ -3,10 +3,9 @@
 namespace Spatie\Calendar\Tests\PropertyTypes;
 
 use Exception;
-use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\PropertyTypes\PropertyType;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\TestCase;
+use Spatie\Calendar\PropertyTypes\Parameter;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 class PropertyTypeTest extends TestCase
 {

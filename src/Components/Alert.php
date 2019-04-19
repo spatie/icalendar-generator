@@ -5,8 +5,8 @@ namespace Spatie\Calendar\Components;
 use DateInterval;
 use DateTimeInterface;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 use Spatie\Calendar\PropertyTypes\Parameter;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 
 final class Alert extends Component
 {

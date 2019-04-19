@@ -4,11 +4,10 @@ namespace Spatie\Calendar\Tests\Dummy;
 
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Components\Component;
-use Spatie\Calendar\HasSubComponents;
 
 class DummyComponent extends Component
 {
-    /** @var array  */
+    /** @var array */
     public $subComponents = [];
 
     /** @var string */

@@ -3,8 +3,8 @@
 namespace Spatie\Calendar\Tests\Components;
 
 use DateTime;
-use Spatie\Calendar\Components\Event;
 use Spatie\Calendar\Tests\TestCase;
+use Spatie\Calendar\Components\Event;
 
 class EventTest extends TestCase
 {

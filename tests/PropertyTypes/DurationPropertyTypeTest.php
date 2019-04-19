@@ -2,8 +2,8 @@
 
 namespace Spatie\Calendar\Tests\PropertyTypes;
 
-use Spatie\Calendar\PropertyTypes\DurationPropertyType;
 use Spatie\Calendar\Tests\TestCase;
+use Spatie\Calendar\PropertyTypes\DurationPropertyType;
 
 final class DurationPropertyTypeTest extends TestCase
 {

@@ -2,14 +2,12 @@
 
 namespace Spatie\Calendar\Tests\Components;
 
-use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Spatie\Calendar\Duration;
 use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\Components\Calendar;
 use Spatie\Calendar\Components\Event;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
+use Spatie\Calendar\Components\Calendar;
 
 class CalendarTest extends TestCase
 {
@@ -132,7 +130,7 @@ class CalendarTest extends TestCase
 
         $this->assertEquals($timezone, $eventTimezone);
     }
-    
+
     /** @test */
     public function a_refresh_rate_can_be_set()
     {

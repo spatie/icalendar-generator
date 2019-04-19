@@ -4,7 +4,7 @@ namespace Spatie\Calendar\PropertyTypes;
 
 final class TextPropertyType extends PropertyType
 {
-    /** @var string  */
+    /** @var string */
     private $text;
 
     public function __construct(string $name, string $text)
@@ -20,7 +20,7 @@ final class TextPropertyType extends PropertyType
             '"' => '\\"',
             ',' => '\\,',
             ';' => '\\;',
-            "\n" => '\\n'
+            "\n" => '\\n',
         ];
 
         return str_replace(array_keys($replacements), $replacements, $this->text);

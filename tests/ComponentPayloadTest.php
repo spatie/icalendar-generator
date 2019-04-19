@@ -5,11 +5,11 @@ namespace Spatie\Calendar\Tests;
 use DateTime;
 use Exception;
 use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
 use Spatie\Calendar\Tests\Dummy\DummyComponent;
 use Spatie\Calendar\Tests\Dummy\DummyPropertyType;
+use Spatie\Calendar\PropertyTypes\TextPropertyType;
+use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
 
 class ComponentPayloadTest extends TestCase
 {

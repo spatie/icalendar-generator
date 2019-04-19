@@ -2,7 +2,6 @@
 
 namespace Spatie\Calendar\PropertyTypes;
 
-use DateTime;
 use DateTimeInterface;
 
 final class DateTimePropertyType extends PropertyType
