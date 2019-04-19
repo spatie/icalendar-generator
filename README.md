@@ -23,6 +23,24 @@ Calendar::create('Laracon online')
     )->get();
 ```
 
+The above code will generate this string:
+
+```
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:spatie/icalendar-generator
+NAME:Laracon online
+X-WR-CALNAME:Laracon online
+BEGIN:VEVENT
+UID:5cb9d22a00ba6
+SUMMARY:Creating calender feeds
+DTSTART:20190306T150000
+DTEND:20190306T160000
+DTSTAMP:20190419T135034
+END:VEVENT
+END:VCALENDAR
+```
+
 ## Installation
 
 You can install the package via composer:
