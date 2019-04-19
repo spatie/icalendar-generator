@@ -1,11 +1,11 @@
 {
-    "name": "spatie/calendar",
+    "name": "spatie/icalendar-generator",
     "description": "Build calendars in the iCalendar format",
     "keywords": [
         "spatie",
         "Calendar"
     ],
-    "homepage": "https://github.com/spatie/Calendar",
+    "homepage": "https://github.com/spatie/icalendar-generator",
     "license": "MIT",
     "authors": [
         {
