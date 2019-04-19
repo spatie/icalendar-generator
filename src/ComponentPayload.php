@@ -116,7 +116,7 @@ final class ComponentPayload
         $properties = array_values($filteredProperties);
 
         if (count($properties) === 0) {
-            throw new Exception("Property {$name} does not exist in the payload");
+            throw new Exception("Property `{$name}` does not exist in the payload");
         }
 
         return $properties[0];
