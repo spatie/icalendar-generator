@@ -18,8 +18,8 @@ use Spatie\Calendar\Components\Event;
 
 Calendar::create('Laracon online')
     ->event(Event::create('Creating calender feeds')
-        ->starts(new DateTime('6 March 2019 15:00'))
-        ->ends(new DateTime('6 March 2019 16:00'))
+        ->startsAt(new DateTime('6 March 2019 15:00'))
+        ->endsAt(new DateTime('6 March 2019 16:00'))
     )->get();
 ```
 
