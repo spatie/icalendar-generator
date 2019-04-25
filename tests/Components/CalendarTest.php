@@ -18,7 +18,7 @@ class CalendarTest extends TestCase
 
         $this->assertEquals('CALENDAR', $payload->getType());
 
-        $this->assertEquals(2, count($payload->getProperties()));
+        $this->assertCount(2, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('VERSION', '2.0', $payload);
         $this->assertPropertyEqualsInPayload('PRODID', 'spatie/icalendar-generator', $payload);
@@ -32,7 +32,7 @@ class CalendarTest extends TestCase
             ->description('What events are going to happen?')
             ->getPayload();
 
-        $this->assertEquals(4, count($payload->getProperties()));
+        $this->assertCount(4, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('NAME', 'Full Stack Europe Schedule', $payload);
         $this->assertAliasEqualsForProperty('NAME', ['X-WR-CALNAME'], $payload);
@@ -50,7 +50,7 @@ class CalendarTest extends TestCase
 
         $subComponents = $payload->getSubComponents();
 
-        $this->assertEquals(1, count($subComponents));
+        $this->assertCount(1, $subComponents);
         $this->assertEquals($subComponents[0], $event);
     }
 
@@ -65,7 +65,7 @@ class CalendarTest extends TestCase
 
         $subComponents = $payload->getSubComponents();
 
-        $this->assertEquals(1, count($subComponents));
+        $this->assertCount(1, $subComponents);
         $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
     }
 
@@ -81,7 +81,7 @@ class CalendarTest extends TestCase
 
         $subComponents = $payload->getSubComponents();
 
-        $this->assertEquals(2, count($subComponents));
+        $this->assertCount(2, $subComponents);
         $this->assertEquals($subComponents[0], $firstEvent);
         $this->assertEquals($subComponents[1], $secondEvent);
     }
@@ -102,7 +102,7 @@ class CalendarTest extends TestCase
 
         $subComponents = $payload->getSubComponents();
 
-        $this->assertEquals(2, count($subComponents));
+        $this->assertCount(2, $subComponents);
         $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
         $this->assertPropertyEqualsInPayload('SUMMARY', 'Websockets what are they?', $subComponents[1]->getPayload());
     }

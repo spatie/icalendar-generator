@@ -16,7 +16,7 @@ class EventTest extends TestCase
         $properties = $payload->getProperties();
 
         $this->assertEquals('EVENT', $payload->getType());
-        $this->assertEquals(2, count($properties));
+        $this->assertCount(2, $properties);
 
         $this->assertPropertyExistInPayload('UID', $payload);
         $this->assertPropertyExistInPayload('DTSTAMP', $payload);
@@ -38,7 +38,7 @@ class EventTest extends TestCase
             ->location('Antwerp')
             ->getPayload();
 
-        $this->assertEquals(7, count($payload->getProperties()));
+        $this->assertCount(7, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction into event sourcing', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'By Freek Murze', $payload);
