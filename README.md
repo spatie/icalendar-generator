@@ -21,7 +21,8 @@ Calendar::create('Laracon online')
     ->event(Event::create('Creating calender feeds')
         ->startsAt(new DateTime('6 March 2019 15:00'))
         ->endsAt(new DateTime('6 March 2019 16:00'))
-    )->get();
+    )
+    ->get();
 ```
 
 The above code will generate this string:
@@ -52,9 +53,7 @@ composer require spatie/Calendar
 
 ## Usage
 
-### Calendars
-
-Here's how you can create a calendar
+Here's how you can create a calendar:
 
 ``` php
 $calendar = Calendar::create();
@@ -124,7 +123,7 @@ Event::create('Laracon Online')
     ->startsAt(new DateTime('6 march 2019'));
 ```
 
-You can set following properties on an event
+You can set following properties on an event:
 
 ``` php
 Event::create()
@@ -138,6 +137,7 @@ Event::create()
 ```
 
 Want to create an event quickly with start and end date?
+
 ``` php
 Event::create('Laracon Online')
     ->period(new DateTime('6 march 2019'), new DateTime('7 march 2019'));
@@ -177,7 +177,7 @@ Want timezones in each event of the calendar?
 
 ``` php
 Calendar::create()
-    ->withTimezones()
+   ->withTimezones()
     ....
 ```
 
@@ -201,9 +201,10 @@ use Illuminate\Http\Response;
 
 $calendar = Calendar::create('Laracon Online');
 
-Response::create($calendar->get())->headers([
-    'Content-Type:text/calendar;charset=utf-8',
-]);
+Response::create($calendar->get())
+   ->headers([
+      'Content-Type:text/calendar;charset=utf-8',
+   ]);
 ```
 
 If you want to add the possibility for users to download a calendar and import it into a calendar application
@@ -213,9 +214,11 @@ use Illuminate\Http\Response;
 
 $calendar = Calendar::create('Laracon Online');
 
-Response::create($calendar->get())->headers([
-    'Content-Type:text/calendar;charset=utf-8',
-])->download('my-awesome-calendar.ics');
+Response::create($calendar->get())
+   ->headers([
+      'Content-Type:text/calendar;charset=utf-8',
+   ])
+   ->download('my-awesome-calendar.ics');
 ```
 
 ### Testing
