@@ -5,7 +5,7 @@ namespace Spatie\Calendar\PropertyTypes;
 final class DurationPropertyType extends PropertyType
 {
     /** @var int */
-    protected $minutes;
+    private $minutes;
 
     public function __construct(string $name, int $minutes)
     {
