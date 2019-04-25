@@ -9,13 +9,9 @@ final class PropertyBuilder
     /** @var \Spatie\Calendar\PropertyTypes\PropertyType */
     private $property;
 
-    /** @var string */
-    private $alias;
-
-    public function __construct(PropertyType $property, string $alias = null)
+    public function __construct(PropertyType $property)
     {
         $this->property = $property;
-        $this->alias = $alias;
     }
 
     public function build($name = null): string
