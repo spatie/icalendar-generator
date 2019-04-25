@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Calendar\Tests\Dummy;
+namespace Spatie\Calendar\Tests\TestClasses;
 
 use Spatie\Calendar\PropertyTypes\PropertyType;
 

@@ -3,7 +3,7 @@
 namespace Spatie\Calendar\Tests\Components;
 
 use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\Tests\Dummy\DummyComponent;
+use Spatie\Calendar\Tests\TestClasses\DummyComponent;
 use Spatie\Calendar\Exceptions\InvalidComponent;
 
 class ComponentTest extends TestCase

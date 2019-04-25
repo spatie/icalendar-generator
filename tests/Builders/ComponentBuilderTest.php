@@ -5,8 +5,8 @@ namespace Spatie\Calendar\Tests\Builders;
 use Spatie\Calendar\Tests\TestCase;
 use Spatie\Calendar\ComponentPayload;
 use Spatie\Calendar\Builders\ComponentBuilder;
-use Spatie\Calendar\Tests\Dummy\DummyComponent;
-use Spatie\Calendar\Tests\Dummy\DummyPropertyType;
+use Spatie\Calendar\Tests\TestClasses\DummyComponent;
+use Spatie\Calendar\Tests\TestClasses\DummyPropertyType;
 
 class ComponentBuilderTest extends TestCase
 {

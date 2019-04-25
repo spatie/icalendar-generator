@@ -5,7 +5,7 @@ namespace Spatie\Calendar\Tests\Builders;
 use Spatie\Calendar\Tests\TestCase;
 use Spatie\Calendar\PropertyTypes\Parameter;
 use Spatie\Calendar\Builders\PropertyBuilder;
-use Spatie\Calendar\Tests\Dummy\DummyPropertyType;
+use Spatie\Calendar\Tests\TestClasses\DummyPropertyType;
 use Spatie\Calendar\PropertyTypes\TextPropertyType;
 
 class PropertyBuilderTest extends TestCase
