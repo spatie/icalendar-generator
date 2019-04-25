@@ -16,7 +16,7 @@ class AlertTest extends TestCase
         $payload = Alert::create($trigger, 'It is time')->getPayload();
 
         $this->assertEquals('ALARM', $payload->getType());
-        $this->assertEquals(3, count($payload->getProperties()));
+        $this->assertCount(3, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is time', $payload);
