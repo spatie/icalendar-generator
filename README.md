@@ -48,7 +48,7 @@ END:VCALENDAR
 You can install the package via composer:
 
 ```bash
-composer require spatie/Calendar
+composer require spatie/icalendar-generator
 ```
 
 ## Usage
