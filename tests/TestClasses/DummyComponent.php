@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Calendar\Tests\TestClasses;
+namespace Spatie\IcalendarGenerator\Tests\TestClasses;
 
-use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\Components\Component;
+use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\Components\Component;
 
 class DummyComponent extends Component
 {

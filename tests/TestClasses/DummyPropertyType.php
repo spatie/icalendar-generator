@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\Calendar\Tests\TestClasses;
+namespace Spatie\IcalendarGenerator\Tests\TestClasses;
 
-use Spatie\Calendar\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 class DummyPropertyType extends PropertyType
 {

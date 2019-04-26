@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Calendar\\": "src"
+            "Spatie\\IcalendarGenerator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Calendar\\Tests\\": "tests"
+            "Spatie\\IcalendarGenerator\\Tests\\": "tests"
         }
     },
     "scripts": {

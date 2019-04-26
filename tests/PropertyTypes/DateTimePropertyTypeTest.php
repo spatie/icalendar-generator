@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Calendar\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
 use DateTime;
 use DateTimeZone;
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 
 class DateTimePropertyTypeTest extends TestCase
 {

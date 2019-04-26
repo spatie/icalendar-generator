@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Calendar\Tests\Builders;
+namespace Spatie\IcalendarGenerator\Tests\Builders;
 
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\Builders\PropertyBuilder;
-use Spatie\Calendar\Tests\TestClasses\DummyPropertyType;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
 class PropertyBuilderTest extends TestCase
 {

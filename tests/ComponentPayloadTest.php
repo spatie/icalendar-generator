@@ -1,15 +1,15 @@
 <?php
 
-namespace Spatie\Calendar\Tests;
+namespace Spatie\IcalendarGenerator\Tests;
 
 use DateTime;
 use Exception;
-use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\Tests\TestClasses\DummyComponent;
-use Spatie\Calendar\Tests\TestClasses\DummyPropertyType;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 
 class ComponentPayloadTest extends TestCase
 {

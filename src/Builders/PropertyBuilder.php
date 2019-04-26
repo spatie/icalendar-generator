@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Calendar\Builders;
+namespace Spatie\IcalendarGenerator\Builders;
 
-use Spatie\Calendar\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 final class PropertyBuilder
 {
-    /** @var \Spatie\Calendar\PropertyTypes\PropertyType */
+    /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType */
     private $property;
 
     public function __construct(PropertyType $property)
@@ -30,7 +30,7 @@ final class PropertyBuilder
         $parameters = '';
 
         foreach ($this->property->getParameters() as $parameter) {
-            /** @var \Spatie\Calendar\PropertyTypes\PropertyType $parameter */
+            /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType $parameter */
             $name = $parameter->getName();
             $value = $parameter->getValue();
 

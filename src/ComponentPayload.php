@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\Calendar;
+namespace Spatie\IcalendarGenerator;
 
 use Closure;
 use Exception;
 use DateTimeInterface;
-use Spatie\Calendar\Components\Component;
-use Spatie\Calendar\PropertyTypes\PropertyType;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\Components\Component;
+use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 
 final class ComponentPayload
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Calendar\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
 use Exception;
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
 class PropertyTypeTest extends TestCase
 {

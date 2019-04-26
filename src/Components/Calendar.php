@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Calendar\Components;
+namespace Spatie\IcalendarGenerator\Components;
 
 use Closure;
-use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\DurationPropertyType;
+use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 
 final class Calendar extends Component
 {
@@ -61,9 +61,9 @@ final class Calendar extends Component
     }
 
     /**
-     * @param $event \Spatie\Calendar\Components\Event|array|Closure
+     * @param $event \Spatie\IcalendarGenerator\Components\Event|array|Closure
      *
-     * @return \Spatie\Calendar\Components\Calendar
+     * @return \Spatie\IcalendarGenerator\Components\Calendar
      */
     public function event($event): Calendar
     {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Calendar\Components;
+namespace Spatie\IcalendarGenerator\Components;
 
 use DateTime;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Spatie\Calendar\ComponentPayload;
+use Spatie\IcalendarGenerator\ComponentPayload;
 
 final class Event extends Component
 {

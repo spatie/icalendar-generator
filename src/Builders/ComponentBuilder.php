@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\Calendar\Builders;
+namespace Spatie\IcalendarGenerator\Builders;
 
-use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 final class ComponentBuilder
 {
-    /** @var \Spatie\Calendar\ComponentPayload */
+    /** @var \Spatie\IcalendarGenerator\ComponentPayload */
     private $componentPayload;
 
     public function __construct(ComponentPayload $componentPayload)
@@ -72,7 +72,7 @@ final class ComponentBuilder
     {
         $lines = [];
 
-        /** @var \Spatie\Calendar\Components\Component $component */
+        /** @var \Spatie\IcalendarGenerator\Components\Component $component */
         foreach ($this->componentPayload->getSubComponents() as $component) {
             $builder = new ComponentBuilder($component->getPayload());
 

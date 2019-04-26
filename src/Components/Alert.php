@@ -1,12 +1,12 @@
 <?php
 
-namespace Spatie\Calendar\Components;
+namespace Spatie\IcalendarGenerator\Components;
 
 use DateInterval;
 use DateTimeInterface;
-use Spatie\Calendar\ComponentPayload;
-use Spatie\Calendar\PropertyTypes\Parameter;
-use Spatie\Calendar\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 
 final class Alert extends Component
 {

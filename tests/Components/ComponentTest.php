@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Calendar\Tests\Components;
+namespace Spatie\IcalendarGenerator\Tests\Components;
 
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\Tests\TestClasses\DummyComponent;
-use Spatie\Calendar\Exceptions\InvalidComponent;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
+use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 
 class ComponentTest extends TestCase
 {

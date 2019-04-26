@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Calendar\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\PropertyTypes\DurationPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 
 final class DurationPropertyTypeTest extends TestCase
 {

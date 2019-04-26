@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\Calendar\Exceptions;
+namespace Spatie\IcalendarGenerator\Exceptions;
 
 use Exception;
-use Spatie\Calendar\Components\Component;
+use Spatie\IcalendarGenerator\Components\Component;
 
 final class InvalidComponent extends Exception
 {

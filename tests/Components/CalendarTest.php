@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\Calendar\Tests\Components;
+namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
 use DateTimeZone;
-use Spatie\Calendar\Duration;
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\Components\Event;
-use Spatie\Calendar\Components\Calendar;
+use Spatie\IcalendarGenerator\Duration;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Components\Calendar;
 
 class CalendarTest extends TestCase
 {

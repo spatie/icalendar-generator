@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Calendar\Tests\Components;
+namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
-use Spatie\Calendar\Tests\TestCase;
-use Spatie\Calendar\Components\Alert;
+use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\Components\Alert;
 
 class AlertTest extends TestCase
 {

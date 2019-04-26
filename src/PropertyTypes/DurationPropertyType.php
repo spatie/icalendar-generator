@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Calendar\PropertyTypes;
+namespace Spatie\IcalendarGenerator\PropertyTypes;
 
 final class DurationPropertyType extends PropertyType
 {

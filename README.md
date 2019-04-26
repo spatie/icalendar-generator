@@ -14,8 +14,8 @@ It's not our intention to implement these RFC's entirely but to provide a straig
 Here's an example of how to use it:
 
 ```php
-use Spatie\Calendar\Components\Calendar;
-use Spatie\Calendar\Components\Event;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
 
 Calendar::create('Laracon online')
     ->event(Event::create('Creating calender feeds')
