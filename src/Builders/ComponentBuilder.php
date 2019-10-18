@@ -3,7 +3,6 @@
 namespace Spatie\IcalendarGenerator\Builders;
 
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 final class ComponentBuilder
 {
@@ -19,7 +18,7 @@ final class ComponentBuilder
     {
         $lines = [];
 
-        foreach ($this->buildComponent() as $line){
+        foreach ($this->buildComponent() as $line) {
             $lines = array_merge($lines, $this->chipLine($line));
         }
 

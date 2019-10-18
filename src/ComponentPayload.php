@@ -67,7 +67,8 @@ final class ComponentPayload
      *
      * @return \Spatie\IcalendarGenerator\ComponentPayload
      */
-    public function textProperty($names, ?string $value): ComponentPayload {
+    public function textProperty($names, ?string $value): ComponentPayload
+    {
         if ($value === null) {
             return $this;
         }

@@ -2,8 +2,8 @@
 
 namespace Spatie\IcalendarGenerator\Tests;
 
-use Spatie\IcalendarGenerator\ComponentPayload;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 abstract class TestCase extends BaseTestCase
