@@ -14,15 +14,15 @@ final class PropertyBuilder
         $this->property = $property;
     }
 
-    public function build($name = null): string
+    public function build(): array
     {
-        $name = $name ?? $this->property->getName();
-
         $parameters = $this->resolveParameters();
 
         $value = $this->property->getValue();
 
-        return "{$name}{$parameters}:{$value}";
+        return array_map(function (string $name) use ($value, $parameters) {
+            return "{$name}{$parameters}:{$value}";
+        }, $this->property->getNames());
     }
 
     private function resolveParameters(): string
@@ -30,7 +30,7 @@ final class PropertyBuilder
         $parameters = '';
 
         foreach ($this->property->getParameters() as $parameter) {
-            /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType $parameter */
+            /** @var \Spatie\IcalendarGenerator\PropertyTypes\Parameter $parameter */
             $name = $parameter->getName();
             $value = $parameter->getValue();
 

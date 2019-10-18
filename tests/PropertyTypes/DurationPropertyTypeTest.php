@@ -12,7 +12,7 @@ final class DurationPropertyTypeTest extends TestCase
     {
         $property = new DurationPropertyType('DURATION', 5);
 
-        $this->assertEquals('DURATION', $property->getName());
+        $this->assertEquals(['DURATION'], $property->getNames());
         $this->assertEquals(5, $property->getOriginalValue());
         $this->assertEquals('PT5M', $property->getValue());
     }

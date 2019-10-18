@@ -21,9 +21,6 @@ final class ComponentPayload
     /** @var array */
     private $subComponents = [];
 
-    /** @var array */
-    private $aliases = [];
-
     public static function create(string $type): ComponentPayload
     {
         return new self($type);
@@ -43,8 +40,16 @@ final class ComponentPayload
         return $this;
     }
 
+    /**
+     * @param array|string $names
+     * @param \DateTimeInterface|null $value
+     * @param bool $withTime
+     * @param bool $withTimeZone
+     *
+     * @return \Spatie\IcalendarGenerator\ComponentPayload
+     */
     public function dateTimeProperty(
-        string $name,
+        $names,
         ?DateTimeInterface $value,
         bool $withTime = false,
         bool $withTimeZone = false
@@ -53,18 +58,21 @@ final class ComponentPayload
             return $this;
         }
 
-        return $this->property(new DateTimePropertyType($name, $value, $withTime, $withTimeZone));
+        return $this->property(new DateTimePropertyType($names, $value, $withTime, $withTimeZone));
     }
 
-    public function textProperty(
-        string $name,
-        ?string $value
-    ): ComponentPayload {
+    /**
+     * @param array|string $names
+     * @param string|null $value
+     *
+     * @return \Spatie\IcalendarGenerator\ComponentPayload
+     */
+    public function textProperty($names, ?string $value): ComponentPayload {
         if ($value === null) {
             return $this;
         }
 
-        return $this->property(new TextPropertyType($name, $value));
+        return $this->property(new TextPropertyType($names, $value));
     }
 
     public function subComponent(Component ...$components): ComponentPayload
@@ -72,13 +80,6 @@ final class ComponentPayload
         foreach ($components as $component) {
             $this->subComponents[] = $component;
         }
-
-        return $this;
-    }
-
-    public function alias(string $propertyName, array $aliases): ComponentPayload
-    {
-        $this->aliases[$propertyName] = $aliases;
 
         return $this;
     }
@@ -107,7 +108,7 @@ final class ComponentPayload
         $filteredProperties = array_filter(
             $this->properties,
             function (PropertyType $property) use ($name) {
-                return $property->getName() === $name;
+                return in_array($name, $property->getNames());
             }
         );
 
@@ -118,17 +119,6 @@ final class ComponentPayload
         }
 
         return $properties[0];
-    }
-
-    public function getAliasesForProperty(string $name): array
-    {
-        foreach ($this->aliases as $propertyName => $aliases) {
-            if ($name === $propertyName) {
-                return $aliases;
-            }
-        }
-
-        return [];
     }
 
     public function getSubComponents(): array

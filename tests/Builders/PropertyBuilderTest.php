@@ -16,7 +16,7 @@ class PropertyBuilderTest extends TestCase
         $property = new DummyPropertyType('location', 'Antwerp');
 
         $this->assertEquals(
-            'location:Antwerp',
+            ['location:Antwerp'],
             (new PropertyBuilder($property))->build()
         );
     }
@@ -31,7 +31,7 @@ class PropertyBuilderTest extends TestCase
         );
 
         $this->assertEquals(
-            'location;street=Samberstraat:Antwerp',
+            ['location;street=Samberstraat:Antwerp'],
             (new PropertyBuilder($property))->build()
         );
     }
@@ -42,7 +42,7 @@ class PropertyBuilderTest extends TestCase
         $property = new TextPropertyType('location', 'Antwerp, Belgium');
 
         $this->assertEquals(
-            'location:Antwerp\, Belgium',
+            ['location:Antwerp\, Belgium'],
             (new PropertyBuilder($property))->build()
         );
     }
@@ -50,11 +50,14 @@ class PropertyBuilderTest extends TestCase
     /** @test */
     public function it_will_use_the_alias_of_a_property_when_given()
     {
-        $property = new TextPropertyType('location', 'Antwerp, Belgium');
+        $property = new TextPropertyType(['location', 'geo'], 'Antwerp, Belgium');
 
         $this->assertEquals(
-            'geo:Antwerp\, Belgium',
-            (new PropertyBuilder($property))->build('geo')
+            [
+                'location:Antwerp\, Belgium',
+                'geo:Antwerp\, Belgium',
+            ],
+            (new PropertyBuilder($property))->build()
         );
     }
 }

@@ -6,8 +6,10 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/icalendar-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/icalendar-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
+**This package is still under development**
+
 Using this package, you can generate calendars for applications like Apple's Calendar and Google Calendar.
-Calendars will be generated in the iCalendar format (RFC 5545) which is a textual format that can be loaded by different applications.
+Calendars will be generated in the iCalendar format (RFC 5545), which is a textual format that can be loaded by different applications.
 This package tries to implement a minimal version of  [RFC 5545](https://tools.ietf.org/html/rfc5545) with some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986).
 It's not our intention to implement these RFC's entirely but to provide a straightforward API that's easy to use.
 
@@ -73,11 +75,54 @@ $calendar = Calendar::create()
     ->description('Experience Laracon all around the world');
 ```
 
-There are multiple ways to add an event:
+In the end, you want to convert your calendar to text so it can be streamed or downloaded to the user. Here's how you do that:
 
 ``` php
-// As single event parameter
-$event = Event::create('Creating calender feeds');
+Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...
+```
+
+When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the refresh interval for the calendar by duration in minutes. When setting this, the calendar application will check your server every time after the specified duration for changes to the calendar:
+
+``` php
+Calendar::create('Laracon Online')
+    ->refreshInterval(5)
+    ...
+```
+
+### Event
+
+An event can be created as follows. A name is not required, but a start date should always be given:
+
+``` php
+Event::create('Laracon Online')
+    ->startsAt(new DateTime('6 march 2019'));
+```
+
+You can set the following properties on an event:
+
+``` php
+Event::create()
+    ->name('Laracon Online')
+    ->description('Experience Laracon all around the world')
+    ->uniqueIdentifier('A unique identifier can be set here')
+    ->location('Antwerp')
+    ->createdAt(new DateTime('6 march 2019'))
+    ->startsAt(new DateTime('6 march 2019 15:00'))
+    ->endsAt(new DateTime('6 march 2019 16:00'));
+```
+
+Want to create an event quickly with start and end date?
+
+``` php
+Event::create('Laracon Online')
+    ->period(new DateTime('6 march 2019'), new DateTime('7 march 2019'));
+```
+
+After creating your event, it should be added to a calendar. There are multiple options to do this:
+
+``` php
+// As a single event parameter
+$event = Event::create('Creating calendar feeds');
 
 Calendar::create('Laracon Online')
     ->event($event)
@@ -99,53 +144,9 @@ Calendar::create('Laracon Online')
     ...
 ```
 
-Here's how you can convert the calendar to text:
-
-``` php
-Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...
-```
-
-When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the refresh interval for the calendar by duration in minutes.
-When setting this, the calendar application will check your server every time after the specified duration for changes to the calendar.
-
-``` php
-Calendar::create('Laracon Online')
-    ->refreshInterval(5)
-    ...
-```
-
-### Event
-
-An event can be created as follows. A name is not required, but a start date should always be given.
-
-``` php
-Event::create('Laracon Online')
-    ->startsAt(new DateTime('6 march 2019'));
-```
-
-You can set following properties on an event:
-
-``` php
-Event::create()
-    ->name('Laracon Online')
-    ->description('Experience Laracon all around the world')
-    ->uniqueIdentifier('A unique identifier can be set here')
-    ->location('Antwerp')
-    ->createdAt(new DateTime('6 march 2019'))
-    ->startsAt(new DateTime('6 march 2019 15:00'))
-    ->endsAt(new DateTime('6 march 2019 16:00'));
-```
-
-Want to create an event quickly with start and end date?
-
-``` php
-Event::create('Laracon Online')
-    ->period(new DateTime('6 march 2019'), new DateTime('7 march 2019'));
-```
-
 #### Using Carbon
 
-Since this package expects a DateTimeInterface for properties related to date and time, it is possible to use the popular [Carbon library](https://carbon.nesbot.com/).
+Since this package expects a DateTimeInterface for properties related to date and time, it is possible to use the popular [Carbon library](https://carbon.nesbot.com/):
 
 ``` php
 use Carbon\Carbon;
@@ -157,12 +158,11 @@ Event::create('Laracon Online')
 
 #### Timezones
 
-By default events will not use timezones, this means an event like noon at 12 o'clock will be shown for someone in New York
-at a different time than for someone in Sydney.
+By default, events will not use timezones. This means an event like noon at 12 o'clock will be shown for someone in New York at a different time than for someone in Sydney.
 
 If you want to show an event at the exact time it is happening, for example, a talk at an online conference streamed around the world. Then you should consider using timezones.
 
-This package relies on the timezones provided by [PHP DateTime](https://www.php.net/manual/en/datetime.settimezone.php) if you want to include these timezones in an event you can do the following.
+This package relies on the timezones provided by [PHP DateTime](https://www.php.net/manual/en/datetime.settimezone.php) if you want to include these timezones in an event you can do the following:
 
 ``` php
 $start = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
@@ -173,7 +173,7 @@ Event::create()
     ...
 ```
 
-Want timezones in each event of the calendar?
+Want timezones in each event of the calendar, then add `withTimezones` to your `Calendar`:
 
 ``` php
 Calendar::create()
@@ -183,8 +183,7 @@ Calendar::create()
 
 #### Alerts
 
-Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event.
-An alert always belongs to an event and has a description and the number of minutes before the event when it is triggered. 
+Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event. An alert always belongs to an event and has a description and the number of minutes before the event it will be triggered:
 
 
 ``` php
@@ -194,31 +193,25 @@ Event::create('Laracon Online')
 
 ### Use with Laravel
 
-You can use Laravel Responses to stream to calendar applications
+You can use Laravel Responses to stream to calendar applications:
 
 ``` php
-use Illuminate\Http\Response;
-
 $calendar = Calendar::create('Laracon Online');
 
-Response::create($calendar->get())
-   ->headers([
-      'Content-Type:text/calendar;charset=utf-8',
-   ]);
+response($calendar->get())
+    ->header('Content-Type', 'text/calendar')
+    ->header('charset', 'utf-8');
 ```
 
-If you want to add the possibility for users to download a calendar and import it into a calendar application
+If you want to add the possibility for users to download a calendar and import it into a calendar application:
 
 ``` php
-use Illuminate\Http\Response;
-
 $calendar = Calendar::create('Laracon Online');
 
-Response::create($calendar->get())
-   ->headers([
-      'Content-Type:text/calendar;charset=utf-8',
-   ])
-   ->download('my-awesome-calendar.ics');
+response($calendar->get())
+    ->header('Content-Type', 'text/calendar')
+    ->header('charset', 'utf-8');
+    ->download('my-awesome-calendar.ics');
 ```
 
 ### Testing

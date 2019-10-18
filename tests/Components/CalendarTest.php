@@ -35,7 +35,7 @@ class CalendarTest extends TestCase
         $this->assertCount(4, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('NAME', 'Full Stack Europe Schedule', $payload);
-        $this->assertAliasEqualsForProperty('NAME', ['X-WR-CALNAME'], $payload);
+        $this->assertPropertyEqualsInPayload('X-WR-CALNAME', 'Full Stack Europe Schedule', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'What events are going to happen?', $payload);
     }
 

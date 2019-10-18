@@ -7,9 +7,15 @@ final class DurationPropertyType extends PropertyType
     /** @var int */
     private $minutes;
 
-    public function __construct(string $name, int $minutes)
+    /**
+     * DurationPropertyType constructor.
+     *
+     * @param array|string $names
+     * @param int $minutes
+     */
+    public function __construct($names, int $minutes)
     {
-        $this->name = $name;
+        parent::__construct($names);
 
         $this->minutes = $minutes;
 

@@ -15,13 +15,21 @@ final class DateTimePropertyType extends PropertyType
     /** @var bool */
     private $withTimeZone;
 
+    /**
+     * DateTimePropertyType constructor.
+     *
+     * @param array|string $names
+     * @param \DateTimeInterface $dateTime
+     * @param bool $withTime
+     * @param bool $withTimeZone
+     */
     public function __construct(
-        string $name,
+        $names,
         DateTimeInterface $dateTime,
         bool $withTime = false,
         bool $withTimeZone = false
     ) {
-        $this->name = $name;
+        parent::__construct($names);
 
         $this->dateTime = $dateTime;
 

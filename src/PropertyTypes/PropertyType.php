@@ -6,8 +6,8 @@ use Exception;
 
 abstract class PropertyType
 {
-    /** @var string */
-    protected $name;
+    /** @var array */
+    protected $names;
 
     /** @var array */
     protected $parameters = [];
@@ -16,9 +16,21 @@ abstract class PropertyType
 
     abstract public function getOriginalValue();
 
-    public function getName(): string
+    /**
+     * PropertyType constructor.
+     *
+     * @param $names array|string
+     */
+    public function __construct($names)
     {
-        return $this->name;
+        $this->names = is_string($names)
+            ? [$names]
+            : $names;
+    }
+
+    public function getNames(): array
+    {
+        return $this->names;
     }
 
     public function getParameters(): array

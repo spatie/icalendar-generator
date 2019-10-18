@@ -120,8 +120,7 @@ final class Calendar extends Component
         return ComponentPayload::create($this->getComponentType())
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', 'spatie/icalendar-generator')
-            ->textProperty('NAME', $this->name)
-            ->alias('NAME', ['X-WR-CALNAME'])
+            ->textProperty(['NAME', 'X-WR-CALNAME'], $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->when(! is_null($this->refreshInterval), function (ComponentPayload $payload) {
                 $payload->property(new DurationPropertyType('REFRESH-INTERVAL', $this->refreshInterval));

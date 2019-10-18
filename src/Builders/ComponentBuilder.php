@@ -17,7 +17,13 @@ final class ComponentBuilder
 
     public function build(): string
     {
-        return implode("\r\n", $this->buildComponent());
+        $lines = [];
+
+        foreach ($this->buildComponent() as $line){
+            $lines = array_merge($lines, $this->chipLine($line));
+        }
+
+        return implode("\r\n", $lines);
     }
 
     public function buildComponent(): array
@@ -40,32 +46,15 @@ final class ComponentBuilder
         $lines = [];
 
         foreach ($this->componentPayload->getProperties() as $key => $property) {
-            $propertyBuilder = new PropertyBuilder($property);
+            $builder = new PropertyBuilder($property);
 
             $lines = array_merge(
                 $lines,
-                $this->chipLine($propertyBuilder->build()),
-                $this->buildAliasesForProperty($property, $propertyBuilder)
+                $builder->build()
             );
         }
 
         return $lines;
-    }
-
-    private function buildAliasesForProperty(
-        PropertyType $property,
-        PropertyBuilder $propertyBuilder
-    ): array {
-        $properties = [];
-
-        foreach ($this->componentPayload->getAliasesForProperty($property->getName()) as $alias) {
-            $properties = array_merge(
-                $properties,
-                $this->chipLine($propertyBuilder->build($alias))
-            );
-        }
-
-        return $properties;
     }
 
     private function buildSubComponents(): array

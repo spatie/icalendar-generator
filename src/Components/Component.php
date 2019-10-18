@@ -28,18 +28,24 @@ abstract class Component
 
     protected function ensureRequiredPropertiesAreSet(ComponentPayload $componentPayload)
     {
-        $requiredProperties = $this->getRequiredProperties();
+        $providedProperties = [];
 
-        $providedProperties = array_map(function (PropertyType $property) {
-            return $property->getName();
-        }, $componentPayload->getProperties());
+        /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType $property */
+        foreach ($componentPayload->getProperties() as $property) {
+            $providedProperties = array_merge(
+                $providedProperties,
+                $property->getNames()
+            );
+        }
+
+        $requiredProperties = $this->getRequiredProperties();
 
         $intersection = array_intersect($requiredProperties, $providedProperties);
 
         if (count($intersection) !== count($requiredProperties)) {
-            $notProvidedProperties = array_diff($requiredProperties, $intersection);
+            $missingProperties = array_diff($requiredProperties, $intersection);
 
-            throw InvalidComponent::requiredPropertyMissing($notProvidedProperties, $this);
+            throw InvalidComponent::requiredPropertyMissing($missingProperties, $this);
         }
     }
 }

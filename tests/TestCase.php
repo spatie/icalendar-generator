@@ -23,11 +23,6 @@ abstract class TestCase extends BaseTestCase
         $this->assertEquals($value, $componentPayload->getProperty($name)->getOriginalValue());
     }
 
-    protected function assertAliasEqualsForProperty(string $propertyName, array $aliases, ComponentPayload $componentPayload): void
-    {
-        $this->assertEquals($aliases, $componentPayload->getAliasesForProperty($propertyName));
-    }
-
     protected function assertParameterEqualsInProperty(string $name, $value, PropertyType $propertyType): void
     {
         $this->assertEquals($value, $propertyType->getParameter($name)->getValue());

@@ -7,9 +7,16 @@ final class TextPropertyType extends PropertyType
     /** @var string */
     private $text;
 
-    public function __construct(string $name, string $text)
+    /**
+     * TextPropertyType constructor.
+     *
+     * @param array|string $names
+     * @param string $text
+     */
+    public function __construct($names, string $text)
     {
-        $this->name = $name;
+        parent::__construct($names);
+
         $this->text = $text;
     }
 
