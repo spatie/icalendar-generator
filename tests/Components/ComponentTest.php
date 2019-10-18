@@ -3,8 +3,8 @@
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use Spatie\IcalendarGenerator\Tests\TestCase;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
 class ComponentTest extends TestCase
 {

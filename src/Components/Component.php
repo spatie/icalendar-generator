@@ -4,7 +4,6 @@ namespace Spatie\IcalendarGenerator\Components;
 
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 
 abstract class Component
