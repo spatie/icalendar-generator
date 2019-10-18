@@ -79,4 +79,25 @@ class EventTest extends TestCase
         $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
     }
+
+    /** @test */
+    public function it_can_alert_minutes_before_an_event()
+    {
+        $dateStarts = new DateTime('17 may 2019 10:00:00');
+        $dateEnds = new DateTime('17 may 2019 12:00:00');
+
+        $payload = Event::create('An introduction into event sourcing')
+            ->period($dateStarts, $dateEnds)
+            ->alertMinutesBefore(5, 'It is on!')
+            ->getPayload();
+
+        $subcomponents = $payload->getSubComponents();
+
+        $this->assertCount(1, $subcomponents);
+
+        $alertComponent = $subcomponents[0]->getPayload();
+
+        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is on!', $alertComponent);
+        $this->assertPropertyEqualsInPayload('TRIGGER', new DateTime('17 may 2019 09:55:00'), $alertComponent);
+    }
 }

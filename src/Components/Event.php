@@ -139,12 +139,14 @@ final class Event extends Component
 
     public function alertMinutesBefore(int $minutes, string $message = null): Event
     {
-        $trigger = new DateTime($this->starts);
+        $trigger = clone $this->starts;
 
         $this->alerts[] = Alert::create(
-            $trigger->add(new DateInterval("PT${$minutes}M")),
+            $trigger->sub(new DateInterval("PT{$minutes}M")),
             $message ?? $this->name
         );
+
+        return $this;
     }
 
     public function getPayload(): ComponentPayload
