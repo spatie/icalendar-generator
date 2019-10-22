@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator\Components;
 use Closure;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 
 final class Calendar extends Component
 {
@@ -121,9 +122,16 @@ final class Calendar extends Component
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', 'spatie/icalendar-generator')
             ->textProperty(['NAME', 'X-WR-CALNAME'], $this->name)
-            ->textProperty('DESCRIPTION', $this->description)
+            ->textProperty(['DESCRIPTION', 'X-WR-CALDESC'], $this->description)
             ->when(! is_null($this->refreshInterval), function (ComponentPayload $payload) {
-                $payload->property(new DurationPropertyType('REFRESH-INTERVAL', $this->refreshInterval));
+                $payload
+                    ->property(
+                        DurationPropertyType::create('REFRESH-INTERVAL', $this->refreshInterval)
+                            ->addParameter(new Parameter('VALUE', 'DURATION'))
+                    )
+                    ->property(
+                        DurationPropertyType::create('X-PUBLISHED-TTL', $this->refreshInterval)
+                    );
             })
             ->subComponent(...$events);
     }

@@ -64,6 +64,7 @@ class EventTest extends TestCase
     }
 
     // TODO: test this
+    /** @test */
     public function an_event_can_be_a_full_day()
     {
         $dateStarts = new DateTime('17 may 2019');

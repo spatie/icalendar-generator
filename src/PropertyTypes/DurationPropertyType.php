@@ -7,6 +7,11 @@ final class DurationPropertyType extends PropertyType
     /** @var int */
     private $minutes;
 
+    public static function create($names, int $minutes): DurationPropertyType
+    {
+        return new self($names, $minutes);
+    }
+
     /**
      * DurationPropertyType constructor.
      *
@@ -18,8 +23,6 @@ final class DurationPropertyType extends PropertyType
         parent::__construct($names);
 
         $this->minutes = $minutes;
-
-        $this->parameters = [new Parameter('VALUE', 'DURATION')];
     }
 
     public function getValue(): string
@@ -27,7 +30,7 @@ final class DurationPropertyType extends PropertyType
         return "PT{$this->minutes}M";
     }
 
-    public function getOriginalValue() : int
+    public function getOriginalValue(): int
     {
         return $this->minutes;
     }
