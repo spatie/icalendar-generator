@@ -34,7 +34,7 @@ final class Event extends Component
     private $created;
 
     /** @var bool */
-    private $withTimezone = false;
+    private $withTimezones = false;
 
     /** @var bool */
     private $isFullDay = false;
@@ -122,9 +122,9 @@ final class Event extends Component
         return $this;
     }
 
-    public function withTimezone(): Event
+    public function withTimezones(): Event
     {
-        $this->withTimezone = true;
+        $this->withTimezones = true;
 
         return $this;
     }
@@ -155,9 +155,9 @@ final class Event extends Component
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->textProperty('LOCATION', $this->location)
-            ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
-            ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
-            ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
+            ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezones)
+            ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezones)
+            ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezones)
             ->subComponent(...$this->alerts);
     }
 }

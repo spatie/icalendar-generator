@@ -114,7 +114,7 @@ final class Calendar extends Component
 
         if ($this->withTimezone) {
             array_walk($events, function (Event $event) {
-                $event->withTimezone();
+                $event->withTimezones();
             });
         }
 
