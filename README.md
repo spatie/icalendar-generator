@@ -169,7 +169,7 @@ $start = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 
 Event::create()
     ->startsAt($starts)
-    ->withTimezones()
+    ->withTimezone()
     ...
 ```
 
@@ -177,7 +177,7 @@ Want timezones in each event of the calendar, then add `withTimezones` to your `
 
 ``` php
 Calendar::create()
-   ->withTimezones()
+   ->withTimezone()
     ....
 ```
 
