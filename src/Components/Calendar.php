@@ -72,9 +72,7 @@ final class Calendar extends Component
             return $this;
         }
 
-        $events = is_array($event) ? $event : [$event];
-
-        $this->events = array_map(function ($eventToResolve) {
+        $events = array_map(function ($eventToResolve) {
             if (! is_callable($eventToResolve)) {
                 return $eventToResolve;
             }
@@ -84,7 +82,9 @@ final class Calendar extends Component
             $eventToResolve($newEvent);
 
             return $newEvent;
-        }, $events);
+        }, is_array($event) ? $event : [$event]);
+
+        $this->events = array_merge($this->events, $events);
 
         return $this;
     }

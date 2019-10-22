@@ -140,4 +140,22 @@ class CalendarTest extends TestCase
         $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', 5, $payload);
         $this->assertParameterEqualsInProperty('VALUE', 'DURATION', $payload->getProperty('REFRESH-INTERVAL'));
     }
+
+    /** @test */
+    public function it_is_possible_to_add_multiple_events()
+    {
+        $firstEvent = Event::create('An introduction to event sourcing');
+        $secondEvent = Event::create('An introduction to event sourcing');
+
+        $payload = Calendar::create()
+            ->event($firstEvent)
+            ->event([$secondEvent])
+            ->getPayload();
+
+        $subComponents = $payload->getSubComponents();
+
+        $this->assertCount(2, $subComponents);
+        $this->assertEquals($subComponents[0], $firstEvent);
+        $this->assertEquals($subComponents[1], $secondEvent);
+    }
 }
