@@ -105,7 +105,6 @@ Event::create()
     ->name('Laracon Online')
     ->description('Experience Laracon all around the world')
     ->uniqueIdentifier('A unique identifier can be set here')
-    ->location('Antwerp')
     ->createdAt(new DateTime('6 march 2019'))
     ->startsAt(new DateTime('6 march 2019 15:00'))
     ->endsAt(new DateTime('6 march 2019 16:00'));
@@ -116,6 +115,15 @@ Want to create an event quickly with start and end date?
 ``` php
 Event::create('Laracon Online')
     ->period(new DateTime('6 march 2019'), new DateTime('7 march 2019'));
+```
+
+You can add a location to an event a such:
+
+``` php
+Event::create()
+    ->address('Samberstraat 69D, 2060 Antwerp, Belgium')
+    ->addressName('Spatie HQ')
+    ->coordinates(51.2343, 4.4287);
 ```
 
 After creating your event, it should be added to a calendar. There are multiple options to do this:

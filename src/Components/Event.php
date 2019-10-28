@@ -6,6 +6,7 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
@@ -201,14 +202,14 @@ final class Event extends Component
             return $payload;
         }
 
-        $payload->textProperty('GEO', "{$this->lat};{$this->lng}");
+        $payload->property(CoordinatesPropertyType::create('GEO', $this->lat, $this->lng));
 
         if (is_null($this->address)) {
             return $payload;
         }
 
-        $property = TextPropertyType::create(
-            'X-APPLE-STRUCTURED-LOCATION', "{$this->lat};{$this->lng}"
+        $property = CoordinatesPropertyType::create(
+            'X-APPLE-STRUCTURED-LOCATION', $this->lat, $this->lng
         )->addParameter(Parameter::create('VALUE', 'URI'))
             ->addParameter(Parameter::create('X-ADDRESS', $this->address))
             ->addParameter(Parameter::create('X-APPLE-RADIUS', 72))

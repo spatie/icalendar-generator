@@ -110,7 +110,10 @@ class EventTest extends TestCase
             ->coordinates(51.2343, 4.4287)
             ->getPayload();
 
-        $this->assertPropertyEqualsInPayload('GEO', "51.2343;4.4287", $payload);
+        $this->assertPropertyEqualsInPayload('GEO', [
+            'lat' => 51.2343,
+            'lng' => 4.4287
+        ], $payload);
     }
 
     /** @test */
@@ -126,7 +129,11 @@ class EventTest extends TestCase
 
         $property = $payload->getProperty('X-APPLE-STRUCTURED-LOCATION');
 
-        $this->assertEquals("51.2343;4.4287", $property->getOriginalValue());
+        $this->assertEquals("51.2343,4.4287", $property->getValue());
+        $this->assertEquals([
+            'lat' => 51.2343,
+            'lng' => 4.4287
+        ], $property->getOriginalValue());
         $this->assertParameterEqualsInProperty('VALUE', 'URI', $property);
         $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D, 2060 Antwerpen, Belgium', $property);
         $this->assertParameterEqualsInProperty('X-APPLE-RADIUS', 72, $property);
