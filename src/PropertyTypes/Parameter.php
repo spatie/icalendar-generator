@@ -10,6 +10,11 @@ final class Parameter
     /** @var string */
     private $value;
 
+    public static function create(string $name, string $value): Parameter
+    {
+        return new self($name, $value);
+    }
+
     public function __construct(string $name, string $value)
     {
         $this->name = $name;

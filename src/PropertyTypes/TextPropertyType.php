@@ -7,6 +7,11 @@ final class TextPropertyType extends PropertyType
     /** @var string */
     private $text;
 
+    public static function create($names, string $text): TextPropertyType
+    {
+        return new self($names, $text);
+    }
+
     /**
      * TextPropertyType constructor.
      *
@@ -33,7 +38,7 @@ final class TextPropertyType extends PropertyType
         return str_replace(array_keys($replacements), $replacements, $this->text);
     }
 
-    public function getOriginalValue() : string
+    public function getOriginalValue(): string
     {
         return $this->text;
     }

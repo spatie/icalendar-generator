@@ -118,21 +118,22 @@ final class Calendar extends Component
             });
         }
 
-        return ComponentPayload::create($this->getComponentType())
+        $payload = ComponentPayload::create($this->getComponentType())
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', 'spatie/icalendar-generator')
             ->textProperty(['NAME', 'X-WR-CALNAME'], $this->name)
             ->textProperty(['DESCRIPTION', 'X-WR-CALDESC'], $this->description)
-            ->when(! is_null($this->refreshInterval), function (ComponentPayload $payload) {
-                $payload
-                    ->property(
-                        DurationPropertyType::create('REFRESH-INTERVAL', $this->refreshInterval)
-                            ->addParameter(new Parameter('VALUE', 'DURATION'))
-                    )
-                    ->property(
-                        DurationPropertyType::create('X-PUBLISHED-TTL', $this->refreshInterval)
-                    );
-            })
             ->subComponent(...$events);
+
+        if($this->refreshInterval){
+            $payload
+                ->property(
+                    DurationPropertyType::create('REFRESH-INTERVAL', $this->refreshInterval)
+                        ->addParameter(new Parameter('VALUE', 'DURATION'))
+                )
+                ->property(DurationPropertyType::create('X-PUBLISHED-TTL', $this->refreshInterval));
+        }
+
+        return $payload;
     }
 }

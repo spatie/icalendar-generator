@@ -6,6 +6,8 @@ use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
 final class Event extends Component
 {
@@ -25,7 +27,16 @@ final class Event extends Component
     private $description;
 
     /** @var string|null */
-    private $location;
+    private $address;
+
+    /** @var string|null */
+    private $addressName;
+
+    /** @var float|null */
+    private $lat;
+
+    /** @var float|null */
+    private $lng;
 
     /** @var string */
     private $uuid;
@@ -101,9 +112,28 @@ final class Event extends Component
         return $this;
     }
 
-    public function location(string $location): Event
+    public function address(string $address, string $name = null): Event
     {
-        $this->location = $location;
+        $this->address = $address;
+
+        if ($name) {
+            $this->addressName = $name;
+        }
+
+        return $this;
+    }
+
+    public function addressName(string $name): Event
+    {
+        $this->addressName = $name;
+
+        return $this;
+    }
+
+    public function coordinates(float $lat, float $lng): Event
+    {
+        $this->lat = $lat;
+        $this->lng = $lng;
 
         return $this;
     }
@@ -150,14 +180,42 @@ final class Event extends Component
 
     public function getPayload(): ComponentPayload
     {
-        return ComponentPayload::create($this->getComponentType())
+        $payload = ComponentPayload::create($this->getComponentType())
             ->textProperty('UID', $this->uuid)
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
-            ->textProperty('LOCATION', $this->location)
+            ->textProperty('LOCATION', $this->address)
             ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
             ->subComponent(...$this->alerts);
+
+        $payload = $this->resolveLocationProperties($payload);
+
+        return $payload;
+    }
+
+    private function resolveLocationProperties(ComponentPayload $payload): ComponentPayload
+    {
+        if (is_null($this->lng) && is_null($this->lat)) {
+            return $payload;
+        }
+
+        $payload->textProperty('GEO', "{$this->lat};{$this->lng}");
+
+        if (is_null($this->address)) {
+            return $payload;
+        }
+
+        $property = TextPropertyType::create(
+            'X-APPLE-STRUCTURED-LOCATION', "{$this->lat};{$this->lng}"
+        )->addParameter(Parameter::create('VALUE', 'URI'))
+            ->addParameter(Parameter::create('X-ADDRESS', $this->address))
+            ->addParameter(Parameter::create('X-APPLE-RADIUS', 72))
+            ->addParameter(Parameter::create('X-TITLE', $this->addressName));
+
+        $payload->property($property);
+
+        return $payload;
     }
 }

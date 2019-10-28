@@ -35,7 +35,8 @@ class EventTest extends TestCase
             ->uniqueIdentifier('Identifier here')
             ->startsAt($dateStarts)
             ->endsAt($dateEnds)
-            ->location('Antwerp')
+            ->address('Antwerp')
+            ->addressName('Spatie')
             ->getPayload();
 
         $this->assertCount(7, $payload->getProperties());
@@ -100,5 +101,36 @@ class EventTest extends TestCase
 
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is on!', $alertComponent);
         $this->assertPropertyEqualsInPayload('TRIGGER', new DateTime('17 may 2019 09:55:00'), $alertComponent);
+    }
+
+    /** @test */
+    public function it_can_set_the_coordinates()
+    {
+        $payload = Event::create('An introduction into event sourcing')
+            ->coordinates(51.2343, 4.4287)
+            ->getPayload();
+
+        $this->assertPropertyEqualsInPayload('GEO', "51.2343;4.4287", $payload);
+    }
+
+    /** @test */
+    public function it_can_generate_an_apple_structured_location()
+    {
+        $payload = Event::create('An introduction into event sourcing')
+            ->coordinates(51.2343, 4.4287)
+            ->address('Samberstraat 69D, 2060 Antwerpen, Belgium')
+            ->addressName('Spatie HQ')
+            ->getPayload();
+
+        $this->assertPropertyExistInPayload('X-APPLE-STRUCTURED-LOCATION', $payload);
+
+        $property = $payload->getProperty('X-APPLE-STRUCTURED-LOCATION');
+
+        $this->assertEquals("51.2343;4.4287", $property->getOriginalValue());
+        $this->assertParameterEqualsInProperty('VALUE', 'URI', $property);
+        $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D, 2060 Antwerpen, Belgium', $property);
+        $this->assertParameterEqualsInProperty('X-APPLE-RADIUS', 72, $property);
+        $this->assertParameterEqualsInProperty('X-TITLE', 'Spatie HQ', $property);
+
     }
 }
