@@ -173,7 +173,7 @@ If you want to show an event at the exact time it is happening, for example, a t
 This package relies on the timezones provided by [PHP DateTime](https://www.php.net/manual/en/datetime.settimezone.php) if you want to include these timezones in an event you can do the following:
 
 ``` php
-$start = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
+$starts = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 
 Event::create()
     ->startsAt($starts)
@@ -218,7 +218,7 @@ $calendar = Calendar::create('Laracon Online');
 
 response($calendar->get())
     ->header('Content-Type', 'text/calendar')
-    ->header('charset', 'utf-8');
+    ->header('charset', 'utf-8')
     ->download('my-awesome-calendar.ics');
 ```
 
