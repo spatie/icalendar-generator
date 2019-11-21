@@ -3,8 +3,8 @@
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Components\Alert;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class AlertTest extends TestCase
 {

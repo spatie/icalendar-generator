@@ -8,7 +8,6 @@ use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
 final class Event extends Component
 {

@@ -5,8 +5,8 @@ namespace Spatie\IcalendarGenerator\Components;
 use DateInterval;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 
 final class Alert extends Component
 {

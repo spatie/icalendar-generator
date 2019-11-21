@@ -2,8 +2,8 @@
 
 namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 
 final class DurationPropertyTypeTest extends TestCase
 {

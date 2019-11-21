@@ -4,8 +4,8 @@ namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
 use DateTime;
 use DateTimeZone;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class DateTimePropertyTypeTest extends TestCase
 {

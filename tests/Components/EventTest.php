@@ -3,8 +3,8 @@
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class EventTest extends TestCase
 {
@@ -65,6 +65,7 @@ class EventTest extends TestCase
     }
 
     // TODO: test this
+
     /** @test */
     public function an_event_can_be_a_full_day()
     {
@@ -112,7 +113,7 @@ class EventTest extends TestCase
 
         $this->assertPropertyEqualsInPayload('GEO', [
             'lat' => 51.2343,
-            'lng' => 4.4287
+            'lng' => 4.4287,
         ], $payload);
     }
 
@@ -129,15 +130,14 @@ class EventTest extends TestCase
 
         $property = $payload->getProperty('X-APPLE-STRUCTURED-LOCATION');
 
-        $this->assertEquals("51.2343,4.4287", $property->getValue());
+        $this->assertEquals('51.2343,4.4287', $property->getValue());
         $this->assertEquals([
             'lat' => 51.2343,
-            'lng' => 4.4287
+            'lng' => 4.4287,
         ], $property->getOriginalValue());
         $this->assertParameterEqualsInProperty('VALUE', 'URI', $property);
         $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D, 2060 Antwerpen, Belgium', $property);
         $this->assertParameterEqualsInProperty('X-APPLE-RADIUS', 72, $property);
         $this->assertParameterEqualsInProperty('X-TITLE', 'Spatie HQ', $property);
-
     }
 }

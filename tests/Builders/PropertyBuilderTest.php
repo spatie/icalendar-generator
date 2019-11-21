@@ -2,10 +2,10 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Builders;
 
-use Spatie\IcalendarGenerator\Tests\TestCase;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
 
 class PropertyBuilderTest extends TestCase

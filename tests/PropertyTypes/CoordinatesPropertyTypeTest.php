@@ -16,7 +16,7 @@ class CoordinatesPropertyTypeTest extends TestCase
         $this->assertEquals('10.5,20.5', $propertyType->getValue());
         $this->assertEquals([
             'lat' => 10.5,
-            'lng' => 20.5
+            'lng' => 20.5,
         ], $propertyType->getOriginalValue());
     }
 }

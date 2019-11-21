@@ -125,7 +125,7 @@ final class Calendar extends Component
             ->textProperty(['DESCRIPTION', 'X-WR-CALDESC'], $this->description)
             ->subComponent(...$events);
 
-        if($this->refreshInterval){
+        if ($this->refreshInterval) {
             $payload
                 ->property(
                     DurationPropertyType::create('REFRESH-INTERVAL', $this->refreshInterval)

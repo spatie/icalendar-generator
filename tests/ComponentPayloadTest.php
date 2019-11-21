@@ -5,10 +5,10 @@ namespace Spatie\IcalendarGenerator\Tests;
 use DateTime;
 use Exception;
 use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
 
 class ComponentPayloadTest extends TestCase
