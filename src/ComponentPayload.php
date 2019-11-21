@@ -3,12 +3,12 @@
 namespace Spatie\IcalendarGenerator;
 
 use Closure;
-use Exception;
 use DateTimeInterface;
+use Exception;
 use Spatie\IcalendarGenerator\Components\Component;
+use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 
 final class ComponentPayload
 {

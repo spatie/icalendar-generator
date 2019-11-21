@@ -3,9 +3,9 @@
 namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
 use Exception;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class PropertyTypeTest extends TestCase
 {

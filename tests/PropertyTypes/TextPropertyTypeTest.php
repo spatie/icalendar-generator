@@ -2,8 +2,8 @@
 
 namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
 
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class TextPropertyTypeTest extends TestCase
 {

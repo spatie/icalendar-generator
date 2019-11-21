@@ -2,9 +2,9 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Builders;
 
-use Spatie\IcalendarGenerator\Tests\TestCase;
-use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
+use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
 
