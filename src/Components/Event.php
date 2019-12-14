@@ -50,6 +50,9 @@ final class Event extends Component
     /** @var bool */
     private $isFullDay = false;
 
+    /** @var string */
+    private $recurrenceRule;
+
     public static function create(string $name = null): Event
     {
         return new self($name);
@@ -178,6 +181,13 @@ final class Event extends Component
         return $this;
     }
 
+    public function recurrenceRule(string $rule): Event
+    {
+        $this->recurrenceRule = $rule;
+
+        return $this;
+    }
+
     public function getPayload(): ComponentPayload
     {
         $payload = ComponentPayload::create($this->getComponentType())
@@ -188,6 +198,7 @@ final class Event extends Component
             ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
+            ->textProperty('RRULE', $this->recurrenceRule)
             ->subComponent(...$this->alerts);
 
         $payload = $this->resolveLocationProperties($payload);

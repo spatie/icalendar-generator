@@ -28,6 +28,7 @@ class EventTest extends TestCase
         $dateCreated = new DateTime('16 may 2019');
         $dateStarts = new DateTime('17 may 2019');
         $dateEnds = new DateTime('18 may 2019');
+        $rRule = 'FREQ=DAILY;INTERVAL=10;COUNT=5';
 
         $payload = Event::create('An introduction into event sourcing')
             ->description('By Freek Murze')
@@ -35,17 +36,19 @@ class EventTest extends TestCase
             ->uniqueIdentifier('Identifier here')
             ->startsAt($dateStarts)
             ->endsAt($dateEnds)
+            ->recurrenceRule($rRule)
             ->address('Antwerp')
             ->addressName('Spatie')
             ->getPayload();
 
-        $this->assertCount(7, $payload->getProperties());
+        $this->assertCount(8, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction into event sourcing', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'By Freek Murze', $payload);
         $this->assertPropertyEqualsInPayload('DTSTAMP', $dateCreated, $payload);
         $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
+        $this->assertPropertyEqualsInPayload('RRULE', $rRule, $payload);
         $this->assertPropertyEqualsInPayload('LOCATION', 'Antwerp', $payload);
         $this->assertPropertyEqualsInPayload('UID', 'Identifier here', $payload);
     }
