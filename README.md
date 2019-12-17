@@ -1,8 +1,8 @@
 # Generate calendars in the iCalendar format
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
-[![Build Status](https://img.shields.io/travis/spatie/icalendar-generator/master.svg?style=flat-square)](https://travis-ci.org/spatie/icalendar-generator)
-[![StyleCI](https://github.styleci.io/repos/170831958/shield?branch=master)](https://github.styleci.io/repos/170831958)
+[![Build Status](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Test?label=Tests)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3ATest)
+[![Style](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Check%20&%20fix%20styling?label=Style)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3A%22Check+%26+fix+styling%22)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/icalendar-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/icalendar-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
