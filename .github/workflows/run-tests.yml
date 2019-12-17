@@ -1,1 +1,37 @@
+name: Test
 
+on: [push]
+
+jobs:
+    test:
+
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: true
+            matrix:
+                php: [ 7.2, 7.3]
+                dependency-version: [prefer-lowest, prefer-stable]
+
+
+        name: PHP ${{ matrix.php }} - ${{ matrix.dependency-version }}
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v1
+
+            -   name: Cache dependencies
+                uses: actions/cache@v1
+                with:
+                    path: ~/.composer/cache/files
+                    key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
+            -   name: Install dependencies
+                run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+            -   name: Setup PHP
+                uses: nanasess/setup-php@master
+                with:
+                    php-version: ${{ matrix.php }}
+
+            -   name: Execute tests
+                run: vendor/bin/phpunit
