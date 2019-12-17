@@ -2,8 +2,12 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
-use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
+use DateTime;
+use Spatie\IcalendarGenerator\Components\Alert;
+use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
 class ComponentTest extends TestCase
@@ -41,5 +45,37 @@ class ComponentTest extends TestCase
         $dummy->description = 'Hello there';
 
         $dummy->toString();
+    }
+
+    /** @test */
+    public function it_can_add_an_extra_property()
+    {
+        $dummy = new DummyComponent('Dummy');
+
+        $dummy->appendProperty(
+            TextPropertyType::create('organizer', 'ruben@spatie.be')
+        );
+
+        $this->assertPropertyEqualsInPayload(
+            'organizer',
+            'ruben@spatie.be',
+            $dummy->resolvePayload()
+        );
+    }
+
+    /** @test */
+    public function it_can_add_an_extra_sub_component()
+    {
+        $dummy = new DummyComponent('Dummy');
+
+        $component = Alert::create(new DateTime());
+
+        $dummy->appendSubComponent($component);
+
+        $this->assertCount(1, $dummy->resolvePayload()->getSubComponents());
+        $this->assertEquals(
+            $component,
+            $dummy->resolvePayload()->getSubComponents()[0]
+        );
     }
 }

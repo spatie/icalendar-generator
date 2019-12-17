@@ -7,9 +7,6 @@ use Spatie\IcalendarGenerator\Components\Component;
 
 class DummyComponent extends Component
 {
-    /** @var array */
-    public $subComponents = [];
-
     /** @var string */
     public $name;
 
@@ -19,13 +16,6 @@ class DummyComponent extends Component
     public function __construct(?string $name = null)
     {
         $this->name = $name;
-    }
-
-    public function subComponent($subComponent): DummyComponent
-    {
-        $this->subComponents[] = $subComponent;
-
-        return $this;
     }
 
     public function getComponentType(): string
@@ -40,11 +30,10 @@ class DummyComponent extends Component
         ];
     }
 
-    public function getPayload(): ComponentPayload
+    protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
             ->textProperty('name', $this->name)
-            ->textProperty('description', $this->description)
-            ->subComponent(...$this->subComponents);
+            ->textProperty('description', $this->description);
     }
 }

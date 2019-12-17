@@ -24,6 +24,9 @@ final class Calendar extends Component
     /** @var int|null */
     private $refreshInterval;
 
+    /** @var string|null */
+    private $productIdentifier;
+
     public static function create(string $name = null): Calendar
     {
         return new self($name);
@@ -57,6 +60,13 @@ final class Calendar extends Component
     public function description(string $description): Calendar
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function productIdentifier(string $identifier): Calendar
+    {
+        $this->productIdentifier = $identifier;
 
         return $this;
     }
@@ -108,7 +118,7 @@ final class Calendar extends Component
         return $this->toString();
     }
 
-    public function getPayload(): ComponentPayload
+    protected function payload(): ComponentPayload
     {
         $events = $this->events;
 
@@ -120,7 +130,7 @@ final class Calendar extends Component
 
         $payload = ComponentPayload::create($this->getComponentType())
             ->textProperty('VERSION', '2.0')
-            ->textProperty('PRODID', 'spatie/icalendar-generator')
+            ->textProperty('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator')
             ->textProperty(['NAME', 'X-WR-CALNAME'], $this->name)
             ->textProperty(['DESCRIPTION', 'X-WR-CALDESC'], $this->description)
             ->subComponent(...$events);

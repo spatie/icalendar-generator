@@ -55,7 +55,7 @@ final class Alert extends Component
         return $this;
     }
 
-    public function getPayload(): ComponentPayload
+    protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
             ->textProperty('ACTION', 'DISPLAY')

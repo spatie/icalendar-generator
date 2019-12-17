@@ -11,7 +11,7 @@ class EventTest extends TestCase
     /** @test */
     public function it_can_create_an_event()
     {
-        $payload = Event::create()->getPayload();
+        $payload = Event::create()->resolvePayload();
 
         $properties = $payload->getProperties();
 
@@ -37,7 +37,7 @@ class EventTest extends TestCase
             ->endsAt($dateEnds)
             ->address('Antwerp')
             ->addressName('Spatie')
-            ->getPayload();
+            ->resolvePayload();
 
         $this->assertCount(7, $payload->getProperties());
 
@@ -58,7 +58,7 @@ class EventTest extends TestCase
 
         $payload = Event::create('An introduction into event sourcing')
             ->period($dateStarts, $dateEnds)
-            ->getPayload();
+            ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
@@ -75,7 +75,7 @@ class EventTest extends TestCase
         $payload = Event::create('An introduction into event sourcing')
             ->fullDay()
             ->period($dateStarts, $dateEnds)
-            ->getPayload();
+            ->resolvePayload();
 
         $payload->getProperty('DTSTART');
 
@@ -92,13 +92,13 @@ class EventTest extends TestCase
         $payload = Event::create('An introduction into event sourcing')
             ->period($dateStarts, $dateEnds)
             ->alertMinutesBefore(5, 'It is on!')
-            ->getPayload();
+            ->resolvePayload();
 
         $subcomponents = $payload->getSubComponents();
 
         $this->assertCount(1, $subcomponents);
 
-        $alertComponent = $subcomponents[0]->getPayload();
+        $alertComponent = $subcomponents[0]->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is on!', $alertComponent);
         $this->assertPropertyEqualsInPayload('TRIGGER', new DateTime('17 may 2019 09:55:00'), $alertComponent);
@@ -109,7 +109,7 @@ class EventTest extends TestCase
     {
         $payload = Event::create('An introduction into event sourcing')
             ->coordinates(51.2343, 4.4287)
-            ->getPayload();
+            ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('GEO', [
             'lat' => 51.2343,
@@ -124,7 +124,7 @@ class EventTest extends TestCase
             ->coordinates(51.2343, 4.4287)
             ->address('Samberstraat 69D, 2060 Antwerpen, Belgium')
             ->addressName('Spatie HQ')
-            ->getPayload();
+            ->resolvePayload();
 
         $this->assertPropertyExistInPayload('X-APPLE-STRUCTURED-LOCATION', $payload);
 

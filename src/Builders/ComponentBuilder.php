@@ -62,7 +62,7 @@ final class ComponentBuilder
 
         /** @var \Spatie\IcalendarGenerator\Components\Component $component */
         foreach ($this->componentPayload->getSubComponents() as $component) {
-            $builder = new ComponentBuilder($component->getPayload());
+            $builder = new ComponentBuilder($component->resolvePayload());
 
             $lines = array_merge(
                 $lines,

@@ -13,7 +13,7 @@ class AlertTest extends TestCase
     {
         $trigger = new DateTime('16 may 2019');
 
-        $payload = Alert::create($trigger, 'It is time')->getPayload();
+        $payload = Alert::create($trigger, 'It is time')->resolvePayload();
 
         $this->assertEquals('ALARM', $payload->getType());
         $this->assertCount(3, $payload->getProperties());

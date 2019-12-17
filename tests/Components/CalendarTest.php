@@ -13,7 +13,7 @@ class CalendarTest extends TestCase
     /** @test */
     public function it_can_create_a_calendar()
     {
-        $payload = Calendar::create()->getPayload();
+        $payload = Calendar::create()->resolvePayload();
 
         $this->assertEquals('CALENDAR', $payload->getType());
 
@@ -29,13 +29,15 @@ class CalendarTest extends TestCase
         $payload = Calendar::create()
             ->name('Full Stack Europe Schedule')
             ->description('What events are going to happen?')
-            ->getPayload();
+            ->productIdentifier('Ruben\'s calendar creator machine')
+            ->resolvePayload();
 
         $this->assertCount(4, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('NAME', 'Full Stack Europe Schedule', $payload);
         $this->assertPropertyEqualsInPayload('X-WR-CALNAME', 'Full Stack Europe Schedule', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'What events are going to happen?', $payload);
+        $this->assertPropertyEqualsInPayload('PRODID', 'Ruben\'s calendar creator machine', $payload);
     }
 
     /** @test */
@@ -45,7 +47,7 @@ class CalendarTest extends TestCase
 
         $payload = Calendar::create()
             ->event($event)
-            ->getPayload();
+            ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
 
@@ -60,12 +62,12 @@ class CalendarTest extends TestCase
             ->event(function (Event $event) {
                 $event->name('An introduction to event sourcing');
             })
-            ->getPayload();
+            ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
 
         $this->assertCount(1, $subComponents);
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
+        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->resolvePayload());
     }
 
     /** @test */
@@ -76,7 +78,7 @@ class CalendarTest extends TestCase
 
         $payload = Calendar::create()
             ->event([$firstEvent, $secondEvent])
-            ->getPayload();
+            ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
 
@@ -97,13 +99,13 @@ class CalendarTest extends TestCase
                     $event->name('Websockets what are they?');
                 },
             ])
-            ->getPayload();
+            ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
 
         $this->assertCount(2, $subComponents);
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->getPayload());
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'Websockets what are they?', $subComponents[1]->getPayload());
+        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->resolvePayload());
+        $this->assertPropertyEqualsInPayload('SUMMARY', 'Websockets what are they?', $subComponents[1]->resolvePayload());
     }
 
     /** @test */
@@ -119,10 +121,10 @@ class CalendarTest extends TestCase
             ->event(function (Event $event) use ($date) {
                 $event->startsAt($date);
             })
-            ->getPayload();
+            ->resolvePayload();
 
         $eventTimezone = $payload->getSubComponents()[0]
-            ->getPayload()
+            ->resolvePayload()
             ->getProperty('DTSTART')
             ->getOriginalValue()
             ->getTimezone();
@@ -135,7 +137,7 @@ class CalendarTest extends TestCase
     {
         $payload = Calendar::create()
             ->refreshInterval(5)
-            ->getPayload();
+            ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', 5, $payload);
         $this->assertParameterEqualsInProperty('VALUE', 'DURATION', $payload->getProperty('REFRESH-INTERVAL'));
@@ -150,7 +152,7 @@ class CalendarTest extends TestCase
         $payload = Calendar::create()
             ->event($firstEvent)
             ->event([$secondEvent])
-            ->getPayload();
+            ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
 

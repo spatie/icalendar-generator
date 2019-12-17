@@ -222,6 +222,51 @@ response($calendar->get())
     ->download('my-awesome-calendar.ics');
 ```
 
+
+### Extending the package
+
+We try to keep this package as straightforward as possible. That's why a lot of properties and subcomponents from the RFC are not included in this package. We've made it possible to add other properties or subcomponents to each component in case you might need something not included in the package. But be careful! From this moment, you're on your own correctly implementing the RFC's.
+
+#### Appending properties
+
+You can add a new property to a component like this:
+
+```php
+Calendar::create()
+    ->appendProperty(
+        TextPropertyType::create('ORGANIZER', 'ruben@spatie.be')
+    )
+    ...
+```
+
+Here we've added a `TextPropertyType`, and this is a default key-value property type with a text as value. You can also use the `DateTimePropertyType`, the `DurationPropertyType` or create your own by extending the `PropertyType` class.
+
+Sometimes a property can have some additional parameters, these are key-value entries and can be added to properties as such:
+
+```php
+$property = TextPropertyType::create('ORGANIZER', 'ruben@spatie.be')
+    ->addParameter(Parameter::create('CN', 'RUBEN VAN ASSCHE'));
+
+Calendar::create()
+    ->appendProperty($property)
+    ...
+```
+
+#### Appending subcomponents
+
+
+A subcomponent can be appended as such:
+
+```php
+Calendar::create()
+    ->appendSubComponent(
+        Event::create('Extending icalendar-generator')
+    )
+    ...
+```
+
+It is possible to create your subcomponents by extending the `Component` class.
+
 ### Testing
 
 ``` bash
