@@ -4,10 +4,9 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
-use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
 class ComponentTest extends TestCase

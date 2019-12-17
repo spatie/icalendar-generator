@@ -83,6 +83,7 @@ final class ComponentBuilder
                 $line = ' '.mb_strcut($line, 75, strlen($line), 'utf-8');
             } else {
                 $chippedLines[] = $line;
+
                 break;
             }
         }
