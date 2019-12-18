@@ -61,7 +61,7 @@ final class Alert extends Component
             ->textProperty('ACTION', 'DISPLAY')
             ->textProperty('DESCRIPTION', $this->message)
             ->property(
-                new DateTimePropertyType('TRIGGER', $this->triggerAt),
+                new DateTimePropertyType('TRIGGER', $this->triggerAt, true),
                 [new Parameter('VALUE', 'DATE-TIME')]
             );
     }
