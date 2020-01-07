@@ -32,7 +32,7 @@ class CoordinatesPropertyType extends PropertyType
 
     public function getValue(): string
     {
-        return "{$this->lat},{$this->lng}";
+        return "{$this->lat};{$this->lng}";
     }
 
     public function getOriginalValue(): array
