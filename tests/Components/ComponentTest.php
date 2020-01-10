@@ -2,7 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
-use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;

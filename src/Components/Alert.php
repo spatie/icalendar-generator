@@ -3,7 +3,6 @@
 namespace Spatie\IcalendarGenerator\Components;
 
 use DateInterval;
-use DateTime;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;

@@ -2,8 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
-use Closure;
-use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;

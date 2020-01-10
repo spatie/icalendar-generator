@@ -43,6 +43,4 @@ final class DurationPropertyTypeTest extends TestCase
         $this->assertEquals($interval, $property->getOriginalValue());
         $this->assertEquals('P4DT3H2M1S', $property->getValue());
     }
-
-
 }
