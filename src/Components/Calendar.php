@@ -3,6 +3,7 @@
 namespace Spatie\IcalendarGenerator\Components;
 
 use Closure;
+use DateInterval;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
@@ -21,7 +22,7 @@ final class Calendar extends Component
     /** @var bool */
     private $withTimezone = false;
 
-    /** @var int|null */
+    /** @var \DateInterval|null */
     private $refreshInterval;
 
     /** @var string|null */
@@ -108,7 +109,7 @@ final class Calendar extends Component
 
     public function refreshInterval(int $minutes): Calendar
     {
-        $this->refreshInterval = $minutes;
+        $this->refreshInterval = new DateInterval("PT{$minutes}M");
 
         return $this;
     }

@@ -67,7 +67,7 @@ class ComponentTest extends TestCase
     {
         $dummy = new DummyComponent('Dummy');
 
-        $component = Alert::create(new DateTime());
+        $component = new Alert();
 
         $dummy->appendSubComponent($component);
 

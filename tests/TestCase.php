@@ -27,4 +27,9 @@ abstract class TestCase extends BaseTestCase
     {
         $this->assertEquals($value, $propertyType->getParameter($name)->getValue());
     }
+
+    protected function assertParameterCountInProperty(int $count, PropertyType $propertyType): void
+    {
+        $this->assertCount($count, $propertyType->getParameters());
+    }
 }

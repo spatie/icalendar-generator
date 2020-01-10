@@ -2,7 +2,9 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
+use DateInterval;
 use DateTime;
+use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
@@ -86,22 +88,40 @@ class EventTest extends TestCase
     /** @test */
     public function it_can_alert_minutes_before_an_event()
     {
-        $dateStarts = new DateTime('17 may 2019 10:00:00');
-        $dateEnds = new DateTime('17 may 2019 12:00:00');
-
-        $payload = Event::create('An introduction into event sourcing')
-            ->period($dateStarts, $dateEnds)
-            ->alertMinutesBefore(5, 'It is on!')
+        $payload = Event::create()
+            ->alertMinutesBefore(5)
             ->resolvePayload();
 
         $subcomponents = $payload->getSubComponents();
 
         $this->assertCount(1, $subcomponents);
+        $this->assertInstanceOf(Alert::class, $subcomponents[0]);
+    }
 
-        $alertComponent = $subcomponents[0]->resolvePayload();
+    /** @test */
+    public function it_can_alert_minutes_after_an_event()
+    {
+        $payload = Event::create()
+            ->alertMinutesAfter(5)
+            ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is on!', $alertComponent);
-        $this->assertPropertyEqualsInPayload('TRIGGER', new DateTime('17 may 2019 09:55:00'), $alertComponent);
+        $subcomponents = $payload->getSubComponents();
+
+        $this->assertCount(1, $subcomponents);
+        $this->assertInstanceOf(Alert::class, $subcomponents[0]);
+    }
+
+    /** @test */
+    public function it_can_add_an_alert()
+    {
+        $payload = Event::create()
+            ->alert(new Alert('Test'))
+            ->resolvePayload();
+
+        $subcomponents = $payload->getSubComponents();
+
+        $this->assertCount(1, $subcomponents);
+        $this->assertInstanceOf(Alert::class, $subcomponents[0]);
     }
 
     /** @test */

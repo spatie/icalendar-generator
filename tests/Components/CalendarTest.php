@@ -2,6 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
+use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Calendar;
@@ -139,7 +140,7 @@ class CalendarTest extends TestCase
             ->refreshInterval(5)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', 5, $payload);
+        $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', new DateInterval('PT5M'), $payload);
         $this->assertParameterEqualsInProperty('VALUE', 'DURATION', $payload->getProperty('REFRESH-INTERVAL'));
     }
 

@@ -16,6 +16,23 @@ final class DateTimePropertyType extends PropertyType
     private $withTimeZone;
 
     /**
+     * @param array|string $names
+     * @param \DateTimeInterface $dateTime
+     * @param bool $withTime
+     * @param bool $withTimeZone
+     *
+     * @return \Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType
+     */
+    public static function create(
+        $names,
+        DateTimeInterface $dateTime,
+        bool $withTime = false,
+        bool $withTimeZone = false
+    ): DateTimePropertyType {
+        return new self($names, $dateTime, $withTime, $withTimeZone);
+    }
+
+    /**
      * DateTimePropertyType constructor.
      *
      * @param array|string $names

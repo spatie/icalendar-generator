@@ -2,36 +2,67 @@
 
 namespace Spatie\IcalendarGenerator\PropertyTypes;
 
+use DateInterval;
+
 final class DurationPropertyType extends PropertyType
 {
-    /** @var int */
-    private $minutes;
+    /** @var DateInterval */
+    private $interval;
 
-    public static function create($names, int $minutes): DurationPropertyType
+    public static function create($names, DateInterval $interval): DurationPropertyType
     {
-        return new self($names, $minutes);
+        return new self($names, $interval);
+    }
+
+    public function invert(): DurationPropertyType
+    {
+        $this->interval->invert = 1;
+
+        return $this;
     }
 
     /**
      * DurationPropertyType constructor.
      *
      * @param array|string $names
-     * @param int $minutes
+     * @param \DateInterval $interval
      */
-    public function __construct($names, int $minutes)
+    public function __construct($names, DateInterval $interval)
     {
         parent::__construct($names);
 
-        $this->minutes = $minutes;
+        $this->interval = $interval;
     }
 
     public function getValue(): string
     {
-        return "PT{$this->minutes}M";
+        $value = $this->interval->invert ? '-P' : 'P';
+
+        if ($this->interval->d > 0) {
+            $value .= "{$this->interval->d}D";
+        }
+
+        if ($this->interval->s > 0 || $this->interval->i > 0 || $this->interval->h > 0) {
+            $value .= 'T';
+        }
+
+        if ($this->interval->h > 0) {
+            $value .= "{$this->interval->h}H";
+        }
+
+        if ($this->interval->i > 0) {
+            $value .= "{$this->interval->i}M";
+        }
+
+        if ($this->interval->s > 0) {
+            $value .= "{$this->interval->s}S";
+        }
+
+        return $value;
     }
 
-    public function getOriginalValue(): int
+    public function getOriginalValue(): DateInterval
     {
-        return $this->minutes;
+        return $this->interval;
     }
 }

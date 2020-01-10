@@ -196,7 +196,24 @@ Alerts allow calendar clients to send reminders about specific events. For examp
 
 ``` php
 Event::create('Laracon Online')
-    ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes')
+    ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes');
+```
+
+You can also trigger an alert after the event:
+
+``` php
+Event::create('Laracon Online')
+    ->alertMinutesAfter(5, 'Laracon online has ended, see you next year!');
+```
+
+Or trigger an alert on a specific date:
+
+``` php
+Event::create('Laracon Online')
+    ->alert(
+        Alert::date(new DateTime('05/16/2020 12:00:00')),
+        'Laracon online has ended, see you next year!'
+    );
 ```
 
 ### Use with Laravel

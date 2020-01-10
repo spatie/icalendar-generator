@@ -2,6 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
+use Closure;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -166,14 +167,23 @@ final class Event extends Component
         return $this;
     }
 
+    public function alert(Alert $alert): Event
+    {
+        $this->alerts[] = $alert;
+
+        return $this;
+    }
+
     public function alertMinutesBefore(int $minutes, string $message = null): Event
     {
-        $trigger = clone $this->starts;
+        $this->alerts[] = Alert::minutesBeforeStart($minutes, $message);
 
-        $this->alerts[] = Alert::create(
-            $trigger->sub(new DateInterval("PT{$minutes}M")),
-            $message ?? $this->name
-        );
+        return $this;
+    }
+
+    public function alertMinutesAfter(int $minutes, string $message = null): Event
+    {
+        $this->alerts[] = Alert::minutesAfterEnd($minutes, $message);
 
         return $this;
     }
