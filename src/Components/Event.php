@@ -6,8 +6,11 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
+use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
 final class Event extends Component
 {
@@ -55,6 +58,12 @@ final class Event extends Component
 
     /** @var bool|null */
     private $transparent = null;
+
+    /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress[] */
+    private $attendees = [];
+
+    /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress|null */
+    private $organizer = null;
 
     public static function create(string $name = null): Event
     {
@@ -207,6 +216,23 @@ final class Event extends Component
         return $this;
     }
 
+    public function attendee(
+        string $email,
+        string $name = null,
+        ParticipationStatus $participationStatus = null
+    ): Event {
+        $this->attendees[] = new CalendarAddress($email, $name, $participationStatus);
+
+        return $this;
+    }
+
+    public function organizer(string $email, string $name = null): Event
+    {
+        $this->organizer = new CalendarAddress($email, $name);
+
+        return $this;
+    }
+
     protected function payload(): ComponentPayload
     {
         $payload = ComponentPayload::create($this->getComponentType())
@@ -220,6 +246,14 @@ final class Event extends Component
             ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
             ->subComponent(...$this->alerts);
+
+        if ($this->organizer) {
+            $payload->property(CalendarAddressPropertyType::create('ORGANIZER', $this->organizer));
+        }
+
+        foreach ($this->attendees as $attendee) {
+            $payload->property(CalendarAddressPropertyType::create('ATTENDEE', $attendee));
+        }
 
         $payload = $this->resolveLocationProperties($payload);
 

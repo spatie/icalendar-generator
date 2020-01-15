@@ -8,11 +8,6 @@ use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function assertInArray($needle, $haystack): void
-    {
-        $this->assertContains($needle, $haystack, '', false, false);
-    }
-
     protected function assertPropertyExistInPayload(string $name, ComponentPayload $componentPayload): void
     {
         $this->assertNotNull($componentPayload->getProperty($name));

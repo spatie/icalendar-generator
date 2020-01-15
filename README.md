@@ -210,10 +210,10 @@ Or trigger an alert on a specific date:
 
 ``` php
 Event::create('Laracon Online')
-    ->alert(
-        Alert::date(new DateTime('05/16/2020 12:00:00')),
+    ->alert(Alert::date(
+        new DateTime('05/16/2020 12:00:00'),
         'Laracon online has ended, see you next year!'
-    );
+    ))
 ```
 
 ### Use with Laravel

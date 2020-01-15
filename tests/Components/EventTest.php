@@ -6,7 +6,10 @@ use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
+use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
 class EventTest extends TestCase
 {
@@ -177,5 +180,45 @@ class EventTest extends TestCase
             ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('TRANSP', 'TRANSPARENT', $payload);
+    }
+
+    /** @test */
+    public function it_can_add_an_organizer()
+    {
+        $payload = Event::create()
+            ->organizer('ruben@spatie.be', 'Ruben')
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload(
+            'ORGANIZER',
+            new CalendarAddress('ruben@spatie.be', 'Ruben'),
+            $payload
+        );
+    }
+
+    /** @test */
+    public function it_can_add_attendees()
+    {
+        $payload = Event::create()
+            ->attendee('ruben@spatie.be')
+            ->attendee('brent@spatie.be', 'Brent')
+            ->attendee('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
+            ->resolvePayload()
+            ->getProperties();
+
+        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+            'ATTENDEE',
+            new CalendarAddress('ruben@spatie.be')
+        ), $payload);
+
+        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+            'ATTENDEE',
+            new CalendarAddress('brent@spatie.be', 'Brent')
+        ), $payload);
+
+        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+            'ATTENDEE',
+            new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
+        ), $payload);
     }
 }
