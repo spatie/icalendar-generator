@@ -123,7 +123,47 @@ You can add a location to an event a such:
 Event::create()
     ->address('Samberstraat 69D, 2060 Antwerp, Belgium')
     ->addressName('Spatie HQ')
-    ->coordinates(51.2343, 4.4287);
+    ->coordinates(51.2343, 4.4287)
+    ...
+```
+
+You can set the organizer of an event, the email address is required the name can be omitted:
+
+``` php
+Event::create()
+    ->organizer('ruben@spatie.be', 'Ruben')
+    ...
+```
+
+Attendees of an event can be added as such
+
+``` php
+Event::create()
+    ->attendee('ruben@spatie.be') // only an email address is required
+    ->attendee('brent@spatie.be', 'Brent')
+    ...
+```
+
+Yoy can also set the participation status of an attendee:
+
+``` php
+Event::create()
+    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::accepted())
+    ...
+```
+
+There are three participation statuses:
+
+- `ParticipationStatus::accepted()`
+- `ParticipationStatus::declined()`
+- `ParticipationStatus::tentative()`
+
+An event can be made transparent, so it does not overlap visually with other events in a calendar:
+
+``` php
+Event::create()
+    ->transparent()
+    ...
 ```
 
 After creating your event, it should be added to a calendar. There are multiple options to do this:
