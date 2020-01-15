@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator\Components;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
+use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 
@@ -48,6 +49,12 @@ final class Event extends Component
 
     /** @var bool */
     private $isFullDay = false;
+
+    /** @var \Spatie\IcalendarGenerator\Enums\Classification|null */
+    private $classification = null;
+
+    /** @var bool|null */
+    private $transparent = null;
 
     public static function create(string $name = null): Event
     {
@@ -186,6 +193,20 @@ final class Event extends Component
         return $this;
     }
 
+    public function classification(?Classification $classification): Event
+    {
+        $this->classification = $classification;
+
+        return $this;
+    }
+
+    public function transparent(): Event
+    {
+        $this->transparent = true;
+
+        return $this;
+    }
+
     protected function payload(): ComponentPayload
     {
         $payload = ComponentPayload::create($this->getComponentType())
@@ -193,6 +214,8 @@ final class Event extends Component
             ->textProperty('SUMMARY', $this->name)
             ->textProperty('DESCRIPTION', $this->description)
             ->textProperty('LOCATION', $this->address)
+            ->textProperty('CLASS', $this->classification)
+            ->textProperty('TRANSP', $this->transparent ? 'TRANSPARENT' : null)
             ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)

@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class EventTest extends TestCase
@@ -64,8 +65,6 @@ class EventTest extends TestCase
         $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
     }
-
-    // TODO: test this
 
     /** @test */
     public function an_event_can_be_a_full_day()
@@ -158,5 +157,25 @@ class EventTest extends TestCase
         $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D, 2060 Antwerpen, Belgium', $property);
         $this->assertParameterEqualsInProperty('X-APPLE-RADIUS', 72, $property);
         $this->assertParameterEqualsInProperty('X-TITLE', 'Spatie HQ', $property);
+    }
+
+    /** @test */
+    public function it_can_add_a_classification()
+    {
+        $payload = Event::create()
+            ->classification(Classification::private())
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload('CLASS', Classification::private()->getValue(), $payload);
+    }
+
+    /** @test */
+    public function it_can_make_an_event_transparent()
+    {
+        $payload = Event::create()
+            ->transparent()
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload('TRANSP', 'TRANSPARENT', $payload);
     }
 }
