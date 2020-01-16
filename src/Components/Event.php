@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
@@ -64,6 +65,9 @@ final class Event extends Component
 
     /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress|null */
     private $organizer = null;
+
+    /** @var \Spatie\IcalendarGenerator\Enums\EventStatus|null */
+    private $status = null;
 
     public static function create(string $name = null): Event
     {
@@ -233,6 +237,13 @@ final class Event extends Component
         return $this;
     }
 
+    public function status(EventStatus $status): Event
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
     protected function payload(): ComponentPayload
     {
         $payload = ComponentPayload::create($this->getComponentType())
@@ -242,6 +253,7 @@ final class Event extends Component
             ->textProperty('LOCATION', $this->address)
             ->textProperty('CLASS', $this->classification)
             ->textProperty('TRANSP', $this->transparent ? 'TRANSPARENT' : null)
+            ->textProperty('STATUS', $this->status)
             ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)

@@ -6,6 +6,7 @@ use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
@@ -220,5 +221,19 @@ class EventTest extends TestCase
             'ATTENDEE',
             new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
         ), $payload);
+    }
+
+    /** @test */
+    public function it_can_set_a_status()
+    {
+        $payload = Event::create()
+            ->status(EventStatus::accepted())
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload(
+            'STATUS',
+            EventStatus::accepted()->getValue(),
+            $payload
+        );
     }
 }
