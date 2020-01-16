@@ -65,15 +65,20 @@ final class ComponentPayload
      * @param array|string $names
      * @param string|null $value
      *
+     * @param bool $disableEscaping
+     *
      * @return \Spatie\IcalendarGenerator\ComponentPayload
      */
-    public function textProperty($names, ?string $value): ComponentPayload
-    {
+    public function textProperty(
+        $names,
+        ?string $value,
+        bool $disableEscaping = false
+    ): ComponentPayload {
         if ($value === null) {
             return $this;
         }
 
-        return $this->property(new TextPropertyType($names, $value));
+        return $this->property(new TextPropertyType($names, $value, $disableEscaping));
     }
 
     public function subComponent(Component ...$components): ComponentPayload

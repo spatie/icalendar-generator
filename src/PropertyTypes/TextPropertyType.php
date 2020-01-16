@@ -7,9 +7,12 @@ final class TextPropertyType extends PropertyType
     /** @var string */
     private $text;
 
-    public static function create($names, string $text): TextPropertyType
+    /** @var bool */
+    private $disableEscaping;
+
+    public static function create($names, string $text, $disableEscaping = false): TextPropertyType
     {
-        return new self($names, $text);
+        return new self($names, $text, $disableEscaping);
     }
 
     /**
@@ -17,16 +20,22 @@ final class TextPropertyType extends PropertyType
      *
      * @param array|string $names
      * @param string $text
+     * @param bool $disableEscaping
      */
-    public function __construct($names, string $text)
+    public function __construct($names, string $text, $disableEscaping = false)
     {
         parent::__construct($names);
 
         $this->text = $text;
+        $this->disableEscaping = $disableEscaping;
     }
 
     public function getValue(): string
     {
+        if ($this->disableEscaping) {
+            return $this->text;
+        }
+
         $replacements = [
             '\\' => '\\\\',
             '"' => '\\"',
