@@ -6,8 +6,6 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/icalendar-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/icalendar-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
-**This package is still under development**
-
 Using this package, you can generate calendars for applications like Apple's Calendar and Google Calendar.
 Calendars will be generated in the iCalendar format (RFC 5545), which is a textual format that can be loaded by different applications.
 This package tries to implement a minimal version of  [RFC 5545](https://tools.ietf.org/html/rfc5545) with some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986).
