@@ -3,7 +3,10 @@
     "description": "Build calendars in the iCalendar format",
     "keywords": [
         "spatie",
-        "Calendar"
+        "calendar",
+        "ics",
+        "ical",
+        "icalendar",
     ],
     "homepage": "https://github.com/spatie/icalendar-generator",
     "license": "MIT",

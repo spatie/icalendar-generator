@@ -127,7 +127,7 @@ Event::create()
     ...
 ```
 
-You can set the organizer of an event, the email address is required the name can be omitted:
+You can set the organizer of an event, the email address is required but the name can be omitted:
 
 ``` php
 Event::create()
@@ -144,7 +144,7 @@ Event::create()
     ...
 ```
 
-Yoy can also set the participation status of an attendee:
+You can also set the participation status of an attendee:
 
 ``` php
 Event::create()
@@ -329,6 +329,10 @@ It is possible to create your subcomponents by extending the `Component` class.
 ``` bash
 composer test
 ```
+
+### Alternatives
+
+We strive for a simple and easy to use API, want something more? Then check out these this [package](https://github.com/markuspoerschke/iCal) by markus poerschke.
 
 ### Changelog
 
