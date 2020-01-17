@@ -6,7 +6,7 @@
         "calendar",
         "ics",
         "ical",
-        "icalendar",
+        "icalendar"
     ],
     "homepage": "https://github.com/spatie/icalendar-generator",
     "license": "MIT",
