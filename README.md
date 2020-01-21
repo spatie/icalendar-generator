@@ -330,7 +330,7 @@ composer test
 
 ### Alternatives
 
-We strive for a simple and easy to use API, want something more? Then check out these this [package](https://github.com/markuspoerschke/iCal) by markus poerschke.
+We strive for a simple and easy to use API, want something more? Then check out this [package](https://github.com/markuspoerschke/iCal) by markus poerschke.
 
 ### Changelog
 
