@@ -227,12 +227,12 @@ class EventTest extends TestCase
     public function it_can_set_a_status()
     {
         $payload = Event::create()
-            ->status(EventStatus::accepted())
+            ->status(EventStatus::tentative())
             ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload(
             'STATUS',
-            EventStatus::accepted()->getValue(),
+            EventStatus::tentative()->getValue(),
             $payload
         );
     }

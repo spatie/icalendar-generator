@@ -36,7 +36,7 @@ class IntegrationTest extends TestCase
                     ->attendee('freek@spatie.be', 'Freek', ParticipationStatus::tentative())
                     ->transparent()
                     ->classification(Classification::public())
-                    ->status(EventStatus::accepted())
+                    ->status(EventStatus::tentative())
                     ->alert(
                         Alert::date(
                             new DateTime('05/16/2020 12:00:00'),
@@ -74,7 +74,7 @@ DESCRIPTION:This description is way too long and should be put onto two dif\r
 LOCATION:Samberstraat 69D\, 2060 Antwerp\, Belgium\r
 CLASS:PUBLIC\r
 TRANSP:TRANSPARENT\r
-STATUS:ACCEPTED\r
+STATUS:TENTATIVE\r
 DTSTART:20190306T150000\r
 DTEND:20190306T160000\r
 DTSTAMP:20190306T160000\r
