@@ -5,15 +5,15 @@ namespace Spatie\IcalendarGenerator\Enums;
 use Spatie\Enum\Enum;
 
 /**
- * @method static self accepted()
- * @method static self declined()
  * @method static self tentative()
+ * @method static self confirmed()
+ * @method static self cancelled()
  */
 class EventStatus extends Enum
 {
     const MAP_VALUE = [
-        'accepted' => 'ACCEPTED',
-        'declined' => 'DECLINED',
         'tentative' => 'TENTATIVE',
+        'confirmed' => 'CONFIRMED',
+        'cancelled' => 'CANCELLED',
     ];
 }
