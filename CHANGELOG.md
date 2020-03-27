@@ -2,9 +2,13 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 1.0.2 - 2020-03-27
+
+- add escaping in property parameters (#17)
+
 ## 1.0.1 - 2020-03-25
 
-- Add more conformity to RFC5545 (#13, #14)
+- add more conformity to RFC5545 (#13, #14)
 
 ## 1.0.0 - 2020-01-17
 
