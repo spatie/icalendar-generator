@@ -158,7 +158,7 @@ class EventTest extends TestCase
             'lng' => 4.4287,
         ], $property->getOriginalValue());
         $this->assertParameterEqualsInProperty('VALUE', 'URI', $property);
-        $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D, 2060 Antwerpen, Belgium', $property);
+        $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D\, 2060 Antwerpen\, Belgium', $property);
         $this->assertParameterEqualsInProperty('X-APPLE-RADIUS', 72, $property);
         $this->assertParameterEqualsInProperty('X-TITLE', 'Spatie HQ', $property);
     }
@@ -227,12 +227,12 @@ class EventTest extends TestCase
     public function it_can_set_a_status()
     {
         $payload = Event::create()
-            ->status(EventStatus::accepted())
+            ->status(EventStatus::tentative())
             ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload(
             'STATUS',
-            EventStatus::accepted()->getValue(),
+            EventStatus::tentative()->getValue(),
             $payload
         );
     }

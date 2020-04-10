@@ -36,7 +36,7 @@ class IntegrationTest extends TestCase
                     ->attendee('freek@spatie.be', 'Freek', ParticipationStatus::tentative())
                     ->transparent()
                     ->classification(Classification::public())
-                    ->status(EventStatus::accepted())
+                    ->status(EventStatus::tentative())
                     ->alert(
                         Alert::date(
                             new DateTime('05/16/2020 12:00:00'),
@@ -74,7 +74,7 @@ DESCRIPTION:This description is way too long and should be put onto two dif\r
 LOCATION:Samberstraat 69D\, 2060 Antwerp\, Belgium\r
 CLASS:PUBLIC\r
 TRANSP:TRANSPARENT\r
-STATUS:ACCEPTED\r
+STATUS:TENTATIVE\r
 DTSTART:20190306T150000\r
 DTEND:20190306T160000\r
 DTSTAMP:20190306T160000\r
@@ -83,8 +83,8 @@ ATTENDEE;CN=Brent;PARTSTAT=ACCEPTED:MAILTO:brent@spatie.be\r
 ATTENDEE;CN=Alex;PARTSTAT=DECLINED:MAILTO:alex@spatie.be\r
 ATTENDEE;CN=Freek;PARTSTAT=TENTATIVE:MAILTO:freek@spatie.be\r
 GEO:51.2343;4.4287\r
-X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-ADDRESS=Samberstraat 69D, 2060 Antw\r
- erp, Belgium;X-APPLE-RADIUS=72;X-TITLE=Spatie HQ:51.2343;4.4287\r
+X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-ADDRESS=Samberstraat 69D\, 2060 Ant\r
+ werp\, Belgium;X-APPLE-RADIUS=72;X-TITLE=Spatie HQ:51.2343;4.4287\r
 BEGIN:VALARM\r
 ACTION:DISPLAY\r
 DESCRIPTION:Laracon online is going to start in five mintutes\r
