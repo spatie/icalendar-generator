@@ -188,6 +188,13 @@ final class Event extends Component
         return $this;
     }
 
+    public function recurring($interval = 'weekly'): Event
+    {
+        $this->recurring = $interval;
+
+        return $this;
+    }
+
     public function alert(Alert $alert): Event
     {
         $this->alerts[] = $alert;
