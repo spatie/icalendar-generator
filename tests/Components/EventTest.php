@@ -236,4 +236,19 @@ class EventTest extends TestCase
             $payload
         );
     }
+
+    /** @test */
+    public function it_can_set_an_address_without_name()
+    {
+        $dateStarts = new DateTime('17 may 2019');
+        $dateEnds = new DateTime('18 may 2019');
+
+        $payload = Event::create('An introduction into event sourcing')
+            ->startsAt($dateStarts)
+            ->endsAt($dateEnds)
+            ->address('Antwerp')
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload('LOCATION', 'Antwerp', $payload);
+    }
 }

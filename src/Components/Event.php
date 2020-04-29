@@ -280,7 +280,7 @@ final class Event extends Component
 
         $payload->property(CoordinatesPropertyType::create('GEO', $this->lat, $this->lng));
 
-        if (is_null($this->address)) {
+        if (is_null($this->address) || is_null($this->addressName)) {
             return $payload;
         }
 
