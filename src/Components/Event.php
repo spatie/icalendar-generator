@@ -55,7 +55,7 @@ final class Event extends Component
     private $isFullDay = false;
 
     /** @var string|null */
-    private $recuring = null;
+    private $recurring = null;
 
     /** @var \Spatie\IcalendarGenerator\Enums\Classification|null */
     private $classification = null;
@@ -257,7 +257,7 @@ final class Event extends Component
             ->textProperty('CLASS', $this->classification)
             ->textProperty('TRANSP', $this->transparent ? 'TRANSPARENT' : null)
             ->textProperty('STATUS', $this->status)
-            ->textProperty('RRULE', $this->recuring ? 'FREQ=' . $this->recuring : null)
+            ->textProperty('RRULE', $this->recurring ? 'FREQ=' . $this->recurring : null)
             ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
