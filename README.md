@@ -43,6 +43,16 @@ END:VEVENT
 END:VCALENDAR
 ```
 
+## Support us
+
+Learn how to create a package like this one, by watching our premium video course:
+
+[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
 ## Installation
 
 You can install the package via composer:
@@ -277,7 +287,6 @@ response($calendar->get())
     ->download('my-awesome-calendar.ics');
 ```
 
-
 ### Extending the package
 
 We try to keep this package as straightforward as possible. That's why a lot of properties and subcomponents from the RFC are not included in this package. We've made it possible to add other properties or subcomponents to each component in case you might need something not included in the package. But be careful! From this moment, you're on your own correctly implementing the RFC's.
@@ -356,13 +365,6 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 
 - [Ruben Van Assche](https://github.com/rubenvanassche)
 - [All Contributors](../../contributors)
-
-## Support us
-
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
-All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
 
 ## License
 
