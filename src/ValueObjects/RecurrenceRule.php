@@ -9,7 +9,6 @@ use Exception;
 use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
 class RecurrenceRule
 {
@@ -131,7 +130,7 @@ class RecurrenceRule
     public function onMonth($months): self
     {
         $this->addAsCollection($this->months, $months, function ($value) {
-            if(is_int($value)){
+            if (is_int($value)) {
                 $value = RecurrenceMonth::make($value);
             }
 
@@ -149,10 +148,10 @@ class RecurrenceRule
     {
         $value = [
             'day' => $day,
-            'index' => $index
+            'index' => $index,
         ];
 
-        if(! in_array($value, $this->weekdays)){
+        if (! in_array($value, $this->weekdays)) {
             $this->weekdays[] = $value;
         }
 
@@ -185,14 +184,14 @@ class RecurrenceRule
 
         if (count($this->weekdays) > 0) {
             $properties['BYDAY'] = implode(',', array_map(
-                fn(array $day) => "{$day['index']}{$day['day']->value}",
+                fn (array $day) => "{$day['index']}{$day['day']->value}",
                 $this->weekdays
             ));
         }
 
         if (count($this->months) > 0) {
             $properties['BYMONTH'] = implode(',', array_map(
-                fn(RecurrenceMonth $month) => $month->value,
+                fn (RecurrenceMonth $month) => $month->value,
                 $this->months
             ));
         }

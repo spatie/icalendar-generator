@@ -4,11 +4,11 @@ namespace Spatie\IcalendarGenerator\Tests\ValueObjects;
 
 use DateTime;
 use Exception;
+use PHPUnit\Framework\TestCase;
 use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
 use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
-use PHPUnit\Framework\TestCase;
 
 class RecurrenceRuleTest extends TestCase
 {
@@ -248,5 +248,4 @@ class RecurrenceRuleTest extends TestCase
             ],
         ];
     }
-
 }
