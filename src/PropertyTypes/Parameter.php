@@ -2,18 +2,20 @@
 
 namespace Spatie\IcalendarGenerator\PropertyTypes;
 
+use Spatie\Enum\Enum;
+
 final class Parameter
 {
     /** @var string */
     private $name;
 
-    /** @var string */
+    /** @var string|\Spatie\Enum\Enum */
     private $value;
 
     /** @var bool */
     private $disableEscaping;
 
-    public static function create(string $name, string $value, $disableEscaping = false): Parameter
+    public static function create(string $name, $value, $disableEscaping = false): Parameter
     {
         return new self($name, $value, $disableEscaping);
     }
@@ -22,14 +24,14 @@ final class Parameter
      * Parameter constructor.
      *
      * @param string $name
-     * @param string $value
+     * @param string|\Spatie\Enum\Enum $value
      * @param bool $disableEscaping
      */
-    public function __construct(string $name, string $value, $disableEscaping = false)
+    public function __construct(string $name, $value, $disableEscaping = false)
     {
         $this->name = $name;
 
-        $this->value = $value;
+        $this->value = $value instanceof Enum ? $value->value : $value;
         $this->disableEscaping = $disableEscaping;
     }
 

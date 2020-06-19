@@ -170,7 +170,7 @@ class EventTest extends TestCase
             ->classification(Classification::private())
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('CLASS', Classification::private()->getValue(), $payload);
+        $this->assertPropertyEqualsInPayload('CLASS', Classification::private()->value, $payload);
     }
 
     /** @test */
@@ -232,7 +232,7 @@ class EventTest extends TestCase
 
         $this->assertPropertyEqualsInPayload(
             'STATUS',
-            EventStatus::tentative()->getValue(),
+            EventStatus::tentative()->value,
             $payload
         );
     }

@@ -36,6 +36,6 @@ class CalendarAddressPropertyTypeTest extends TestCase
 
         $this->assertParameterCountInProperty(2, $property);
         $this->assertParameterEqualsInProperty('CN', 'Ruben', $property);
-        $this->assertParameterEqualsInProperty('PARTSTAT', ParticipationStatus::accepted()->getValue(), $property);
+        $this->assertParameterEqualsInProperty('PARTSTAT', ParticipationStatus::accepted()->value, $property);
     }
 }
