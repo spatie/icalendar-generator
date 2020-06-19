@@ -10,7 +10,6 @@ use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
 use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
 
-
 class RecurrenceRuleTest extends TestCase
 {
     /** @test */
