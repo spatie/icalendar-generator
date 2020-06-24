@@ -1,43 +1,33 @@
-name: Tests
+name: Psalm
 
-on: [push, pull_request]
+on:
+    push:
+        paths:
+            - '**.php'
+            - 'psalm.xml'
 
 jobs:
-    test:
-        runs-on: ${{ matrix.os }}
-        strategy:
-            fail-fast: true
-            matrix:
-                os: [ubuntu-latest, windows-latest]
-                php: [7.4]
-                laravel: [7.*]
-                dependency-version: [prefer-lowest, prefer-stable]
-                include:
-                    -   laravel: 7.*
-                        testbench: 5.*
-
-        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
-
+    psalm:
+        name: psalm
+        runs-on: ubuntu-latest
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v1
+            - uses: actions/checkout@v1
 
-            -   name: Cache dependencies
-                uses: actions/cache@v1
-                with:
-                    path: ~/.composer/cache/files
-                    key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '7.4'
+                  extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+                  coverage: none
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v1
-                with:
-                    php-version: ${{ matrix.php }}
-                    extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-                    coverage: none
+            - name: Cache composer dependencies
+              uses: actions/cache@v1
+              with:
+                  path: vendor
+                  key: composer-${{ hashFiles('composer.lock') }}
 
-            -   name: Install dependencies
-                run: |
-                    composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-                    composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
-            -   name: Execute tests
-                run: vendor/bin/phpunit
+            - name: Run composer install
+              run: composer install -n --prefer-dist
+
+            - name: Run psalm
+              run: ./vendor/bin/psalm -c psalm.xml
