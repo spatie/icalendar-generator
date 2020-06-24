@@ -8,8 +8,7 @@ final class Parameter
 {
     private string $name;
 
-    /** @var string|\Spatie\Enum\Enum */
-    private $value;
+    private string $value;
 
     private bool $disableEscaping;
 

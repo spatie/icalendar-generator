@@ -25,7 +25,8 @@
     },
     "require-dev": {
         "larapack/dd": "^1.0",
-        "phpunit/phpunit": "^8.2"
+        "phpunit/phpunit": "^8.2",
+        "vimeo/psalm": "^3.12"
     },
     "autoload": {
         "psr-4": {
@@ -39,8 +40,8 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "psalm": "vendor/bin/psalm"
     },
     "config": {
         "sort-packages": true

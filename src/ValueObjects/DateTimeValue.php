@@ -34,6 +34,6 @@ class DateTimeValue
 
     public function __toString()
     {
-        return $this->getValue();
+        return $this->format();
     }
 }
