@@ -282,7 +282,7 @@ class Event extends Component
             )
             ->optional(
                 $this->rrule,
-                fn() => RRuleProperty::create('RRULE', $this->rrule)
+                fn () => RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
                 $this->attendees,
