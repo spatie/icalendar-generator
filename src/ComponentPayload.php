@@ -56,22 +56,6 @@ class ComponentPayload
         return $this;
     }
 
-    public function textProperty(
-        string $name,
-        $value,
-        bool $disableEscaping = false
-    ): ComponentPayload {
-        if ($value === null) {
-            return $this;
-        }
-
-        if ($value instanceof Enum) {
-            $value = $value->value;
-        }
-
-        return $this->property(new TextProperty($name, $value, $disableEscaping));
-    }
-
     public function subComponent(Component ...$components): ComponentPayload
     {
         foreach ($components as $component) {
