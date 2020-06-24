@@ -4,10 +4,8 @@ namespace Spatie\IcalendarGenerator;
 
 use Closure;
 use Exception;
-use Spatie\Enum\Enum;
 use Spatie\IcalendarGenerator\Components\Component;
 use Spatie\IcalendarGenerator\Properties\Property;
-use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class ComponentPayload
 {
