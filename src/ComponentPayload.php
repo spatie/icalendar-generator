@@ -62,16 +62,8 @@ final class ComponentPayload
         return $this->property(new DateTimePropertyType($names, $value, $withTime, $withTimeZone));
     }
 
-    /**
-     * @param array|string $names
-     * @param string|null|\Spatie\Enum\Enum $value
-     *
-     * @param bool $disableEscaping
-     *
-     * @return \Spatie\IcalendarGenerator\ComponentPayload
-     */
     public function textProperty(
-        $names,
+        string $name,
         $value,
         bool $disableEscaping = false
     ): ComponentPayload {
@@ -83,7 +75,7 @@ final class ComponentPayload
             $value = $value->value;
         }
 
-        return $this->property(new TextPropertyType($names, $value, $disableEscaping));
+        return $this->property(new TextPropertyType($name, $value, $disableEscaping));
     }
 
     public function subComponent(Component ...$components): ComponentPayload
@@ -119,7 +111,7 @@ final class ComponentPayload
         $filteredProperties = array_filter(
             $this->properties,
             function (PropertyType $property) use ($name) {
-                return in_array($name, $property->getNames());
+                return in_array($name, $property->getNameAndAliases());
             }
         );
 

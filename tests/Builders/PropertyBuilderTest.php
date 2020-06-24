@@ -50,7 +50,7 @@ class PropertyBuilderTest extends TestCase
     /** @test */
     public function it_will_use_the_alias_of_a_property_when_given()
     {
-        $property = new TextPropertyType(['location', 'geo'], 'Antwerp, Belgium');
+        $property = TextPropertyType::create('location', 'Antwerp, Belgium')->addAlias('geo');
 
         $this->assertEquals(
             [

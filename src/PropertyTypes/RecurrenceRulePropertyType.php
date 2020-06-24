@@ -8,15 +8,14 @@ class RecurrenceRulePropertyType extends PropertyType
 {
     private RecurrenceRule $recurrenceRule;
 
-    public static function create($names, RecurrenceRule $recurrenceRule): self
+    public static function create(string $name, RecurrenceRule $recurrenceRule): self
     {
-        return new self($names, $recurrenceRule);
+        return new self($name, $recurrenceRule);
     }
 
-    public function __construct($names, RecurrenceRule $recurrenceRule)
+    public function __construct(string $name, RecurrenceRule $recurrenceRule)
     {
-        parent::__construct($names);
-
+        $this->name = $name;
         $this->recurrenceRule = $recurrenceRule;
     }
 

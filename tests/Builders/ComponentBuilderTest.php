@@ -35,7 +35,9 @@ EOT
     {
         $payload = ComponentPayload::create('TEST');
 
-        $payload->property(new DummyPropertyType(['location', 'geo'], 'Antwerp'));
+        $payload->property(
+            (new DummyPropertyType('location', 'Antwerp'))->addAlias('geo')
+        );
 
         $builder = new ComponentBuilder($payload);
 

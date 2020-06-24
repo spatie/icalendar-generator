@@ -17,7 +17,7 @@ class CalendarAddressPropertyTypeTest extends TestCase
             new CalendarAddress('ruben@spatie.be')
         );
 
-        $this->assertEquals(['ORGANIZER'], $property->getNames());
+        $this->assertEquals('ORGANIZER', $property->getName());
         $this->assertEquals('MAILTO:ruben@spatie.be', $property->getValue());
 
         $this->assertParameterCountInProperty(0, $property);
@@ -31,7 +31,7 @@ class CalendarAddressPropertyTypeTest extends TestCase
             new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::accepted())
         );
 
-        $this->assertEquals(['ORGANIZER'], $property->getNames());
+        $this->assertEquals('ORGANIZER', $property->getName());
         $this->assertEquals('MAILTO:ruben@spatie.be', $property->getValue());
 
         $this->assertParameterCountInProperty(2, $property);

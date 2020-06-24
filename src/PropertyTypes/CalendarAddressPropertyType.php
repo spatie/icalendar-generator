@@ -6,23 +6,16 @@ use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
 class CalendarAddressPropertyType extends PropertyType
 {
-    private $calendarAddress;
+    private CalendarAddress $calendarAddress;
 
-    public static function create($names, CalendarAddress $calendarAddress): CalendarAddressPropertyType
+    public static function create(string  $name, CalendarAddress $calendarAddress): CalendarAddressPropertyType
     {
-        return new self($names, $calendarAddress);
+        return new self($name, $calendarAddress);
     }
 
-    /**
-     * TextPropertyType constructor.
-     *
-     * @param array|string $names
-     * @param \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress $calendarAddress
-     */
-    public function __construct($names, CalendarAddress $calendarAddress)
+    public function __construct(string $name, CalendarAddress $calendarAddress)
     {
-        parent::__construct($names);
-
+        $this->name = $name;
         $this->calendarAddress = $calendarAddress;
 
         if ($this->calendarAddress->name) {

@@ -4,28 +4,18 @@ namespace Spatie\IcalendarGenerator\PropertyTypes;
 
 final class TextPropertyType extends PropertyType
 {
-    /** @var string */
-    private $text;
+    private string $text;
 
-    /** @var bool */
-    private $disableEscaping;
+    private bool $disableEscaping;
 
-    public static function create($names, string $text, $disableEscaping = false): TextPropertyType
+    public static function create(string $name, string $text, $disableEscaping = false): TextPropertyType
     {
-        return new self($names, $text, $disableEscaping);
+        return new self($name, $text, $disableEscaping);
     }
 
-    /**
-     * TextPropertyType constructor.
-     *
-     * @param array|string $names
-     * @param string $text
-     * @param bool $disableEscaping
-     */
-    public function __construct($names, string $text, $disableEscaping = false)
+    public function __construct(string $name, string $text, $disableEscaping = false)
     {
-        parent::__construct($names);
-
+        $this->name = $name;
         $this->text = $text;
         $this->disableEscaping = $disableEscaping;
     }

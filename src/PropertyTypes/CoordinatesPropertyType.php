@@ -4,28 +4,18 @@ namespace Spatie\IcalendarGenerator\PropertyTypes;
 
 class CoordinatesPropertyType extends PropertyType
 {
-    /** @var float */
-    private $lat;
+    private float $lat;
 
-    /** @var float */
-    private $lng;
+    private float $lng;
 
-    public static function create($names, float $lat, float $lng): CoordinatesPropertyType
+    public static function create(string $name, float $lat, float $lng): CoordinatesPropertyType
     {
-        return new self($names, $lat, $lng);
+        return new self($name, $lat, $lng);
     }
 
-    /**
-     * CoordinatesPropertyType constructor.
-     *
-     * @param string|array $names
-     * @param float $lat
-     * @param float $lng
-     */
-    public function __construct($names, float $lat, float $lng)
+    public function __construct(string $name, float $lat, float $lng)
     {
-        parent::__construct($names);
-
+        $this->name = $name;
         $this->lat = $lat;
         $this->lng = $lng;
     }

@@ -6,52 +6,30 @@ use DateTimeInterface;
 
 final class DateTimePropertyType extends PropertyType
 {
-    /** @var \DateTimeInterface */
-    private $dateTime;
+    private DateTimeInterface $dateTime;
 
-    /** @var bool */
-    private $withTime;
+    private bool $withTime;
 
-    /** @var bool */
-    private $withTimeZone;
+    private bool $withTimeZone;
 
-    /**
-     * @param array|string $names
-     * @param \DateTimeInterface $dateTime
-     * @param bool $withTime
-     * @param bool $withTimeZone
-     *
-     * @return \Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType
-     */
     public static function create(
-        $names,
+        string $name,
         DateTimeInterface $dateTime,
         bool $withTime = false,
         bool $withTimeZone = false
     ): DateTimePropertyType {
-        return new self($names, $dateTime, $withTime, $withTimeZone);
+        return new self($name, $dateTime, $withTime, $withTimeZone);
     }
 
-    /**
-     * DateTimePropertyType constructor.
-     *
-     * @param array|string $names
-     * @param \DateTimeInterface $dateTime
-     * @param bool $withTime
-     * @param bool $withTimeZone
-     */
     public function __construct(
-        $names,
+        string $name,
         DateTimeInterface $dateTime,
         bool $withTime = false,
         bool $withTimeZone = false
     ) {
-        parent::__construct($names);
-
+        $this->name = $name;
         $this->dateTime = $dateTime;
-
         $this->withTime = $withTime;
-
         $this->withTimeZone = $withTimeZone;
 
         if ($this->withTime && $this->withTimeZone) {

@@ -7,26 +7,21 @@ use DateInterval;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
 final class Calendar extends Component
 {
-    /** @var array */
-    private $events = [];
+    private array $events = [];
 
-    /** @var string|null */
-    private $name;
+    private ?string $name = null;
 
-    /** @var string|null */
-    private $description;
+    private ?string $description = null;
 
-    /** @var bool */
-    private $withTimezone = false;
+    private bool $withTimezone = false;
 
-    /** @var \DateInterval|null */
-    private $refreshInterval;
+    private ?DateInterval $refreshInterval = null;
 
-    /** @var string|null */
-    private $productIdentifier;
+    private ?string $productIdentifier = null;
 
     public static function create(string $name = null): Calendar
     {
@@ -132,9 +127,19 @@ final class Calendar extends Component
         $payload = ComponentPayload::create($this->getComponentType())
             ->textProperty('VERSION', '2.0')
             ->textProperty('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator')
-            ->textProperty(['NAME', 'X-WR-CALNAME'], $this->name)
-            ->textProperty(['DESCRIPTION', 'X-WR-CALDESC'], $this->description)
             ->subComponent(...$events);
+
+        if($this->name){
+            $payload->property(
+                TextPropertyType::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
+            );
+        }
+
+        if($this->description){
+            $payload->property(
+                TextPropertyType::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
+            );
+        }
 
         if ($this->refreshInterval) {
             $payload

@@ -14,11 +14,9 @@ class RecurrenceRulePropertyTypeTest extends TestCase
     {
         $recurrenceRule = RecurrenceRule::frequency(RecurrenceFrequency::daily());
 
-        $propertyType = RecurrenceRulePropertyType::create([
-            'RRULE'
-        ], $recurrenceRule);
+        $propertyType = RecurrenceRulePropertyType::create('RRULE', $recurrenceRule);
 
-        $this->assertEquals(['RRULE'], $propertyType->getNames());
+        $this->assertEquals('RRULE', $propertyType->getName());
         $this->assertEquals('RRULE:FREQ=DAILY', $propertyType->getValue());
         $this->assertEquals($recurrenceRule, $propertyType->getOriginalValue());
     }

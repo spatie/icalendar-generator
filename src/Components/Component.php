@@ -10,10 +10,10 @@ use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 abstract class Component
 {
     /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType[] */
-    private $appendedProperties = [];
+    private array $appendedProperties = [];
 
     /** @var \Spatie\IcalendarGenerator\Components\Component[] */
-    private $appendedSubComponents = [];
+    private array $appendedSubComponents = [];
 
     abstract public function getComponentType(): string;
 
@@ -67,7 +67,7 @@ abstract class Component
         foreach ($componentPayload->getProperties() as $property) {
             $providedProperties = array_merge(
                 $providedProperties,
-                $property->getNames()
+                $property->getNameAndAliases()
             );
         }
 

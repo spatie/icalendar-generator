@@ -15,7 +15,7 @@ final class DurationPropertyTypeTest extends TestCase
 
         $property = new DurationPropertyType('DURATION', $interval);
 
-        $this->assertEquals(['DURATION'], $property->getNames());
+        $this->assertEquals('DURATION', $property->getName());
         $this->assertEquals($interval, $property->getOriginalValue());
         $this->assertEquals('PT5M', $property->getValue());
     }
@@ -27,7 +27,7 @@ final class DurationPropertyTypeTest extends TestCase
 
         $property = DurationPropertyType::create('DURATION', $interval)->invert();
 
-        $this->assertEquals(['DURATION'], $property->getNames());
+        $this->assertEquals('DURATION', $property->getName());
         $this->assertEquals($interval, $property->getOriginalValue());
         $this->assertEquals('-PT5M', $property->getValue());
     }
@@ -39,7 +39,7 @@ final class DurationPropertyTypeTest extends TestCase
 
         $property = new DurationPropertyType('DURATION', $interval);
 
-        $this->assertEquals(['DURATION'], $property->getNames());
+        $this->assertEquals('DURATION', $property->getName());
         $this->assertEquals($interval, $property->getOriginalValue());
         $this->assertEquals('P4DT3H2M1S', $property->getValue());
     }

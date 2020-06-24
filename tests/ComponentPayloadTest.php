@@ -99,14 +99,4 @@ class ComponentPayloadTest extends TestCase
 
         $this->assertEquals($parameters, $payload->getProperty('name')->getParameters());
     }
-
-    /** @test */
-    public function a_property_can_be_aliased()
-    {
-        $payload = (new ComponentPayload('TESTCOMPONENT'))
-            ->textProperty(['alpha', 'beta'], 'Some text here');
-
-        $this->assertPropertyEqualsInPayload('alpha', 'Some text here', $payload);
-        $this->assertPropertyEqualsInPayload('beta', 'Some text here', $payload);
-    }
 }

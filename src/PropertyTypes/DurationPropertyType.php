@@ -6,12 +6,17 @@ use DateInterval;
 
 final class DurationPropertyType extends PropertyType
 {
-    /** @var DateInterval */
-    private $interval;
+    private DateInterval $interval;
 
-    public static function create($names, DateInterval $interval): DurationPropertyType
+    public static function create(string $name, DateInterval $interval): DurationPropertyType
     {
-        return new self($names, $interval);
+        return new self($name, $interval);
+    }
+
+    public function __construct(string $name, DateInterval $interval)
+    {
+        $this->name = $name;
+        $this->interval = $interval;
     }
 
     public function invert(): DurationPropertyType
@@ -19,19 +24,6 @@ final class DurationPropertyType extends PropertyType
         $this->interval->invert = 1;
 
         return $this;
-    }
-
-    /**
-     * DurationPropertyType constructor.
-     *
-     * @param array|string $names
-     * @param \DateInterval $interval
-     */
-    public function __construct($names, DateInterval $interval)
-    {
-        parent::__construct($names);
-
-        $this->interval = $interval;
     }
 
     public function getValue(): string

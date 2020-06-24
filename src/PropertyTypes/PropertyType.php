@@ -6,31 +6,32 @@ use Exception;
 
 abstract class PropertyType
 {
-    /** @var array */
-    protected $names;
+    protected string $name;
 
-    /** @var array */
-    protected $parameters = [];
+    protected array $parameters = [];
+
+    protected array $aliases = [];
 
     abstract public function getValue(): string;
 
     abstract public function getOriginalValue();
 
-    /**
-     * PropertyType constructor.
-     *
-     * @param $names array|string
-     */
-    public function __construct($names)
+    public function getNameAndAliases(): array
     {
-        $this->names = is_string($names)
-            ? [$names]
-            : $names;
+        return array_merge(
+            [$this->name],
+            $this->aliases
+        );
     }
 
-    public function getNames(): array
+    public function getName(): string
     {
-        return $this->names;
+        return $this->name;
+    }
+
+    public function getAliases(): array
+    {
+        return $this->aliases;
     }
 
     public function getParameters(): array
@@ -54,7 +55,7 @@ abstract class PropertyType
         return $parameters[0];
     }
 
-    public function addParameters(array $parameters): PropertyType
+    public function addParameters(array $parameters): self
     {
         foreach ($parameters as $parameter) {
             $this->addParameter($parameter);
@@ -63,9 +64,16 @@ abstract class PropertyType
         return $this;
     }
 
-    public function addParameter(Parameter $parameter): PropertyType
+    public function addParameter(Parameter $parameter): self
     {
         $this->parameters[] = $parameter;
+
+        return $this;
+    }
+
+    public function addAlias(string ...$aliases): self
+    {
+        $this->aliases = $aliases;
 
         return $this;
     }

@@ -6,19 +6,11 @@ use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
 class DummyPropertyType extends PropertyType
 {
-    /** @var string */
-    protected $value;
+    protected string $value;
 
-    /**
-     * DummyPropertyType constructor.
-     *
-     * @param string|array $names
-     * @param string $value
-     */
-    public function __construct($names, string $value)
+    public function __construct($name, string $value)
     {
-        parent::__construct($names);
-
+        $this->name = $name;
         $this->value = $value;
     }
 

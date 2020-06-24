@@ -22,7 +22,7 @@ final class PropertyBuilder
 
         return array_map(function (string $name) use ($value, $parameters) {
             return "{$name}{$parameters}:{$value}";
-        }, $this->property->getNames());
+        }, $this->property->getNameAndAliases());
     }
 
     private function resolveParameters(): string
