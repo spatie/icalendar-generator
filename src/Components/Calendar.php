@@ -129,13 +129,13 @@ final class Calendar extends Component
             ->textProperty('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator')
             ->subComponent(...$events);
 
-        if($this->name){
+        if ($this->name) {
             $payload->property(
                 TextPropertyType::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
             );
         }
 
-        if($this->description){
+        if ($this->description) {
             $payload->property(
                 TextPropertyType::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
             );
