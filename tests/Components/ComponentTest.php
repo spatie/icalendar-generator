@@ -4,7 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
@@ -51,7 +51,7 @@ class ComponentTest extends TestCase
         $dummy = new DummyComponent('Dummy');
 
         $dummy->appendProperty(
-            TextPropertyType::create('organizer', 'ruben@spatie.be')
+            TextProperty::create('organizer', 'ruben@spatie.be')
         );
 
         $this->assertPropertyEqualsInPayload(

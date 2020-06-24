@@ -8,7 +8,7 @@ use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
-use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
+use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
@@ -207,17 +207,17 @@ class EventTest extends TestCase
             ->resolvePayload()
             ->getProperties();
 
-        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+        $this->assertContainsEquals(CalendarAddressProperty::create(
             'ATTENDEE',
             new CalendarAddress('ruben@spatie.be')
         ), $payload);
 
-        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+        $this->assertContainsEquals(CalendarAddressProperty::create(
             'ATTENDEE',
             new CalendarAddress('brent@spatie.be', 'Brent')
         ), $payload);
 
-        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+        $this->assertContainsEquals(CalendarAddressProperty::create(
             'ATTENDEE',
             new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
         ), $payload);

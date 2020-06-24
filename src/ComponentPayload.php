@@ -7,9 +7,10 @@ use DateTimeInterface;
 use Exception;
 use Spatie\Enum\Enum;
 use Spatie\IcalendarGenerator\Components\Component;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\Property;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class ComponentPayload
 {
@@ -29,7 +30,7 @@ class ComponentPayload
         $this->type = $type;
     }
 
-    public function property(PropertyType $property, array $parameters = null): ComponentPayload
+    public function property(Property $property, array $parameters = null): ComponentPayload
     {
         $property->addParameters($parameters ?? []);
 
@@ -38,25 +39,24 @@ class ComponentPayload
         return $this;
     }
 
-    /**
-     * @param array|string $names
-     * @param \DateTimeInterface|null $value
-     * @param bool $withTime
-     * @param bool $withTimeZone
-     *
-     * @return \Spatie\IcalendarGenerator\ComponentPayload
-     */
-    public function dateTimeProperty(
-        $names,
-        ?DateTimeInterface $value,
-        bool $withTime = false,
-        bool $withTimeZone = false
-    ): ComponentPayload {
-        if ($value === null) {
+    public function optional($when, Closure $closure): self
+    {
+        if ($when === null || $when === false) {
             return $this;
         }
 
-        return $this->property(new DateTimePropertyType($names, $value, $withTime, $withTimeZone));
+        $this->properties[] = $closure();
+
+        return $this;
+    }
+
+    public function multiple(array $items, Closure $closure): self
+    {
+        foreach ($items as $item) {
+            $this->property($closure($item));
+        }
+
+        return $this;
     }
 
     public function textProperty(
@@ -72,22 +72,13 @@ class ComponentPayload
             $value = $value->value;
         }
 
-        return $this->property(new TextPropertyType($name, $value, $disableEscaping));
+        return $this->property(new TextProperty($name, $value, $disableEscaping));
     }
 
     public function subComponent(Component ...$components): ComponentPayload
     {
         foreach ($components as $component) {
             $this->subComponents[] = $component;
-        }
-
-        return $this;
-    }
-
-    public function when(bool $condition, Closure $closure): ComponentPayload
-    {
-        if ($condition) {
-            $closure($this);
         }
 
         return $this;
@@ -103,11 +94,11 @@ class ComponentPayload
         return $this->properties;
     }
 
-    public function getProperty(string $name): PropertyType
+    public function getProperty(string $name): Property
     {
         $filteredProperties = array_filter(
             $this->properties,
-            function (PropertyType $property) use ($name) {
+            function (Property $property) use ($name) {
                 return in_array($name, $property->getNameAndAliases());
             }
         );

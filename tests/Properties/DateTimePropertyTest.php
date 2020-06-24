@@ -1,13 +1,13 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use DateTime;
 use DateTimeZone;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class DateTimePropertyTypeTest extends TestCase
+class DateTimePropertyTest extends TestCase
 {
     protected DateTime $date;
 
@@ -21,7 +21,7 @@ class DateTimePropertyTypeTest extends TestCase
     /** @test */
     public function it_will_format_the_date_correctly()
     {
-        $property = new DateTimePropertyType('STARTS', $this->date);
+        $property = new DateTimeProperty('STARTS', $this->date);
 
         $this->assertEquals('20190516', $property->getValue());
     }
@@ -29,7 +29,7 @@ class DateTimePropertyTypeTest extends TestCase
     /** @test */
     public function it_will_format_the_date_and_time_correctly()
     {
-        $property = new DateTimePropertyType('STARTS', $this->date, true);
+        $property = new DateTimeProperty('STARTS', $this->date, true);
 
         $this->assertEquals('20190516T121015', $property->getValue());
     }
@@ -39,7 +39,7 @@ class DateTimePropertyTypeTest extends TestCase
     {
         $this->date->setTimezone(new DateTimeZone('Europe/Brussels'));
 
-        $property = new DateTimePropertyType('STARTS', $this->date, true, true);
+        $property = new DateTimeProperty('STARTS', $this->date, true, true);
 
         $this->assertEquals('20190516T141015', $property->getValue());
         $this->assertEquals(1, count($property->getParameters()));

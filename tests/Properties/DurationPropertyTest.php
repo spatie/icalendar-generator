@@ -1,19 +1,19 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use DateInterval;
-use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
+use Spatie\IcalendarGenerator\Properties\DurationProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class DurationPropertyTypeTest extends TestCase
+class DurationPropertyTest extends TestCase
 {
     /** @test */
     public function it_can_create_a_duration_property_type()
     {
         $interval = new DateInterval('PT5M');
 
-        $property = new DurationPropertyType('DURATION', $interval);
+        $property = new DurationProperty('DURATION', $interval);
 
         $this->assertEquals('DURATION', $property->getName());
         $this->assertEquals($interval, $property->getOriginalValue());
@@ -25,7 +25,7 @@ class DurationPropertyTypeTest extends TestCase
     {
         $interval = new DateInterval('PT5M');
 
-        $property = DurationPropertyType::create('DURATION', $interval)->invert();
+        $property = DurationProperty::create('DURATION', $interval)->invert();
 
         $this->assertEquals('DURATION', $property->getName());
         $this->assertEquals($interval, $property->getOriginalValue());
@@ -37,7 +37,7 @@ class DurationPropertyTypeTest extends TestCase
     {
         $interval = new DateInterval('P4DT3H2M1S');
 
-        $property = new DurationPropertyType('DURATION', $interval);
+        $property = new DurationProperty('DURATION', $interval);
 
         $this->assertEquals('DURATION', $property->getName());
         $this->assertEquals($interval, $property->getOriginalValue());

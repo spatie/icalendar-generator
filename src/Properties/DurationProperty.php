@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
 use DateInterval;
 
-class DurationPropertyType extends PropertyType
+class DurationProperty extends Property
 {
     private DateInterval $interval;
 
-    public static function create(string $name, DateInterval $interval): DurationPropertyType
+    public static function create(string $name, DateInterval $interval): DurationProperty
     {
         return new self($name, $interval);
     }
@@ -19,7 +19,7 @@ class DurationPropertyType extends PropertyType
         $this->interval = $interval;
     }
 
-    public function invert(): DurationPropertyType
+    public function invert(): DurationProperty
     {
         $this->interval->invert = 1;
 

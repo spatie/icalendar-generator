@@ -2,9 +2,9 @@
 
 namespace Spatie\IcalendarGenerator\Tests\TestClasses;
 
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\Properties\Property;
 
-class DummyPropertyType extends PropertyType
+class DummyProperty extends Property
 {
     protected string $value;
 

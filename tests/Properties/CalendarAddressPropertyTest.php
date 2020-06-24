@@ -1,18 +1,18 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
-use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
+use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
-class CalendarAddressPropertyTypeTest extends TestCase
+class CalendarAddressPropertyTest extends TestCase
 {
     /** @test */
     public function it_can_create_a_calendar_property_type()
     {
-        $property = new CalendarAddressPropertyType(
+        $property = new CalendarAddressProperty(
             'ORGANIZER',
             new CalendarAddress('ruben@spatie.be')
         );
@@ -26,7 +26,7 @@ class CalendarAddressPropertyTypeTest extends TestCase
     /** @test */
     public function it_can_set_a_name_and_participation_status()
     {
-        $property = new CalendarAddressPropertyType(
+        $property = new CalendarAddressProperty(
             'ORGANIZER',
             new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::accepted())
         );

@@ -8,9 +8,11 @@ use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
-use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
+use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
 
@@ -239,29 +241,51 @@ class Event extends Component
     protected function payload(): ComponentPayload
     {
         $payload = ComponentPayload::create($this->getComponentType())
-            ->textProperty('UID', $this->uuid)
-            ->textProperty('SUMMARY', $this->name)
-            ->textProperty('DESCRIPTION', $this->description)
-            ->textProperty('LOCATION', $this->address)
-            ->textProperty('CLASS', $this->classification)
-            ->textProperty('TRANSP', $this->transparent ? 'TRANSPARENT' : null)
-            ->textProperty('STATUS', $this->status)
-            ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
-            ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
-            ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
+            ->property(TextProperty::create('UID', $this->uuid))
+            ->property(DateTimeProperty::create('DTSTAMP', $this->created, true, $this->withTimezone))
+            ->optional(
+                $this->name,
+                fn() => TextProperty::create('SUMMARY', $this->name)
+            )
+            ->optional(
+                $this->description,
+                fn() => TextProperty::create('DESCRIPTION', $this->description)
+            )
+            ->optional(
+                $this->address,
+                fn() => TextProperty::create('LOCATION', $this->address)
+            )
+            ->optional(
+                $this->classification,
+                fn() => TextProperty::create('CLASS', $this->classification->value)
+            )
+            ->optional(
+                $this->status,
+                fn() => TextProperty::create('STATUS', $this->status->value)
+            )
+            ->optional(
+                $this->transparent,
+                fn() => TextProperty::create('TRANSP', 'TRANSPARENT')
+            )
+            ->optional(
+                $this->starts,
+                fn() => DateTimeProperty::create('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
+            )
+            ->optional(
+                $this->ends,
+                fn() => DateTimeProperty::create('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
+            )
+            ->optional(
+                $this->organizer,
+                fn() => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+            )
+            ->multiple(
+                $this->attendees,
+                fn(CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+            )
             ->subComponent(...$this->alerts);
 
-        if ($this->organizer) {
-            $payload->property(CalendarAddressPropertyType::create('ORGANIZER', $this->organizer));
-        }
-
-        foreach ($this->attendees as $attendee) {
-            $payload->property(CalendarAddressPropertyType::create('ATTENDEE', $attendee));
-        }
-
-        $payload = $this->resolveLocationProperties($payload);
-
-        return $payload;
+        return $this->resolveLocationProperties($payload);
     }
 
     private function resolveLocationProperties(ComponentPayload $payload): ComponentPayload
@@ -270,13 +294,13 @@ class Event extends Component
             return $payload;
         }
 
-        $payload->property(CoordinatesPropertyType::create('GEO', $this->lat, $this->lng));
+        $payload->property(CoordinatesProperty::create('GEO', $this->lat, $this->lng));
 
         if (is_null($this->address) || is_null($this->addressName)) {
             return $payload;
         }
 
-        $property = CoordinatesPropertyType::create(
+        $property = CoordinatesProperty::create(
             'X-APPLE-STRUCTURED-LOCATION',
             $this->lat,
             $this->lng

@@ -6,7 +6,7 @@ use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
 class ComponentBuilderTest extends TestCase
 {
@@ -15,7 +15,7 @@ class ComponentBuilderTest extends TestCase
     {
         $payload = ComponentPayload::create('TEST');
 
-        $payload->property(new DummyPropertyType('location', 'Antwerp'));
+        $payload->property(new DummyProperty('location', 'Antwerp'));
 
         $builder = new ComponentBuilder($payload);
 
@@ -36,7 +36,7 @@ EOT
         $payload = ComponentPayload::create('TEST');
 
         $payload->property(
-            (new DummyPropertyType('location', 'Antwerp'))->addAlias('geo')
+            (new DummyProperty('location', 'Antwerp'))->addAlias('geo')
         );
 
         $builder = new ComponentBuilder($payload);
@@ -80,7 +80,7 @@ EOT
     {
         $payload = ComponentPayload::create('TEST');
 
-        $payload->property(new DummyPropertyType('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
+        $payload->property(new DummyProperty('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
 
         $builder = new ComponentBuilder($payload);
 

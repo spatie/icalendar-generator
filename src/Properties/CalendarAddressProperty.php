@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
-class CalendarAddressPropertyType extends PropertyType
+class CalendarAddressProperty extends Property
 {
     private CalendarAddress $calendarAddress;
 
-    public static function create(string  $name, CalendarAddress $calendarAddress): CalendarAddressPropertyType
+    public static function create(string  $name, CalendarAddress $calendarAddress): CalendarAddressProperty
     {
         return new self($name, $calendarAddress);
     }

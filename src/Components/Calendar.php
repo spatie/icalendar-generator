@@ -4,10 +4,11 @@ namespace Spatie\IcalendarGenerator\Components;
 
 use Closure;
 use DateInterval;
+use SebastianBergmann\CodeCoverage\Report\Text;
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Properties\DurationProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class Calendar extends Component
 {
@@ -116,40 +117,37 @@ class Calendar extends Component
 
     protected function payload(): ComponentPayload
     {
-        $events = $this->events;
+        return ComponentPayload::create($this->getComponentType())
+            ->property(TextProperty::create('VERSION', '2.0'))
+            ->property(TextProperty::create('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator'))
+            ->optional(
+                $this->name,
+                fn() => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
+            )
+            ->optional(
+                $this->description,
+                fn() => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
+            )
+            ->optional(
+                $this->refreshInterval,
+                fn() => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
+            )
+            ->optional(
+                $this->refreshInterval,
+                fn() => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
+            )
+            ->subComponent(...$this->resolveEvents());
+    }
 
-        if ($this->withTimezone) {
-            array_walk($events, function (Event $event) {
-                $event->withTimezone();
-            });
+    private function resolveEvents(): array
+    {
+        if($this->withTimezone === false){
+            return $this->events;
         }
 
-        $payload = ComponentPayload::create($this->getComponentType())
-            ->textProperty('VERSION', '2.0')
-            ->textProperty('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator')
-            ->subComponent(...$events);
-
-        if ($this->name) {
-            $payload->property(
-                TextPropertyType::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
-            );
-        }
-
-        if ($this->description) {
-            $payload->property(
-                TextPropertyType::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
-            );
-        }
-
-        if ($this->refreshInterval) {
-            $payload
-                ->property(
-                    DurationPropertyType::create('REFRESH-INTERVAL', $this->refreshInterval)
-                        ->addParameter(new Parameter('VALUE', 'DURATION'))
-                )
-                ->property(DurationPropertyType::create('X-PUBLISHED-TTL', $this->refreshInterval));
-        }
-
-        return $payload;
+        return array_map(
+            fn(Event $event) => $event->withTimezone(),
+            $this->events
+        );
     }
 }

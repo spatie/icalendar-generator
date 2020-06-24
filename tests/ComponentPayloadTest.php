@@ -5,11 +5,11 @@ namespace Spatie\IcalendarGenerator\Tests;
 use DateTime;
 use Exception;
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyPropertyType;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
 class ComponentPayloadTest extends TestCase
 {
@@ -27,12 +27,12 @@ class ComponentPayloadTest extends TestCase
         $date = new DateTime();
 
         $payload = (new ComponentPayload('TESTCOMPONENT'))
-            ->textProperty('text', 'Some text here')
-            ->dateTimeProperty('date', $date);
+            ->property(TextProperty::create('text', 'Some text here'))
+            ->property(DateTimeProperty::create('date', $date));
 
         $this->assertEquals([
-            new TextPropertyType('text', 'Some text here'),
-            new DateTimePropertyType('date', $date),
+            new TextProperty('text', 'Some text here'),
+            new DateTimeProperty('date', $date),
         ], $payload->getProperties());
     }
 
@@ -51,15 +51,6 @@ class ComponentPayloadTest extends TestCase
     }
 
     /** @test */
-    public function a_payload_can_give_a_specified_property()
-    {
-        $payload = (new ComponentPayload('TESTCOMPONENT'))
-            ->textProperty('text', 'Some text here');
-
-        $this->assertPropertyEqualsInPayload('text', 'Some text here', $payload);
-    }
-
-    /** @test */
     public function an_exception_will_be_thrown_when_an_property_does_not_exist()
     {
         $this->expectException(Exception::class);
@@ -70,25 +61,45 @@ class ComponentPayloadTest extends TestCase
     }
 
     /** @test */
-    public function a_when_will_only_be_executed_when_the_condition_is_true()
+    public function an_optional_will_only_be_added_when_the_condition_is_true()
     {
         $payload = (new ComponentPayload('TESTCOMPONENT'));
 
-        $payload->when(false, function (ComponentPayload $componentPayload) {
-            $componentPayload->textProperty('text', 'Some text here');
-        });
-
-        $payload->when(true, function (ComponentPayload $componentPayload) {
-            $componentPayload->textProperty('text', 'Other text here');
-        });
+        $payload->optional(false, fn() => TextProperty::create('text', 'Some text here'));
+        $payload->optional(true, fn() => TextProperty::create('text', 'Other text here'));
 
         $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
     }
 
     /** @test */
+    public function an_optional_will_only_be_added_when_it_has_a_value()
+    {
+        $payload = (new ComponentPayload('TESTCOMPONENT'));
+
+        $payload->optional(null, fn() => TextProperty::create('text', 'Some text here'));
+        $payload->optional('something', fn() => TextProperty::create('text', 'Other text here'));
+
+        $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
+    }
+
+    /** @test */
+    public function an_multiple_will_be_added_via_closure()
+    {
+        $payload = (new ComponentPayload('TESTCOMPONENT'));
+
+        $payload->multiple(['a', 'b', 'c'], fn(string $letter) => TextProperty::create('text', $letter));
+
+        $this->assertEquals([
+            TextProperty::create('text', 'a'),
+            TextProperty::create('text', 'b'),
+            TextProperty::create('text', 'c'),
+        ], $payload->getProperties());
+    }
+
+    /** @test */
     public function a_property_can_be_added_with_parameters()
     {
-        $property = new DummyPropertyType('name', 'TESTPROPERTY');
+        $property = new DummyProperty('name', 'TESTPROPERTY');
 
         $parameters = [
             new Parameter('hello', 'world'),

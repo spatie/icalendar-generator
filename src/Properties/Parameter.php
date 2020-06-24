@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
 use Spatie\Enum\Enum;
 

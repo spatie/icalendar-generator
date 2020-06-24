@@ -1,16 +1,16 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\Properties;
 
-use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
+use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class CoordinatesPropertyTypeTest extends TestCase
+class CoordinatesPropertyTest extends TestCase
 {
     /** @test */
     public function it_can_create_a_coordinates_property_type()
     {
-        $propertyType = new CoordinatesPropertyType('GEO', 10.5, 20.5);
+        $propertyType = new CoordinatesProperty('GEO', 10.5, 20.5);
 
         $this->assertEquals('GEO', $propertyType->getName());
         $this->assertEquals('10.5;20.5', $propertyType->getValue());

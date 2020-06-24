@@ -2,14 +2,14 @@
 
 namespace Spatie\IcalendarGenerator\Builders;
 
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\Properties\Property;
 
 class PropertyBuilder
 {
-    /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType */
-    private PropertyType $property;
+    /** @var \Spatie\IcalendarGenerator\Properties\Property */
+    private Property $property;
 
-    public function __construct(PropertyType $property)
+    public function __construct(Property $property)
     {
         $this->property = $property;
     }
@@ -30,7 +30,7 @@ class PropertyBuilder
         $parameters = '';
 
         foreach ($this->property->getParameters() as $parameter) {
-            /** @var \Spatie\IcalendarGenerator\PropertyTypes\Parameter $parameter */
+            /** @var \Spatie\IcalendarGenerator\Properties\Parameter $parameter */
             $name = $parameter->getName();
             $value = $parameter->getValue();
 

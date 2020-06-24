@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
 use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
 
-class RecurrenceRulePropertyType extends PropertyType
+class RecurrenceRuleProperty extends Property
 {
     private RecurrenceRule $recurrenceRule;
 

@@ -5,11 +5,11 @@ namespace Spatie\IcalendarGenerator\Components;
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
+use Spatie\IcalendarGenerator\Properties\Property;
 
 abstract class Component
 {
-    /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType[] */
+    /** @var \Spatie\IcalendarGenerator\Properties\Property[] */
     private array $appendedProperties = [];
 
     /** @var \Spatie\IcalendarGenerator\Components\Component[] */
@@ -45,7 +45,7 @@ abstract class Component
         return $builder->build();
     }
 
-    public function appendProperty(PropertyType $property): Component
+    public function appendProperty(Property $property): Component
     {
         $this->appendedProperties[] = $property;
 
@@ -63,7 +63,7 @@ abstract class Component
     {
         $providedProperties = [];
 
-        /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType $property */
+        /** @var \Spatie\IcalendarGenerator\Properties\Property $property */
         foreach ($componentPayload->getProperties() as $property) {
             $providedProperties = array_merge(
                 $providedProperties,

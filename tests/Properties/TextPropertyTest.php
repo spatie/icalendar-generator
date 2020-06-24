@@ -1,38 +1,38 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\Properties;
 
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class ParameterTest extends TestCase
+class TextPropertyTest extends TestCase
 {
     /** @test */
     public function it_replaces_all_illegal_characters()
     {
         $this->assertEquals(
             'a backslash \\\\ ',
-            (new Parameter('', 'a backslash \ '))->getValue()
+            (new TextProperty('', 'a backslash \ '))->getValue()
         );
 
         $this->assertEquals(
             'a quote \\" ',
-            (new Parameter('', 'a quote " '))->getValue()
+            (new TextProperty('', 'a quote " '))->getValue()
         );
 
         $this->assertEquals(
             'a comma \\, ',
-            (new Parameter('', 'a comma , '))->getValue()
+            (new TextProperty('', 'a comma , '))->getValue()
         );
 
         $this->assertEquals(
             'a point-comma \\; ',
-            (new Parameter('', 'a point-comma ; '))->getValue()
+            (new TextProperty('', 'a point-comma ; '))->getValue()
         );
 
         $this->assertEquals(
             'a return \\\n ',
-            (new Parameter('', 'a return \n '))->getValue()
+            (new TextProperty('', 'a return \n '))->getValue()
         );
     }
 
@@ -41,27 +41,27 @@ class ParameterTest extends TestCase
     {
         $this->assertEquals(
             'a backslash \ ',
-            (new Parameter('', 'a backslash \ ', true))->getValue()
+            (new TextProperty('', 'a backslash \ ', true))->getValue()
         );
 
         $this->assertEquals(
             'a quote " ',
-            (new Parameter('', 'a quote " ', true))->getValue()
+            (new TextProperty('', 'a quote " ', true))->getValue()
         );
 
         $this->assertEquals(
             'a comma , ',
-            (new Parameter('', 'a comma , ', true))->getValue()
+            (new TextProperty('', 'a comma , ', true))->getValue()
         );
 
         $this->assertEquals(
             'a point-comma ; ',
-            (new Parameter('', 'a point-comma ; ', true))->getValue()
+            (new TextProperty('', 'a point-comma ; ', true))->getValue()
         );
 
         $this->assertEquals(
             'a return \n ',
-            (new Parameter('', 'a return \n ', true))->getValue()
+            (new TextProperty('', 'a return \n ', true))->getValue()
         );
     }
 }

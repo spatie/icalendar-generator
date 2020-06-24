@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
 use DateTimeInterface;
 
-class DateTimePropertyType extends PropertyType
+class DateTimeProperty extends Property
 {
     private DateTimeInterface $dateTime;
 
@@ -17,7 +17,7 @@ class DateTimePropertyType extends PropertyType
         DateTimeInterface $dateTime,
         bool $withTime = false,
         bool $withTimeZone = false
-    ): DateTimePropertyType {
+    ): DateTimeProperty {
         return new self($name, $dateTime, $withTime, $withTimeZone);
     }
 

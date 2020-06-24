@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
-class TextPropertyType extends PropertyType
+class TextProperty extends Property
 {
     private string $text;
 
     private bool $disableEscaping;
 
-    public static function create(string $name, string $text, $disableEscaping = false): TextPropertyType
+    public static function create(string $name, string $text, $disableEscaping = false): TextProperty
     {
         return new self($name, $text, $disableEscaping);
     }

@@ -5,9 +5,10 @@ namespace Spatie\IcalendarGenerator\Components;
 use DateInterval;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\DurationProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class Alert extends Component
 {
@@ -112,22 +113,22 @@ class Alert extends Component
     protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
-            ->textProperty('ACTION', 'DISPLAY')
-            ->textProperty('DESCRIPTION', $this->message)
+            ->property(TextProperty::create('ACTION', 'DISPLAY'))
+            ->optional($this->message, fn() => TextProperty::create('DESCRIPTION', $this->message))
             ->property($this->resolveTriggerProperty());
     }
 
     private function resolveTriggerProperty()
     {
         if ($this->triggerMode === self::TRIGGER_DATE) {
-            return DateTimePropertyType::create(
+            return DateTimeProperty::create(
                 'TRIGGER',
                 $this->triggerDate,
                 true
             )->addParameter(new Parameter('VALUE', 'DATE-TIME'));
         }
 
-        $property = DurationPropertyType::create('TRIGGER', $this->triggerInterval);
+        $property = DurationProperty::create('TRIGGER', $this->triggerInterval);
 
         if ($this->triggerMode === self::TRIGGER_END) {
             return $property->addParameter(new Parameter('RELATED', 'END'));

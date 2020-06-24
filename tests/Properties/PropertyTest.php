@@ -1,18 +1,18 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Exception;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class PropertyTypeTest extends TestCase
+class PropertyTest extends TestCase
 {
     /** @test */
     public function a_property_can_give_a_specified_parameter()
     {
-        $property = new TextPropertyType('NAME', 'Ruben');
+        $property = new TextProperty('NAME', 'Ruben');
 
         $property->addParameter(new Parameter('LASTNAME', 'Van Assche'));
 
@@ -26,7 +26,7 @@ class PropertyTypeTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        $property = new TextPropertyType('NAME', 'Ruben');
+        $property = new TextProperty('NAME', 'Ruben');
 
         $property->addParameter(new Parameter('LASTNAME', 'Van Assche'));
 

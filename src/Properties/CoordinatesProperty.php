@@ -1,14 +1,14 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
-class CoordinatesPropertyType extends PropertyType
+class CoordinatesProperty extends Property
 {
     private float $lat;
 
     private float $lng;
 
-    public static function create(string $name, float $lat, float $lng): CoordinatesPropertyType
+    public static function create(string $name, float $lat, float $lng): CoordinatesProperty
     {
         return new self($name, $lat, $lng);
     }

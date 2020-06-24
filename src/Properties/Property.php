@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\PropertyTypes;
+namespace Spatie\IcalendarGenerator\Properties;
 
 use Exception;
 
-abstract class PropertyType
+abstract class Property
 {
     protected string $name;
 

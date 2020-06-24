@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\TestClasses;
 
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Components\Component;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class DummyComponent extends Component
 {
@@ -31,7 +32,7 @@ class DummyComponent extends Component
     protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
-            ->textProperty('name', $this->name)
-            ->textProperty('description', $this->description);
+            ->optional($this->name, fn() => TextProperty::create('name', $this->name))
+            ->optional($this->description, fn() => TextProperty::create('description', $this->description));
     }
 }
