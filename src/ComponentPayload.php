@@ -3,12 +3,9 @@
 namespace Spatie\IcalendarGenerator;
 
 use Closure;
-use DateTimeInterface;
 use Exception;
 use Spatie\Enum\Enum;
 use Spatie\IcalendarGenerator\Components\Component;
-use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
-use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\Property;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 

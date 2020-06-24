@@ -245,43 +245,43 @@ class Event extends Component
             ->property(DateTimeProperty::create('DTSTAMP', $this->created, true, $this->withTimezone))
             ->optional(
                 $this->name,
-                fn() => TextProperty::create('SUMMARY', $this->name)
+                fn () => TextProperty::create('SUMMARY', $this->name)
             )
             ->optional(
                 $this->description,
-                fn() => TextProperty::create('DESCRIPTION', $this->description)
+                fn () => TextProperty::create('DESCRIPTION', $this->description)
             )
             ->optional(
                 $this->address,
-                fn() => TextProperty::create('LOCATION', $this->address)
+                fn () => TextProperty::create('LOCATION', $this->address)
             )
             ->optional(
                 $this->classification,
-                fn() => TextProperty::create('CLASS', $this->classification->value)
+                fn () => TextProperty::create('CLASS', $this->classification->value)
             )
             ->optional(
                 $this->status,
-                fn() => TextProperty::create('STATUS', $this->status->value)
+                fn () => TextProperty::create('STATUS', $this->status->value)
             )
             ->optional(
                 $this->transparent,
-                fn() => TextProperty::create('TRANSP', 'TRANSPARENT')
+                fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
             )
             ->optional(
                 $this->starts,
-                fn() => DateTimeProperty::create('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
+                fn () => DateTimeProperty::create('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
             )
             ->optional(
                 $this->ends,
-                fn() => DateTimeProperty::create('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
+                fn () => DateTimeProperty::create('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
             )
             ->optional(
                 $this->organizer,
-                fn() => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+                fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
             )
             ->multiple(
                 $this->attendees,
-                fn(CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+                fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
             )
             ->subComponent(...$this->alerts);
 

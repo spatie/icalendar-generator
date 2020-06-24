@@ -114,7 +114,7 @@ class Alert extends Component
     {
         return ComponentPayload::create($this->getComponentType())
             ->property(TextProperty::create('ACTION', 'DISPLAY'))
-            ->optional($this->message, fn() => TextProperty::create('DESCRIPTION', $this->message))
+            ->optional($this->message, fn () => TextProperty::create('DESCRIPTION', $this->message))
             ->property($this->resolveTriggerProperty());
     }
 

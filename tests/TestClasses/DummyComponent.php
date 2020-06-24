@@ -32,7 +32,7 @@ class DummyComponent extends Component
     protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
-            ->optional($this->name, fn() => TextProperty::create('name', $this->name))
-            ->optional($this->description, fn() => TextProperty::create('description', $this->description));
+            ->optional($this->name, fn () => TextProperty::create('name', $this->name))
+            ->optional($this->description, fn () => TextProperty::create('description', $this->description));
     }
 }

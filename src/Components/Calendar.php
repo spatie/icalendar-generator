@@ -4,7 +4,6 @@ namespace Spatie\IcalendarGenerator\Components;
 
 use Closure;
 use DateInterval;
-use SebastianBergmann\CodeCoverage\Report\Text;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Properties\DurationProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
@@ -122,31 +121,31 @@ class Calendar extends Component
             ->property(TextProperty::create('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator'))
             ->optional(
                 $this->name,
-                fn() => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
+                fn () => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
             )
             ->optional(
                 $this->description,
-                fn() => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
+                fn () => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
             )
             ->optional(
                 $this->refreshInterval,
-                fn() => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
+                fn () => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
             )
             ->optional(
                 $this->refreshInterval,
-                fn() => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
+                fn () => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
             )
             ->subComponent(...$this->resolveEvents());
     }
 
     private function resolveEvents(): array
     {
-        if($this->withTimezone === false){
+        if ($this->withTimezone === false) {
             return $this->events;
         }
 
         return array_map(
-            fn(Event $event) => $event->withTimezone(),
+            fn (Event $event) => $event->withTimezone(),
             $this->events
         );
     }

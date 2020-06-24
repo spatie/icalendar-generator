@@ -65,8 +65,8 @@ class ComponentPayloadTest extends TestCase
     {
         $payload = (new ComponentPayload('TESTCOMPONENT'));
 
-        $payload->optional(false, fn() => TextProperty::create('text', 'Some text here'));
-        $payload->optional(true, fn() => TextProperty::create('text', 'Other text here'));
+        $payload->optional(false, fn () => TextProperty::create('text', 'Some text here'));
+        $payload->optional(true, fn () => TextProperty::create('text', 'Other text here'));
 
         $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
     }
@@ -76,8 +76,8 @@ class ComponentPayloadTest extends TestCase
     {
         $payload = (new ComponentPayload('TESTCOMPONENT'));
 
-        $payload->optional(null, fn() => TextProperty::create('text', 'Some text here'));
-        $payload->optional('something', fn() => TextProperty::create('text', 'Other text here'));
+        $payload->optional(null, fn () => TextProperty::create('text', 'Some text here'));
+        $payload->optional('something', fn () => TextProperty::create('text', 'Other text here'));
 
         $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
     }
@@ -87,7 +87,7 @@ class ComponentPayloadTest extends TestCase
     {
         $payload = (new ComponentPayload('TESTCOMPONENT'));
 
-        $payload->multiple(['a', 'b', 'c'], fn(string $letter) => TextProperty::create('text', $letter));
+        $payload->multiple(['a', 'b', 'c'], fn (string $letter) => TextProperty::create('text', $letter));
 
         $this->assertEquals([
             TextProperty::create('text', 'a'),
