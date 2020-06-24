@@ -6,7 +6,7 @@ use DateInterval;
 use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
-final class DurationPropertyTypeTest extends TestCase
+class DurationPropertyTypeTest extends TestCase
 {
     /** @test */
     public function it_can_create_a_duration_property_type()

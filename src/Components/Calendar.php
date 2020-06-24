@@ -9,7 +9,7 @@ use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
-final class Calendar extends Component
+class Calendar extends Component
 {
     private array $events = [];
 

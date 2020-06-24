@@ -4,7 +4,7 @@ namespace Spatie\IcalendarGenerator\PropertyTypes;
 
 use DateInterval;
 
-final class DurationPropertyType extends PropertyType
+class DurationPropertyType extends PropertyType
 {
     private DateInterval $interval;
 

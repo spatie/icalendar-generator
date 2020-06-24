@@ -4,10 +4,9 @@ namespace Spatie\IcalendarGenerator\Builders;
 
 use Spatie\IcalendarGenerator\ComponentPayload;
 
-final class ComponentBuilder
+class ComponentBuilder
 {
-    /** @var \Spatie\IcalendarGenerator\ComponentPayload */
-    private $componentPayload;
+    private ComponentPayload $componentPayload;
 
     public function __construct(ComponentPayload $componentPayload)
     {

@@ -4,7 +4,7 @@ namespace Spatie\IcalendarGenerator\PropertyTypes;
 
 use Spatie\Enum\Enum;
 
-final class Parameter
+class Parameter
 {
     private string $name;
 

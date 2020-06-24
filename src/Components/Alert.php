@@ -9,23 +9,19 @@ use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 
-final class Alert extends Component
+class Alert extends Component
 {
     private const TRIGGER_START = 'trigger_start';
     private const TRIGGER_END = 'trigger_end';
     private const TRIGGER_DATE = 'trigger_date';
 
-    /** @var \DateTimeInterface */
-    private $triggerDate;
+    private DateTimeInterface $triggerDate;
 
-    /** @var DateInterval */
-    private $triggerInterval;
+    private DateInterval $triggerInterval;
 
-    /** @var string */
-    private $triggerMode = self::TRIGGER_DATE;
+    private string $triggerMode = self::TRIGGER_DATE;
 
-    /** @var null|string */
-    private $message;
+    private ?string $message;
 
     public static function date(DateTimeInterface $date, string $description = null): Alert
     {

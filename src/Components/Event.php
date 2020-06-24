@@ -14,7 +14,7 @@ use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
 
-final class Event extends Component
+class Event extends Component
 {
     private array $alerts = [];
 

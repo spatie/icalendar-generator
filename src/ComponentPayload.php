@@ -11,16 +11,13 @@ use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
 
-final class ComponentPayload
+class ComponentPayload
 {
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var array */
-    private $properties = [];
+    private array $properties = [];
 
-    /** @var array */
-    private $subComponents = [];
+    private array $subComponents = [];
 
     public static function create(string $type): ComponentPayload
     {

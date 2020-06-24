@@ -4,7 +4,7 @@ namespace Spatie\IcalendarGenerator\PropertyTypes;
 
 use DateTimeInterface;
 
-final class DateTimePropertyType extends PropertyType
+class DateTimePropertyType extends PropertyType
 {
     private DateTimeInterface $dateTime;
 

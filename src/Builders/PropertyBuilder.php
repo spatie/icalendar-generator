@@ -4,10 +4,10 @@ namespace Spatie\IcalendarGenerator\Builders;
 
 use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 
-final class PropertyBuilder
+class PropertyBuilder
 {
     /** @var \Spatie\IcalendarGenerator\PropertyTypes\PropertyType */
-    private $property;
+    private PropertyType $property;
 
     public function __construct(PropertyType $property)
     {

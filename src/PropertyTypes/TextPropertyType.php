@@ -2,7 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\PropertyTypes;
 
-final class TextPropertyType extends PropertyType
+class TextPropertyType extends PropertyType
 {
     private string $text;
 

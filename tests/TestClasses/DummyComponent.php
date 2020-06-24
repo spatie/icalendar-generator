@@ -7,11 +7,9 @@ use Spatie\IcalendarGenerator\Components\Component;
 
 class DummyComponent extends Component
 {
-    /** @var string */
-    public $name;
+    public ?string $name;
 
-    /** @var string */
-    public $description;
+    public ?string $description = null;
 
     public function __construct(?string $name = null)
     {

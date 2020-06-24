@@ -9,8 +9,7 @@ use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class DateTimePropertyTypeTest extends TestCase
 {
-    /** @var \DateTime */
-    protected $date;
+    protected DateTime $date;
 
     protected function setUp() : void
     {
