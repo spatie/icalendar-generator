@@ -12,9 +12,10 @@ use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
-use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Event extends Component
 {
@@ -54,7 +55,7 @@ class Event extends Component
 
     private ?EventStatus $status = null;
 
-    private ?RecurrenceRule $rrule = null;
+    private ?RRule $rrule = null;
 
     public static function create(string $name = null): Event
     {
@@ -231,7 +232,7 @@ class Event extends Component
         return $this;
     }
 
-    public function rrule(RecurrenceRule $rrule): Event
+    public function rrule(RRule $rrule): Event
     {
         $this->rrule = $rrule;
 
@@ -278,6 +279,10 @@ class Event extends Component
             ->optional(
                 $this->organizer,
                 fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+            )
+            ->optional(
+                $this->rrule,
+                fn() => RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
                 $this->attendees,

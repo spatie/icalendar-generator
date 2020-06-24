@@ -2,18 +2,18 @@
 
 namespace Spatie\IcalendarGenerator\Properties;
 
-use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
-class RecurrenceRuleProperty extends Property
+class RRuleProperty extends Property
 {
-    private RecurrenceRule $recurrenceRule;
+    private RRule $recurrenceRule;
 
-    public static function create(string $name, RecurrenceRule $recurrenceRule): self
+    public static function create(string $name, RRule $recurrenceRule): self
     {
         return new self($name, $recurrenceRule);
     }
 
-    public function __construct(string $name, RecurrenceRule $recurrenceRule)
+    public function __construct(string $name, RRule $recurrenceRule)
     {
         $this->name = $name;
         $this->recurrenceRule = $recurrenceRule;
@@ -30,7 +30,7 @@ class RecurrenceRuleProperty extends Property
         return "RRULE:" . implode(';', $segments);
     }
 
-    public function getOriginalValue(): RecurrenceRule
+    public function getOriginalValue(): RRule
     {
         return$this->recurrenceRule;
     }

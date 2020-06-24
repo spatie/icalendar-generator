@@ -10,7 +10,7 @@ use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
 
-class RecurrenceRule
+class RRule
 {
     public RecurrenceFrequency $frequency;
 

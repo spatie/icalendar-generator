@@ -8,9 +8,11 @@ use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
+use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class EventTest extends TestCase
 {
@@ -250,5 +252,15 @@ class EventTest extends TestCase
             ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('LOCATION', 'Antwerp', $payload);
+    }
+
+    /** @test */
+    public function it_can_set_an_recurrence_rule()
+    {
+        $payload = Event::create('An introduction into event sourcing')
+            ->rrule($rrule = RRule::frequency(RecurrenceFrequency::daily()))
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload('RRULE', $rrule, $payload);
     }
 }
