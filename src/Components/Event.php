@@ -12,62 +12,47 @@ use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\RecurrenceRule;
 
 final class Event extends Component
 {
-    /** @var array */
-    private $alerts = [];
+    private array $alerts = [];
 
-    /** @var \DateTimeInterface */
-    private $starts;
+    private ?DateTimeInterface $starts = null;
 
-    /** @var \DateTimeInterface */
-    private $ends;
+    private ?DateTimeInterface $ends = null;
 
-    /** @var string */
-    private $name;
+    private ?string $name = null;
 
-    /** @var string|null */
-    private $description;
+    private ?string $description = null;
 
-    /** @var string|null */
-    private $address;
+    private ?string $address = null;
 
-    /** @var string|null */
-    private $addressName;
+    private ?string $addressName = null;
 
-    /** @var float|null */
-    private $lat;
+    private ?float $lat = null;
 
-    /** @var float|null */
-    private $lng;
+    private ?float $lng = null;
 
-    /** @var string */
-    private $uuid;
+    private string $uuid;
 
-    /** @var \DateTimeInterface */
-    private $created;
+    private DateTimeInterface $created;
 
-    /** @var bool */
-    private $withTimezone = false;
+    private bool $withTimezone = false;
 
-    /** @var bool */
-    private $isFullDay = false;
+    private bool $isFullDay = false;
 
-    /** @var \Spatie\IcalendarGenerator\Enums\Classification|null */
-    private $classification = null;
+    private ?Classification $classification = null;
 
-    /** @var bool|null */
-    private $transparent = null;
+    private ?bool $transparent = null;
 
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress[] */
-    private $attendees = [];
+    private array $attendees = [];
 
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress|null */
-    private $organizer = null;
+    private ?CalendarAddress $organizer = null;
 
-    /** @var \Spatie\IcalendarGenerator\Enums\EventStatus|null */
-    private $status = null;
+    private ?EventStatus $status = null;
+
+    private ?RecurrenceRule $rrule = null;
 
     public static function create(string $name = null): Event
     {
@@ -240,6 +225,13 @@ final class Event extends Component
     public function status(EventStatus $status): Event
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function rrule(RecurrenceRule $rrule): Event
+    {
+        $this->rrule = $rrule;
 
         return $this;
     }
