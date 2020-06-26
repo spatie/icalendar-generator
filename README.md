@@ -129,7 +129,7 @@ You can add a location to an event a such:
 
 ``` php
 Event::create()
-    ->address('Samberstraat 69D, 2060 Antwerp, Belgium')
+    ->address('Kruikstraat 22, 2018 Antwerp, Belgium')
     ->addressName('Spatie HQ')
     ->coordinates(51.2343, 4.4287)
     ...
