@@ -55,7 +55,7 @@ class IntegrationTest extends TestCase
                     ->uniqueIdentifier('uuid')
                     ->createdAt(new DateTime('6 March 2019 16:00:00'))
                     ->startsAt(new DateTime('6 march 2019', new DateTimeZone('Europe/Brussels')))
-                    ->withTimezone();
+                    ->withoutTimezone();
             })
             ->get();
 
@@ -69,15 +69,15 @@ REFRESH-INTERVAL;VALUE=DURATION:PT5M\r
 X-PUBLISHED-TTL:PT5M\r
 BEGIN:VEVENT\r
 UID:uuid\r
-DTSTAMP:20190306T160000\r
+DTSTAMP;TZID=UTC:20190306T160000\r
 DESCRIPTION:This description is way too long and should be put onto two dif\r
  ferent lines in the vcalendar\r
 LOCATION:Samberstraat 69D\, 2060 Antwerp\, Belgium\r
 CLASS:PUBLIC\r
 STATUS:TENTATIVE\r
 TRANSP:TRANSPARENT\r
-DTSTART:20190306T150000\r
-DTEND:20190306T160000\r
+DTSTART;TZID=UTC:20190306T150000\r
+DTEND;TZID=UTC:20190306T160000\r
 ORGANIZER;CN=Ruben:MAILTO:ruben@spatie.be\r
 ATTENDEE;CN=Brent;PARTSTAT=ACCEPTED:MAILTO:brent@spatie.be\r
 ATTENDEE;CN=Alex;PARTSTAT=DECLINED:MAILTO:alex@spatie.be\r
@@ -98,21 +98,21 @@ END:VALARM\r
 BEGIN:VALARM\r
 ACTION:DISPLAY\r
 DESCRIPTION:Laracon online has ended\, see you next year!\r
-TRIGGER;VALUE=DATE-TIME:20200516T120000\r
+TRIGGER;TZID=UTC;VALUE=DATE-TIME:20200516T120000\r
 END:VALARM\r
 END:VEVENT\r
 BEGIN:VEVENT\r
 UID:uuid\r
-DTSTAMP:20190306T150000\r
+DTSTAMP;TZID=UTC:20190306T150000\r
 SUMMARY:Laracon Online\r
-DTSTART:20190306T150000\r
-DTEND:20190307T150000\r
+DTSTART;TZID=UTC:20190306T150000\r
+DTEND;TZID=UTC:20190307T150000\r
 END:VEVENT\r
 BEGIN:VEVENT\r
 UID:uuid\r
-DTSTAMP;TZID=UTC:20190306T160000\r
+DTSTAMP:20190306T160000\r
 SUMMARY:In a timezone\r
-DTSTART;TZID=Europe/Brussels:20190306T000000\r
+DTSTART:20190306T000000\r
 END:VEVENT\r
 END:VCALENDAR
 EOD;

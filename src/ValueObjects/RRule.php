@@ -3,12 +3,14 @@
 namespace Spatie\IcalendarGenerator\ValueObjects;
 
 use Closure;
+use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class RRule
 {
@@ -35,7 +37,7 @@ class RRule
     /** @var int[] */
     public array $monthDays = [];
 
-    /** @var array|DateTimeInterface[] */
+    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
     public array $excluded = [];
 
     public static function frequency(RecurrenceFrequency $frequency): self
@@ -48,7 +50,7 @@ class RRule
         $this->frequency = $frequency;
     }
 
-    public function every(int $interval = 1): self
+    public function interval(int $interval = 1): self
     {
         if ($interval < 1) {
             throw new Exception('Recurrence rule interval should be grater then 1');
@@ -72,10 +74,16 @@ class RRule
 
     /**
      * @param DateTimeInterface[]|DateTimeInterface $exclude
+     * @param bool $withTime
+     *
+     * @return \Spatie\IcalendarGenerator\ValueObjects\RRule
      */
-    public function exclude($exclude): self
+    public function exclude($exclude, bool $withTime = false): self
     {
-        $exclude = is_array($exclude) ? $exclude : [$exclude];
+        $exclude = array_map(
+            fn(DateTime $date) => DateTimeValue::create($date, $withTime),
+            is_array($exclude) ? $exclude : [$exclude]
+        );
 
         $this->excluded = array_merge($this->excluded, $exclude);
 
@@ -184,20 +192,43 @@ class RRule
 
         if (count($this->weekdays) > 0) {
             $properties['BYDAY'] = implode(',', array_map(
-                fn (array $day) => "{$day['index']}{$day['day']->value}",
+                fn(array $day) => "{$day['index']}{$day['day']->value}",
                 $this->weekdays
             ));
         }
 
         if (count($this->months) > 0) {
             $properties['BYMONTH'] = implode(',', array_map(
-                fn (RecurrenceMonth $month) => $month->value,
+                fn(RecurrenceMonth $month) => $month->value,
                 $this->months
             ));
         }
 
         if (count($this->monthDays) > 0) {
             $properties['BYMONTHDAY'] = implode(',', $this->monthDays);
+        }
+
+        return $properties;
+    }
+
+    public function getProperties(): array
+    {
+        $properties = [];
+
+        // TODO: Test this, add support for excluding dates only without time
+        // TODO: Check how to handle timezones within RRule's
+        // TODO: write docs for this
+        // TODO: implement RDATE
+
+        if ($this->excluded) {
+            $properties[] = TextProperty::create(
+                'EXDATE',
+                join(',', array_map(
+                    fn(DateTimeValue $dateTime) => $dateTime->format(),
+                    $this->excluded
+                )),
+                true
+            );
         }
 
         return $properties;

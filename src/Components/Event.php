@@ -19,6 +19,7 @@ use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Event extends Component
 {
+    /** @var \Spatie\IcalendarGenerator\Components\Alert[] */
     private array $alerts = [];
 
     private ?DateTimeInterface $starts = null;
@@ -41,7 +42,7 @@ class Event extends Component
 
     private DateTimeInterface $created;
 
-    private bool $withTimezone = false;
+    private bool $withoutTimezone = false;
 
     private bool $isFullDay = false;
 
@@ -159,9 +160,9 @@ class Event extends Component
         return $this;
     }
 
-    public function withTimezone(): Event
+    public function withoutTimezone(): Event
     {
-        $this->withTimezone = true;
+        $this->withoutTimezone = true;
 
         return $this;
     }
@@ -176,6 +177,13 @@ class Event extends Component
     public function alert(Alert $alert): Event
     {
         $this->alerts[] = $alert;
+
+        return $this;
+    }
+
+    public function alertAt(DateTimeInterface $alert, string $message = null)
+    {
+        $this->alerts[] = Alert::date($alert, $message);
 
         return $this;
     }
@@ -243,52 +251,52 @@ class Event extends Component
     {
         $payload = ComponentPayload::create($this->getComponentType())
             ->property(TextProperty::create('UID', $this->uuid))
-            ->property(DateTimeProperty::create('DTSTAMP', $this->created, true, $this->withTimezone))
+            ->property(DateTimeProperty::create('DTSTAMP', $this->created, true, $this->withoutTimezone))
             ->optional(
                 $this->name,
-                fn () => TextProperty::create('SUMMARY', $this->name)
+                fn() => TextProperty::create('SUMMARY', $this->name)
             )
             ->optional(
                 $this->description,
-                fn () => TextProperty::create('DESCRIPTION', $this->description)
+                fn() => TextProperty::create('DESCRIPTION', $this->description)
             )
             ->optional(
                 $this->address,
-                fn () => TextProperty::create('LOCATION', $this->address)
+                fn() => TextProperty::create('LOCATION', $this->address)
             )
             ->optional(
                 $this->classification,
-                fn () => TextProperty::create('CLASS', $this->classification->value)
+                fn() => TextProperty::create('CLASS', $this->classification->value)
             )
             ->optional(
                 $this->status,
-                fn () => TextProperty::create('STATUS', $this->status->value)
+                fn() => TextProperty::create('STATUS', $this->status->value)
             )
             ->optional(
                 $this->transparent,
-                fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
+                fn() => TextProperty::create('TRANSP', 'TRANSPARENT')
             )
             ->optional(
                 $this->starts,
-                fn () => DateTimeProperty::create('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
+                fn() => DateTimeProperty::create('DTSTART', $this->starts, ! $this->isFullDay, $this->withoutTimezone)
             )
             ->optional(
                 $this->ends,
-                fn () => DateTimeProperty::create('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
+                fn() => DateTimeProperty::create('DTEND', $this->ends, ! $this->isFullDay, $this->withoutTimezone)
             )
             ->optional(
                 $this->organizer,
-                fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+                fn() => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
             )
             ->optional(
                 $this->rrule,
-                fn () => RRuleProperty::create('RRULE', $this->rrule)
+                fn() => RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
                 $this->attendees,
-                fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+                fn(CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
             )
-            ->subComponent(...$this->alerts);
+            ->subComponent(...$this->resolveAlerts());
 
         return $this->resolveLocationProperties($payload);
     }
@@ -317,5 +325,17 @@ class Event extends Component
         $payload->property($property);
 
         return $payload;
+    }
+
+    private function resolveAlerts(): array
+    {
+        if ($this->withoutTimezone === false) {
+            return $this->alerts;
+        }
+
+        return array_map(
+            fn(Alert $alert) => $alert->withoutTimezone(),
+            $this->alerts
+        );
     }
 }

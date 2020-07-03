@@ -6,9 +6,10 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/icalendar-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/icalendar-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
-Using this package, you can generate calendars for applications like Apple's Calendar and Google Calendar.
-Calendars will be generated in the iCalendar format (RFC 5545), which is a textual format that can be loaded by different applications.
-This package tries to implement a minimal version of  [RFC 5545](https://tools.ietf.org/html/rfc5545) with some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986).
+Want to create online calendars, so you can display them on an iPhone's calendar app or in Google Calendar? 
+This can be done by generating calendars in the iCalendar format (RFC 5545), which is a textual format that can be loaded by different applications.
+The format of such calendars is defined in [RFC 5545](https://tools.ietf.org/html/rfc5545) which is not a pleasant reading experience.
+This package implements [RFC 5545](https://tools.ietf.org/html/rfc5545) and some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986) to provide you an easy to use API for creating calendars.
 It's not our intention to implement these RFC's entirely but to provide a straightforward API that's easy to use.
 
 Here's an example of how to use it:
@@ -34,11 +35,11 @@ PRODID:spatie/icalendar-generator
 NAME:Laracon online
 X-WR-CALNAME:Laracon online
 BEGIN:VEVENT
-UID:5cb9d22a00ba6
+UID:5ef5c3f64cb2c
+DTSTAMP;TZID=UTC:20200626T094630
 SUMMARY:Creating calender feeds
-DTSTART:20190306T150000
-DTEND:20190306T160000
-DTSTAMP:20190419T135034
+DTSTART;TZID=UTC:20190306T150000
+DTEND;TZID=UTC:20190306T160000
 END:VEVENT
 END:VCALENDAR
 ```
@@ -61,6 +62,10 @@ You can install the package via composer:
 composer require spatie/icalendar-generator
 ```
 
+## Upgrading
+
+There were some substantial changes between v1 and v2 of the package, check the [upgrade](https://github.com/spatie/icalendar-generator/blob/master/UPGRADING.md) guide for more information.
+
 ## Usage
 
 Here's how you can create a calendar:
@@ -69,13 +74,13 @@ Here's how you can create a calendar:
 $calendar = Calendar::create();
 ```
 
-You can give a name to a calendar:
+You can give a calendar a name:
 
 ``` php
 $calendar = Calendar::create('Laracon Online');
 ```
 
-A description can be added to an calendar:
+A description can be added to a calendar:
 
 ``` php
 $calendar = Calendar::create()
@@ -83,7 +88,7 @@ $calendar = Calendar::create()
     ->description('Experience Laracon all around the world');
 ```
 
-In the end, you want to convert your calendar to text so it can be streamed or downloaded to the user. Here's how you do that:
+In the end, you want to convert your calendar to text, so it can be streamed or downloaded to the user. Here's how you do that:
 
 ``` php
 Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...
@@ -135,7 +140,7 @@ Event::create()
     ...
 ```
 
-You can set the organizer of an event, the email address is required but the name can be omitted:
+You can set the organizer of an event, the email address is required, but the name can be omitted:
 
 ``` php
 Event::create()
@@ -171,6 +176,36 @@ An event can be made transparent, so it does not overlap visually with other eve
 ``` php
 Event::create()
     ->transparent()
+    ...
+```
+
+It is possible to create an event that spans a full day:
+
+``` php
+Event::create()
+    ->fullDay()
+    ...
+```
+
+The status of an event can be set:
+
+``` php
+Event::create()
+    ->status(EventStatus::cancelled())
+    ...
+```
+
+There are three event statuses:
+
+- `EventStatus::confirmed()`
+- `EventStatus::cancelled()`
+- `EventStatus::tentative()`
+
+An event can be classified(`public`, `private`, `confidential`) as such:
+
+``` php
+Event::create()
+    ->classification(Classification::private())
     ...
 ```
 
@@ -214,26 +249,33 @@ Event::create('Laracon Online')
 
 #### Timezones
 
-By default, events will not use timezones. This means an event like noon at 12 o'clock will be shown for someone in New York at a different time than for someone in Sydney.
+Events will use the timezones defined in your `DateTime`, these timezones are always [set]((https://www.php.net/manual/en/datetime.settimezone.php)) by PHP in a `DateTime` object.
+It is possible to change this default timezone, you can find more information: [here](https://www.php.net/manual/en/function.date-default-timezone-set.php).
 
-If you want to show an event at the exact time it is happening, for example, a talk at an online conference streamed around the world. Then you should consider using timezones.
+Just a reminder, do not use PHP's `setTimezone` function on a `DateTime` object, it will change the time according to the timezone! It is better to create a new `DateTime` object with a timezone as such:
 
-This package relies on the timezones provided by [PHP DateTime](https://www.php.net/manual/en/datetime.settimezone.php) if you want to include these timezones in an event you can do the following:
+``` php
+new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
+```
+
+A point can be made for omitting timezones. This can happen in the case where you want to show an event at noon in the world. We define noon at 12 o'clock but that time is actually relative. It not the same for people in Belgium or Australia or any other country in the world.
+
+That's why you can disable timezones on events:
 
 ``` php
 $starts = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 
 Event::create()
     ->startsAt($starts)
-    ->withTimezone()
+    ->withoutTimezone()
     ...
 ```
 
-Want timezones in each event of the calendar, then add `withTimezones` to your `Calendar`:
+Or you could even disable timezones for a whole calendar:
 
 ``` php
 Calendar::create()
-   ->withTimezone()
+   ->withoutTimezone()
     ....
 ```
 

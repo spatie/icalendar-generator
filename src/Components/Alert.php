@@ -24,6 +24,8 @@ class Alert extends Component
 
     private ?string $message;
 
+    private bool $withoutTimezone = false;
+
     public static function date(DateTimeInterface $date, string $description = null): Alert
     {
         return static::create($description)->triggerDate($date);
@@ -110,11 +112,18 @@ class Alert extends Component
         return $this;
     }
 
+    public function withoutTimezone(): Alert
+    {
+        $this->withoutTimezone = true;
+
+        return $this;
+    }
+
     protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
             ->property(TextProperty::create('ACTION', 'DISPLAY'))
-            ->optional($this->message, fn () => TextProperty::create('DESCRIPTION', $this->message))
+            ->optional($this->message, fn() => TextProperty::create('DESCRIPTION', $this->message))
             ->property($this->resolveTriggerProperty());
     }
 
@@ -124,7 +133,8 @@ class Alert extends Component
             return DateTimeProperty::create(
                 'TRIGGER',
                 $this->triggerDate,
-                true
+                true,
+                $this->withoutTimezone
             )->addParameter(new Parameter('VALUE', 'DATE-TIME'));
         }
 

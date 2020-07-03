@@ -263,4 +263,29 @@ class EventTest extends TestCase
 
         $this->assertPropertyEqualsInPayload('RRULE', $rrule, $payload);
     }
+
+    /** @test */
+    public function it_can_create_an_event_without_timezones()
+    {
+        $dateAlert = new DateTime('17 may 2019 11:00:00');
+        $dateStarts = new DateTime('17 may 2019 12:00:00');
+        $dateEnds = new DateTime('18 may 2019 13:00:00');
+
+        $payload = Event::create('An introduction into event sourcing')
+            ->withoutTimezone()
+            ->alertAt($dateAlert)
+            ->startsAt($dateStarts)
+            ->endsAt($dateEnds)
+            ->resolvePayload();
+
+        $this->assertParameterCountInProperty(0, $payload->getProperty('DTSTART'));
+        $this->assertParameterCountInProperty(0, $payload->getProperty('DTEND'));
+        $this->assertParameterCountInProperty(0, $payload->getProperty('DTSTAMP'));
+
+        /** @var \Spatie\IcalendarGenerator\ComponentPayload $alert */
+        $alert = $payload->getSubComponents()[0]->resolvePayload();
+
+        $this->assertParameterCountInProperty(1, $alert->getProperty('TRIGGER'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $alert->getProperty('TRIGGER'));
+    }
 }

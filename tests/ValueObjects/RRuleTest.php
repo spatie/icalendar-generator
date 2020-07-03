@@ -75,7 +75,7 @@ class RRuleTest extends TestCase
     public function it_can_set_interval()
     {
         $rrule = RRule::frequency(RecurrenceFrequency::daily())
-            ->every(10)
+            ->interval(10)
             ->compose();
 
         $this->assertEquals([
@@ -90,7 +90,7 @@ class RRuleTest extends TestCase
         $this->expectException(Exception::class);
 
         RRule::frequency(RecurrenceFrequency::daily())
-            ->every(-1)
+            ->interval(-1)
             ->compose();
     }
 

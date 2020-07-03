@@ -11,13 +11,14 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class Calendar extends Component
 {
+    /** @var \Spatie\IcalendarGenerator\Components\Event[]  */
     private array $events = [];
 
     private ?string $name = null;
 
     private ?string $description = null;
 
-    private bool $withTimezone = false;
+    private bool $withoutTimezone = false;
 
     private ?DateInterval $refreshInterval = null;
 
@@ -95,9 +96,9 @@ class Calendar extends Component
         return $this;
     }
 
-    public function withTimezone(): Calendar
+    public function withoutTimezone(): Calendar
     {
-        $this->withTimezone = true;
+        $this->withoutTimezone = true;
 
         return $this;
     }
@@ -140,12 +141,12 @@ class Calendar extends Component
 
     private function resolveEvents(): array
     {
-        if ($this->withTimezone === false) {
+        if ($this->withoutTimezone === false) {
             return $this->events;
         }
 
         return array_map(
-            fn (Event $event) => $event->withTimezone(),
+            fn (Event $event) => $event->withoutTimezone(),
             $this->events
         );
     }
