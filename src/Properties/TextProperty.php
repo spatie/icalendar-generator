@@ -20,6 +20,13 @@ class TextProperty extends Property
         $this->disableEscaping = $disableEscaping;
     }
 
+    public function withoutEscaping(): self
+    {
+        $this->disableEscaping = true;
+
+        return $this;
+    }
+
     public function getValue(): string
     {
         if ($this->disableEscaping) {
