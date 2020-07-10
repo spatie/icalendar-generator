@@ -2,8 +2,11 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
+use DateInterval;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Exception;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
@@ -15,6 +18,9 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
+use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
+use Spatie\IcalendarGenerator\ValueObjects\PeriodValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Event extends Component
@@ -22,9 +28,11 @@ class Event extends Component
     /** @var \Spatie\IcalendarGenerator\Components\Alert[] */
     private array $alerts = [];
 
-    private ?DateTimeInterface $starts = null;
+    private ?DateTimeValue $starts = null;
 
-    private ?DateTimeInterface $ends = null;
+    private ?DateTimeValue $ends = null;
+
+    private DateTimeValue $created;
 
     private ?string $name = null;
 
@@ -39,8 +47,6 @@ class Event extends Component
     private ?float $lng = null;
 
     private string $uuid;
-
-    private DateTimeInterface $created;
 
     private bool $withoutTimezone = false;
 
@@ -58,6 +64,9 @@ class Event extends Component
 
     private ?RRule $rrule = null;
 
+    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[]|\Spatie\IcalendarGenerator\ValueObjects\PeriodValue[]|\Spatie\IcalendarGenerator\ValueObjects\DurationValue[] */
+    private array $recurrence_dates = [];
+
     public static function create(string $name = null): Event
     {
         return new self($name);
@@ -67,7 +76,7 @@ class Event extends Component
     {
         $this->name = $name;
         $this->uuid = uniqid();
-        $this->created = new DateTimeImmutable();
+        $this->created = DateTimeValue::create(new DateTimeImmutable());
     }
 
     public function getComponentType(): string
@@ -84,24 +93,27 @@ class Event extends Component
         ];
     }
 
-    public function startsAt(DateTimeInterface $starts): Event
+    public function startsAt(DateTimeInterface $starts, bool $withTime = true): Event
     {
-        $this->starts = $starts;
+        $this->starts = DateTimeValue::create($starts, $withTime);
 
         return $this;
     }
 
-    public function endsAt(DateTimeInterface $ends): Event
+    public function endsAt(DateTimeInterface $ends, bool $withTime = true): Event
     {
-        $this->ends = $ends;
+        $this->ends = DateTimeValue::create($ends, $withTime);
 
         return $this;
     }
 
-    public function period(DateTimeInterface $starts, DateTimeInterface $ends): Event
-    {
-        $this->starts = $starts;
-        $this->ends = $ends;
+    public function period(
+        DateTimeInterface $starts,
+        DateTimeInterface $ends,
+        bool $withTime = true
+    ): Event {
+        $this->starts = DateTimeValue::create($starts, $withTime);
+        $this->ends = DateTimeValue::create($ends, $withTime);
 
         return $this;
     }
@@ -153,9 +165,9 @@ class Event extends Component
         return $this;
     }
 
-    public function createdAt(DateTimeInterface $created): Event
+    public function createdAt(DateTimeInterface $created, bool $withTime = true): Event
     {
-        $this->created = $created;
+        $this->created = new DateTimeValue($created, $withTime);
 
         return $this;
     }
@@ -247,11 +259,33 @@ class Event extends Component
         return $this;
     }
 
+    public function reccur($first, bool $withTime = true)
+    {
+        if ($first instanceof DateInterval) {
+            $this->recurrence_dates[] = DurationValue::create($first);
+
+            return;
+        }
+
+        if ($first instanceof DateTime) {
+            $this->recurrence_dates[] = DateTimeValue::create($first, $withTime);
+
+            return;
+        }
+
+        throw new Exception("Could not reccur");
+    }
+
     protected function payload(): ComponentPayload
     {
+        if ($this->isFullDay) {
+            $this->starts = DateTimeValue::create($this->starts->getDateTime(), false);
+            $this->ends = DateTimeValue::create($this->ends->getDateTime(), false);
+        }
+
         $payload = ComponentPayload::create($this->getComponentType())
             ->property(TextProperty::create('UID', $this->uuid))
-            ->property(DateTimeProperty::create('DTSTAMP', $this->created, true, $this->withoutTimezone))
+            ->property(DateTimeProperty::create('DTSTAMP', $this->created, $this->withoutTimezone))
             ->optional(
                 $this->name,
                 fn() => TextProperty::create('SUMMARY', $this->name)
@@ -278,11 +312,11 @@ class Event extends Component
             )
             ->optional(
                 $this->starts,
-                fn() => DateTimeProperty::create('DTSTART', $this->starts, ! $this->isFullDay, $this->withoutTimezone)
+                fn() => DateTimeProperty::create('DTSTART', $this->starts, $this->withoutTimezone)
             )
             ->optional(
                 $this->ends,
-                fn() => DateTimeProperty::create('DTEND', $this->ends, ! $this->isFullDay, $this->withoutTimezone)
+                fn() => DateTimeProperty::create('DTEND', $this->ends, $this->withoutTimezone)
             )
             ->optional(
                 $this->organizer,

@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class DateTimePropertyTest extends TestCase
 {
@@ -21,7 +22,7 @@ class DateTimePropertyTest extends TestCase
     /** @test */
     public function it_will_format_the_date_correctly()
     {
-        $property = new DateTimeProperty('STARTS', $this->date);
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date);
 
         $this->assertEquals('20190516', $property->getValue());
     }
@@ -29,7 +30,7 @@ class DateTimePropertyTest extends TestCase
     /** @test */
     public function it_will_format_the_date_and_time_correctly_with_timezone()
     {
-        $property = new DateTimeProperty('STARTS', $this->date, true);
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
 
         $this->assertEquals('20190516T121015', $property->getValue());
         $this->assertCount(1, $property->getParameters());
@@ -41,7 +42,7 @@ class DateTimePropertyTest extends TestCase
     {
         $this->date->setTimezone(new DateTimeZone('UTC'));
 
-        $property = new DateTimeProperty('STARTS', $this->date, true);
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
 
         $this->assertEquals('20190516T101015', $property->getValue());
         $this->assertCount(1, $property->getParameters());
@@ -51,7 +52,17 @@ class DateTimePropertyTest extends TestCase
     /** @test */
     public function it_will_format_the_date_and_time_without_timezone()
     {
-        $property = new DateTimeProperty('STARTS', $this->date, true, true);
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true, true);
+
+        $this->assertEquals('20190516T121015', $property->getValue());
+    }
+
+    /** @test */
+    public function it_can_be_created_from_a_date_time_value()
+    {
+        $property = DateTimeProperty::create(
+            'STARTS', DateTimeValue::create($this->date)
+        );
 
         $this->assertEquals('20190516T121015', $property->getValue());
     }

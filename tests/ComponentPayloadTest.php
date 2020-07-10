@@ -28,11 +28,11 @@ class ComponentPayloadTest extends TestCase
 
         $payload = (new ComponentPayload('TESTCOMPONENT'))
             ->property(TextProperty::create('text', 'Some text here'))
-            ->property(DateTimeProperty::create('date', $date));
+            ->property(DateTimeProperty::fromDateTime('date', $date));
 
         $this->assertEquals([
-            new TextProperty('text', 'Some text here'),
-            new DateTimeProperty('date', $date),
+            TextProperty::create('text', 'Some text here'),
+            DateTimeProperty::fromDateTime('date', $date),
         ], $payload->getProperties());
     }
 

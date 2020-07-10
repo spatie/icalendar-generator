@@ -12,14 +12,14 @@ class DateTimeValue
 
     public static function create(
         DateTimeInterface $dateTime,
-        bool $withTime = false
+        bool $withTime = true
     ): self {
         return new self($dateTime, $withTime);
     }
 
     public function __construct(
         DateTimeInterface $dateTime,
-        bool $withTime = false
+        bool $withTime = true
     ) {
         $this->dateTime = $dateTime;
         $this->withTime = $withTime;
@@ -30,6 +30,16 @@ class DateTimeValue
         $format = $this->withTime ? 'Ymd\THis' : 'Ymd';
 
         return $this->dateTime->format($format);
+    }
+
+    public function hasTime(): bool
+    {
+        return $this->withTime;
+    }
+
+    public function getDateTime(): DateTimeInterface
+    {
+        return $this->dateTime;
     }
 
     public function __toString()

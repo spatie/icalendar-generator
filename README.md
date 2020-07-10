@@ -249,21 +249,20 @@ Event::create('Laracon Online')
 
 #### Timezones
 
-Events will use the timezones defined in your `DateTime`, these timezones are always [set]((https://www.php.net/manual/en/datetime.settimezone.php)) by PHP in a `DateTime` object.
-It is possible to change this default timezone, you can find more information: [here](https://www.php.net/manual/en/function.date-default-timezone-set.php).
+Events will use the [timezones]((https://www.php.net/manual/en/datetime.settimezone.php)) defined in the `DateTime` objects you provide. These timezones are always set by PHP in a `DateTime` object. By default this will be the UTC timezone but it is possible to [change](https://www.php.net/manual/en/function.date-default-timezone-set.php) this.
 
-Just a reminder, do not use PHP's `setTimezone` function on a `DateTime` object, it will change the time according to the timezone! It is better to create a new `DateTime` object with a timezone as such:
+Just a reminder: do not use PHP's `setTimezone` function on a `DateTime` object, it will change the time according to the timezone! It is better to create a new `DateTime` object with a timezone as such:
 
 ``` php
 new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 ```
 
-A point can be made for omitting timezones. This can happen in the case where you want to show an event at noon in the world. We define noon at 12 o'clock but that time is actually relative. It not the same for people in Belgium or Australia or any other country in the world.
+A point can be made for omitting timezones. This can happen in the case where you want to show an event at noon in the world. We define noon at 12 o'clock but that time is actually relative. It is not the same for people in Belgium, Australia or any other country in the world.
 
 That's why you can disable timezones on events:
 
 ``` php
-$starts = new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
+$starts = new DateTime('6 march 2019 12:00')
 
 Event::create()
     ->startsAt($starts)
@@ -271,7 +270,7 @@ Event::create()
     ...
 ```
 
-Or you could even disable timezones for a whole calendar:
+You can even disable timezones for a whole calendar:
 
 ``` php
 Calendar::create()
@@ -300,11 +299,123 @@ Or trigger an alert on a specific date:
 
 ``` php
 Event::create('Laracon Online')
-    ->alert(Alert::date(
-        new DateTime('05/16/2020 12:00:00'),
-        'Laracon online has ended, see you next year!'
-    ))
+    ->alertAt(
+    	new DateTime('05/16/2020 12:00:00'), 
+    	'Laracon online has ended, see you next year!'
+    );
 ```
+
+Removing timezones on an calendar or event, will also remove timezones on the alert.
+
+### Recurrence rules
+
+Recurrence rules or RRule's in short make it possible to add an repeating event in your calendar by describing when it repeats wirthin an RRule. First we have to create a RRule:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::daily())
+```
+
+This rule describes an event that will be repeated daily, you can also set the frequency to `secondly`, `minutely`, `hourly`, `weekly`, `monthly` or `yearly`.
+
+The RRULE can be added to an event as such:
+
+``` php
+Event::create('Laracon Online')
+    ->rrule(RRule::frequeny(RecurrenceFrequency::monthly()));
+```
+
+It is possible to finetune the RRule to your personal taste, lets have a look!
+
+A RRule can start from a certain point in time:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::daily())->starting(new DateTime('now'));
+```
+
+And stop at a certain point:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::daily())->until(new DateTime('now'));
+```
+
+It can only be repeated for a few times:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::daily())->times(10);
+```
+
+This event will repeat itself 10 times, it is also possible to exclude dates:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::daily())->exclude(
+	new DateTime('05/16/2020')
+);
+```
+
+The interval of the repetition can be changed, for example:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::daily())->interval(2);
+```
+
+When this event starts on monday for example, the next repition of this event will not take place on thuesday but on wednesday. You can do the same for all the frequencies.
+
+It is also possible to repeat the event on a specific weekday:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
+	RecurrenceDay::friday()
+);
+```
+
+Or on the last weekday of a month:
+
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
+	RecurrenceDay::sunday(), -1
+);
+```
+
+You can repeat on a specific day in the month:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(16);
+```
+
+It is even possible to give an array of days in the month:
+
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(
+	[5, 10, 15, 20]
+);
+```
+
+Repeating can be done for certain months (for example only in the second quarter)
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
+	[RecurrenceMonth::april(), RecurrenceMonth::may(), RecurrenceMonth::june()]
+);
+```
+
+Or just on one month only:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
+	RecurrenceMonth::october()
+);
+```
+
+It is possible to set the day where the week starts on:
+
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->weekStartsOn(
+	ReccurenceDay::monday()
+);
+```
+
 
 ### Use with Laravel
 
@@ -340,17 +451,17 @@ You can add a new property to a component like this:
 ```php
 Calendar::create()
     ->appendProperty(
-        TextPropertyType::create('ORGANIZER', 'ruben@spatie.be')
+        TextProperty::create('ORGANIZER', 'ruben@spatie.be')
     )
     ...
 ```
 
-Here we've added a `TextPropertyType`, and this is a default key-value property type with a text as value. You can also use the `DateTimePropertyType`, the `DurationPropertyType` or create your own by extending the `PropertyType` class.
+Here we've added a `TextProperty `, and this is a default key-value property type with a text as value. You can also use the `DateTimeProperty`, the `DurationProperty` or create your own by extending the `Property` class.
 
 Sometimes a property can have some additional parameters, these are key-value entries and can be added to properties as such:
 
 ```php
-$property = TextPropertyType::create('ORGANIZER', 'ruben@spatie.be')
+$property = TextProperty::create('ORGANIZER', 'ruben@spatie.be')
     ->addParameter(Parameter::create('CN', 'RUBEN VAN ASSCHE'));
 
 Calendar::create()

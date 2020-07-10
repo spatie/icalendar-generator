@@ -7,34 +7,35 @@ use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class DateTimeProperty extends Property
 {
-    private DateTimeInterface $dateTime;
+    private DateTimeValue $dateTimeValue;
 
-    private bool $withTime;
-
-    private bool $withoutTimeZone;
-
-    public static function create(
+    public static function fromDateTime(
         string $name,
         DateTimeInterface $dateTime,
         bool $withTime = false,
         bool $withoutTimeZone = false
     ): DateTimeProperty {
-        return new self($name, $dateTime, $withTime, $withoutTimeZone);
+        return new self($name, new DateTimeValue($dateTime, $withTime), $withoutTimeZone);
     }
 
-    public function __construct(
+    public static function create(
         string $name,
-        DateTimeInterface $dateTime,
-        bool $withTime = false,
+        DateTimeValue $dateTimeValue,
+        bool $withoutTimeZone = false
+    ) {
+        return new self($name, $dateTimeValue, $withoutTimeZone);
+    }
+
+    private function __construct(
+        string $name,
+        DateTimeValue $dateTimeValue,
         bool $withoutTimeZone = false
     ) {
         $this->name = $name;
-        $this->dateTime = $dateTime;
-        $this->withTime = $withTime;
-        $this->withoutTimeZone = $withoutTimeZone;
+        $this->dateTimeValue = $dateTimeValue;
 
-        if ($this->withTime && $this->withoutTimeZone === false) {
-            $timezone = $this->dateTime->getTimezone()->getName();
+        if ($dateTimeValue->hasTime() && $withoutTimeZone === false) {
+            $timezone = $dateTimeValue->getDateTime()->getTimezone()->getName();
 
             $this->addParameter(new Parameter('TZID', $timezone));
         }
@@ -42,11 +43,11 @@ class DateTimeProperty extends Property
 
     public function getValue(): string
     {
-        return new DateTimeValue($this->dateTime, $this->withTime);
+        return $this->dateTimeValue->format();
     }
 
     public function getOriginalValue(): DateTimeInterface
     {
-        return $this->dateTime;
+        return $this->dateTimeValue->getDateTime();
     }
 }

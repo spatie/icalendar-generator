@@ -9,6 +9,7 @@ use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\DurationProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class Alert extends Component
 {
@@ -16,7 +17,7 @@ class Alert extends Component
     private const TRIGGER_END = 'trigger_end';
     private const TRIGGER_DATE = 'trigger_date';
 
-    private DateTimeInterface $triggerDate;
+    private DateTimeValue $triggerDate;
 
     private DateInterval $triggerInterval;
 
@@ -91,7 +92,7 @@ class Alert extends Component
     public function triggerDate(DateTimeInterface $triggerAt): Alert
     {
         $this->triggerMode = self::TRIGGER_DATE;
-        $this->triggerDate = $triggerAt;
+        $this->triggerDate = DateTimeValue::create($triggerAt, true);
 
         return $this;
     }
@@ -133,7 +134,6 @@ class Alert extends Component
             return DateTimeProperty::create(
                 'TRIGGER',
                 $this->triggerDate,
-                true,
                 $this->withoutTimezone
             )->addParameter(new Parameter('VALUE', 'DATE-TIME'));
         }
