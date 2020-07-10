@@ -4,7 +4,6 @@ namespace Spatie\IcalendarGenerator\ValueObjects;
 
 use DateInterval;
 use Exception;
-use Spatie\IcalendarGenerator\Properties\DurationProperty;
 
 class DurationValue
 {
@@ -12,11 +11,11 @@ class DurationValue
 
     public static function create($interval): DurationValue
     {
-        if($interval instanceof DateInterval){
+        if ($interval instanceof DateInterval) {
             return new self($interval);
         }
 
-        if(is_string($interval)){
+        if (is_string($interval)) {
             return new self(new DateInterval($interval));
         }
 

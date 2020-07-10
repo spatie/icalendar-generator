@@ -3,7 +3,6 @@
 namespace Spatie\IcalendarGenerator\Tests\ValueObjects;
 
 use DateInterval;
-use Spatie\IcalendarGenerator\Properties\DurationProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 

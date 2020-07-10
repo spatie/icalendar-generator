@@ -81,7 +81,7 @@ class RRule
     public function exclude($exclude, bool $withTime = false): self
     {
         $exclude = array_map(
-            fn(DateTime $date) => DateTimeValue::create($date, $withTime),
+            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
             is_array($exclude) ? $exclude : [$exclude]
         );
 
@@ -192,14 +192,14 @@ class RRule
 
         if (count($this->weekdays) > 0) {
             $properties['BYDAY'] = implode(',', array_map(
-                fn(array $day) => "{$day['index']}{$day['day']->value}",
+                fn (array $day) => "{$day['index']}{$day['day']->value}",
                 $this->weekdays
             ));
         }
 
         if (count($this->months) > 0) {
             $properties['BYMONTH'] = implode(',', array_map(
-                fn(RecurrenceMonth $month) => $month->value,
+                fn (RecurrenceMonth $month) => $month->value,
                 $this->months
             ));
         }
@@ -224,7 +224,7 @@ class RRule
             $properties[] = TextProperty::create(
                 'EXDATE',
                 join(',', array_map(
-                    fn(DateTimeValue $dateTime) => $dateTime->format(),
+                    fn (DateTimeValue $dateTime) => $dateTime->format(),
                     $this->excluded
                 )),
                 true

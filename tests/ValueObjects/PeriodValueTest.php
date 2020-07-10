@@ -2,7 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\Tests\ValueObjects;
 
-use DateInterval;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DurationValue;

@@ -11,7 +11,7 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 class Calendar extends Component
 {
-    /** @var \Spatie\IcalendarGenerator\Components\Event[]  */
+    /** @var \Spatie\IcalendarGenerator\Components\Event[] */
     private array $events = [];
 
     private ?string $name = null;

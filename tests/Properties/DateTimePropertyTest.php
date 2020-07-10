@@ -61,7 +61,8 @@ class DateTimePropertyTest extends TestCase
     public function it_can_be_created_from_a_date_time_value()
     {
         $property = DateTimeProperty::create(
-            'STARTS', DateTimeValue::create($this->date)
+            'STARTS',
+            DateTimeValue::create($this->date)
         );
 
         $this->assertEquals('20190516T121015', $property->getValue());
