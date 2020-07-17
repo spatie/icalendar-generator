@@ -26,6 +26,7 @@
     "require-dev": {
         "larapack/dd": "^1.0",
         "phpunit/phpunit": "^8.2",
+        "spatie/phpunit-snapshot-assertions": "^4.2",
         "vimeo/psalm": "^3.12"
     },
     "autoload": {

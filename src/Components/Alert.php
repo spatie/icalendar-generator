@@ -70,7 +70,7 @@ class Alert extends Component
 
     public function getComponentType(): string
     {
-        return 'ALARM';
+        return 'VALARM';
     }
 
     public function getRequiredProperties(): array

@@ -16,7 +16,7 @@ class CalendarTest extends TestCase
     {
         $payload = Calendar::create()->resolvePayload();
 
-        $this->assertEquals('CALENDAR', $payload->getType());
+        $this->assertEquals('VCALENDAR', $payload->getType());
 
         $this->assertCount(2, $payload->getProperties());
 

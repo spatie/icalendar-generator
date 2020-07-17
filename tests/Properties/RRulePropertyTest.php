@@ -17,7 +17,7 @@ class RRulePropertyTest extends TestCase
         $propertyType = RRuleProperty::create('RRULE', $recurrenceRule);
 
         $this->assertEquals('RRULE', $propertyType->getName());
-        $this->assertEquals('RRULE:FREQ=DAILY', $propertyType->getValue());
+        $this->assertEquals('FREQ=DAILY', $propertyType->getValue());
         $this->assertEquals($recurrenceRule, $propertyType->getOriginalValue());
     }
 }

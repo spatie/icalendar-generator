@@ -80,7 +80,7 @@ class Event extends Component
 
     public function getComponentType(): string
     {
-        return 'EVENT';
+        return 'VEVENT';
     }
 
     public function getRequiredProperties(): array

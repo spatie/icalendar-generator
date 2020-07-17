@@ -16,7 +16,7 @@ class AlertTest extends TestCase
 
         $payload = (new Alert('It is time'))->triggerDate($trigger)->resolvePayload();
 
-        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals('VALARM', $payload->getType());
         $this->assertCount(3, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
@@ -50,7 +50,7 @@ class AlertTest extends TestCase
             ->triggerAtStart($trigger)
             ->resolvePayload();
 
-        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals('VALARM', $payload->getType());
         $this->assertCount(2, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
@@ -67,7 +67,7 @@ class AlertTest extends TestCase
             ->triggerAtEnd($trigger)
             ->resolvePayload();
 
-        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals('VALARM', $payload->getType());
         $this->assertCount(2, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);

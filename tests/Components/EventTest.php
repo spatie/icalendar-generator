@@ -23,7 +23,7 @@ class EventTest extends TestCase
 
         $properties = $payload->getProperties();
 
-        $this->assertEquals('EVENT', $payload->getType());
+        $this->assertEquals('VEVENT', $payload->getType());
         $this->assertCount(2, $properties);
 
         $this->assertPropertyExistInPayload('UID', $payload);

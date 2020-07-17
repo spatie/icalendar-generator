@@ -36,7 +36,7 @@ class Calendar extends Component
 
     public function getComponentType(): string
     {
-        return 'CALENDAR';
+        return 'VCALENDAR';
     }
 
     public function getRequiredProperties(): array

@@ -19,7 +19,7 @@ class DummyComponent extends Component
 
     public function getComponentType(): string
     {
-        return 'DUMMY';
+        return 'VDUMMY';
     }
 
     public function getRequiredProperties(): array

@@ -27,7 +27,7 @@ class RRuleProperty extends Property
             $segments[] = "{$property}={$value}";
         }
 
-        return "RRULE:" . implode(';', $segments);
+        return implode(';', $segments);
     }
 
     public function getOriginalValue(): RRule

@@ -2,7 +2,10 @@
 
 namespace Spatie\IcalendarGenerator\ValueObjects;
 
+use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 
 class DateTimeValue
 {
@@ -40,6 +43,21 @@ class DateTimeValue
     public function getDateTime(): DateTimeInterface
     {
         return $this->dateTime;
+    }
+
+    public function convertToTimezone(DateTimeZone $dateTimeZone): self
+    {
+        if (! $this->withTime) {
+            return $this;
+        }
+
+        $dateTime = $this->dateTime instanceof DateTimeImmutable
+            ? DateTime::createFromImmutable($this->dateTime)
+            : clone $this->dateTime;
+
+        $this->dateTime = $dateTime->setTimezone($dateTimeZone);
+
+        return $this;
     }
 
     public function __toString()

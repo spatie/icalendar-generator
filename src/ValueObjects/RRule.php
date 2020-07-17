@@ -218,7 +218,8 @@ class RRule
         // TODO: Test this, add support for excluding dates only without time
         // TODO: Check how to handle timezones within RRule's
         // TODO: write docs for this
-        // TODO: implement RDATE
+        // TODO: implement RDATE, also on timezones
+        // TODO: DTSTAMP must be UTC https://www.kanzaki.com/docs/ical/dtstamp.html
 
         if ($this->excluded) {
             $properties[] = TextProperty::create(

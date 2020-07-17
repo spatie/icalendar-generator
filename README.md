@@ -278,6 +278,8 @@ Calendar::create()
     ....
 ```
 
+It is also possible to define your own timezone components here: **INSERT LINK**
+
 #### Alerts
 
 Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event. An alert always belongs to an event and has a description and the number of minutes before the event it will be triggered:
@@ -414,6 +416,92 @@ It is possible to set the day where the week starts on:
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->weekStartsOn(
 	ReccurenceDay::monday()
 );
+```
+
+### Timezones
+
+When using datetimes with timezones the package will output a timezone identifier so the calendar client can calculate the correct time for an event. Such identifier will look like this `Europe\Brussels` for a Belgian timezone or `UTC` for the UTC timezone.
+
+Most of the calendar clients know these identifiers and can find the correct timezones but some don't, that's why you can explicitly define the timezones within your calendar.
+
+This is a quite complicated feature, that's why when you add a datetime with a timezone to the package we'll generate these blocks for you automatically and you shouldn't think about these issues with timezones again!
+
+If you still want to create your own timezones then you're in the right place, although I advise you to read the [section](https://tools.ietf.org/html/rfc5545#section-3.6.5) on timzones from the RFC first. 
+
+You can create a timezone as such:
+
+```php
+$timezone = Timezone::create('Europe/Brussels');
+```
+
+It is possible to provide the last modified date:
+
+```php
+$timezone = Timezone::create('Europe/Brussels')
+    ->lastModified(new DateTime('16 may 2020 12:00:00'));
+```
+
+Or add an url with more information about the timezone:
+
+```php
+$timezone = Timezone::create('Europe/Brussels')
+    ->url('https://spatie.be');
+```
+
+A timezone has multiple entries in time where the time of the timezone changed relative to UTC, such entry can be constructed for standard or daylight time:
+
+```php
+$entry = TimezoneEntry::create(
+    TimezoneEntryType::standard(), 
+    new DateTime('16 may 2020 12:00:00'),
+    '+00:00',
+    '+02:00'
+)
+```
+
+Firstly you provide the type of entry (`standard` or `daylight`), next the point  where the time changes. And then an offset relative to UTC from before the change and an offset relative to UTC during the change.
+
+It is also possible to give this entry a name and description: 
+
+```php
+$entry = TimezoneEntry::create(...)
+    ->name('Europe - Brussels')
+    ->description('Belgian timezones ftw!');
+```
+
+An RRule for the entry can be given as such:
+
+```php
+$entry = TimezoneEntry::create(...)
+    ->rrule(RRule::frequency(RecurrenceFrequency::daily()));
+```
+
+In the end you can add an entry to a timezone:
+
+```php
+$timezone = Timezone::create('Europe/Brussels')
+	->entry($timezoneEntry);
+```
+
+Or even add multiple entries:
+
+```php
+$timezone = Timezone::create('Europe/Brussels')
+	->entry([$timezoneEntryOne, $timezoneEntryTwo]);
+```
+
+Now we've constructed our timezone it is time(👀) to add this timezone to our calendar:
+
+```php
+$calendar = Calendar::create('Calendar with timezones')
+	->timezone($timezone);
+```
+
+And also here it is possible to add multiple timezones:
+
+```php
+$calendar = Calendar::create('Calendar with timezones')
+	->timezone([$timezoneOne, $timezoneTwo]);
 ```
 
 
