@@ -281,10 +281,11 @@ If you want to add the possibility for users to download a calendar and import i
 ``` php
 $calendar = Calendar::create('Laracon Online');
 
-response($calendar->get())
-    ->header('Content-Type', 'text/calendar')
-    ->header('charset', 'utf-8')
-    ->download('my-awesome-calendar.ics');
+return response($calendar->get(), 200, [
+   'Content-Type' => 'text/calendar',
+   'Content-Disposition' => 'attachment; filename="my-awesome-calendar.ics"',
+   'charset' => 'utf-8',
+]);
 ```
 
 ### Extending the package
