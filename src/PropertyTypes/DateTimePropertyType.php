@@ -65,7 +65,8 @@ final class DateTimePropertyType extends PropertyType
     {
         $format = $this->withTime ? 'Ymd\THis' : 'Ymd';
 
-        return $this->dateTime->format($format);
+        return $this->dateTime->format($format) .
+            ($this->withTime && ! $this->withTimeZone ? 'Z' : '');
     }
 
     public function getOriginalValue(): DateTimeInterface

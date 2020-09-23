@@ -30,9 +30,9 @@ class DateTimePropertyTypeTest extends TestCase
     /** @test */
     public function it_will_format_the_date_and_time_correctly()
     {
-        $property = new DateTimePropertyType('STARTS', $this->date, true);
+        $property = new DateTimePropertyType('STARTS', $this->date, true, false);
 
-        $this->assertEquals('20190516T121015', $property->getValue());
+        $this->assertEquals('20190516T121015Z', $property->getValue());
     }
 
     /** @test */
