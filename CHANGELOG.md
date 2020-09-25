@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 1.0.4 - 2020-09-25
+
+- fix timezones on older clients (#30)
+
 ## 1.0.3 - 2020-04-29
 
 - fix addresses not working without the name of the address
