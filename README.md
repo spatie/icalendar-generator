@@ -36,9 +36,9 @@ X-WR-CALNAME:Laracon online
 BEGIN:VEVENT
 UID:5cb9d22a00ba6
 SUMMARY:Creating calender feeds
-DTSTART:20190306T150000
-DTEND:20190306T160000
-DTSTAMP:20190419T135034
+DTSTART:20190306T150000Z
+DTEND:20190306T160000Z
+DTSTAMP:20190419T135034Z
 END:VEVENT
 END:VCALENDAR
 ```
@@ -190,8 +190,8 @@ Calendar::create('Laracon Online')
         Event::create('Creating calender feeds'),
         Event::create('Creating contact lists'),
     ])
-    ...    
-    
+    ...
+
 // As a closure
 Calendar::create('Laracon Online')
     ->event(function(Event $event){
