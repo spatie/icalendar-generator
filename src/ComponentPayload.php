@@ -9,6 +9,7 @@ use Spatie\IcalendarGenerator\Components\Component;
 use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
+use Spatie\IcalendarGenerator\PropertyTypes\UriPropertyType;
 
 final class ComponentPayload
 {
@@ -79,6 +80,23 @@ final class ComponentPayload
         }
 
         return $this->property(new TextPropertyType($names, $value, $disableEscaping));
+    }
+
+    /**
+     * @param array|string $names
+     * @param string|null $value
+     *
+     * @return \Spatie\IcalendarGenerator\ComponentPayload
+     */
+    public function uriProperty(
+        $names,
+        ?string $value
+    ): ComponentPayload {
+        if ($value === null) {
+            return $this;
+        }
+
+        return $this->property(new UriPropertyType($names, $value)) ?: $this;
     }
 
     public function subComponent(Component ...$components): ComponentPayload

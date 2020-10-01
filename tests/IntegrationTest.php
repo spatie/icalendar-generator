@@ -28,6 +28,7 @@ class IntegrationTest extends TestCase
                     ->address('Samberstraat 69D, 2060 Antwerp, Belgium')
                     ->addressName('Spatie HQ')
                     ->coordinates(51.2343, 4.4287)
+                    ->uniformResourceLocator('http://example.com/pub/calendars/jsmith/mytime.ics')
                     ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes')
                     ->alertMinutesAfter(5, 'Laracon online has ended, see you next year!')
                     ->organizer('ruben@spatie.be', 'Ruben')
@@ -75,6 +76,7 @@ LOCATION:Samberstraat 69D\, 2060 Antwerp\, Belgium\r
 CLASS:PUBLIC\r
 TRANSP:TRANSPARENT\r
 STATUS:TENTATIVE\r
+URL:http://example.com/pub/calendars/jsmith/mytime.ics\r
 DTSTART:20190306T150000Z\r
 DTEND:20190306T160000Z\r
 DTSTAMP:20190306T160000Z\r
