@@ -96,7 +96,7 @@ final class ComponentPayload
             return $this;
         }
 
-        return $this->property(new UriPropertyType($names, $value)) ?: $this;
+        return filter_var($value, FILTER_VALIDATE_URL) ? $this->property(new UriPropertyType($names, $value)) : $this;
     }
 
     public function subComponent(Component ...$components): ComponentPayload

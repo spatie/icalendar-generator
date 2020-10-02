@@ -38,7 +38,7 @@ class EventTest extends TestCase
         $payload = Event::create('An introduction into event sourcing')
             ->description('By Freek Murze')
             ->createdAt($dateCreated)
-            ->uniformResourceLocator('http://example.com/pub/calendars/jsmith/mytime.ics')
+            ->url('http://example.com/pub/calendars/jsmith/mytime.ics')
             ->uniqueIdentifier('Identifier here')
             ->startsAt($dateStarts)
             ->endsAt($dateEnds)
@@ -258,9 +258,19 @@ class EventTest extends TestCase
     public function it_can_set_a_url()
     {
         $payload = Event::create()
-            ->uniformResourceLocator('http://example.com/pub/calendars/jsmith/mytime.ics')
+            ->url('http://example.com/pub/calendars/jsmith/mytime.ics')
             ->resolvePayload();
 
         $this->assertPropertyEqualsInPayload('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics', $payload);
+    }
+
+    /** @test */
+    public function it_ignores_a_wrong_url()
+    {
+        $payload = Event::create()
+            ->url('xample.com/pub/calendars/jsmith/mytime.ics')
+            ->resolvePayload();
+
+        $this->assertPropertyNotInPayload('URL', $payload);
     }
 }

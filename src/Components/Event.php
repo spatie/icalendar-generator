@@ -247,7 +247,7 @@ final class Event extends Component
         return $this;
     }
 
-    public function uniformResourceLocator(string $url): Event
+    public function url(string $url): Event
     {
         $this->url = $url;
 
