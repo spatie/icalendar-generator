@@ -7,16 +7,16 @@ final class UriPropertyType extends PropertyType
     /** @var string */
     private $uri;
 
-    public static function create($names, string $uri): URIPropertyType
+    public static function create($names, string $uri): UriPropertyType
     {
         return new self($names, $uri);
     }
 
     /**
-     * URIPropertyType constructor.
+     * UriPropertyType constructor.
      *
      * @param array|string $names
-     * @param uri $uri
+     * @param string $uri
      */
     public function __construct($names, string $uri)
     {

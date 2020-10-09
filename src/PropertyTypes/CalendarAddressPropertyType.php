@@ -31,7 +31,7 @@ class CalendarAddressPropertyType extends PropertyType
 
         if ($this->calendarAddress->participationStatus) {
             $this->addParameter(
-                Parameter::create('PARTSTAT', $this->calendarAddress->participationStatus)
+                Parameter::create('PARTSTAT', (string) $this->calendarAddress->participationStatus)
             );
         }
     }

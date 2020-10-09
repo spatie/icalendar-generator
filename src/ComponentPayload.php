@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator;
 use Closure;
 use DateTimeInterface;
 use Exception;
+use Spatie\Enum\Enum;
 use Spatie\IcalendarGenerator\Components\Component;
 use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
 use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
@@ -64,7 +65,7 @@ final class ComponentPayload
 
     /**
      * @param array|string $names
-     * @param string|null $value
+     * @param string|\Spatie\Enum\Enum|null $value
      *
      * @param bool $disableEscaping
      *
@@ -79,6 +80,10 @@ final class ComponentPayload
             return $this;
         }
 
+        if ($value instanceof Enum) {
+            $value = (string) $value;
+        }
+
         return $this->property(new TextPropertyType($names, $value, $disableEscaping));
     }
 
@@ -88,10 +93,8 @@ final class ComponentPayload
      *
      * @return \Spatie\IcalendarGenerator\ComponentPayload
      */
-    public function uriProperty(
-        $names,
-        ?string $value
-    ): ComponentPayload {
+    public function uriProperty($names, ?string $value): ComponentPayload
+    {
         if ($value === null) {
             return $this;
         }

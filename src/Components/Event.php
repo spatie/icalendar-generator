@@ -301,7 +301,7 @@ final class Event extends Component
             $this->lng
         )->addParameter(Parameter::create('VALUE', 'URI'))
             ->addParameter(Parameter::create('X-ADDRESS', $this->address))
-            ->addParameter(Parameter::create('X-APPLE-RADIUS', 72))
+            ->addParameter(Parameter::create('X-APPLE-RADIUS', '72'))
             ->addParameter(Parameter::create('X-TITLE', $this->addressName));
 
         $payload->property($property);
