@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 1.0.5 - 2020-10-09
+
+- add support for url's for events (#31)
+
 ## 1.0.4 - 2020-09-25
 
 - fix timezones on older clients (#30)
