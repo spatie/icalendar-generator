@@ -21,7 +21,7 @@
     "require": {
         "php": "^7.4",
         "ext-mbstring": "*",
-        "spatie/enum": "3.x-dev"
+        "spatie/enum": "^3.0"
     },
     "require-dev": {
         "larapack/dd": "^1.0",
