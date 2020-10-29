@@ -101,7 +101,7 @@ class TimezoneTransitionsResolver
             'PT' . abs($hours) . 'H' . abs($minutes) . 'M'
         );
 
-        $interval->invert = $hours < 0  || $minutes < 0;
+        $interval->invert = $hours < 0 || $minutes < 0;
 
         return $interval;
     }

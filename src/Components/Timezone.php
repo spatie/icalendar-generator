@@ -2,7 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
-use Closure;
 use DateTimeInterface;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\ComponentPayload;
@@ -83,11 +82,11 @@ class Timezone extends Component
             ->property(TextProperty::create('TZID', $this->identifier))
             ->optional(
                 $this->url,
-                fn() => TextProperty::create('TZURL', $this->url)->withoutEscaping()
+                fn () => TextProperty::create('TZURL', $this->url)->withoutEscaping()
             )
             ->optional(
                 $this->lastModified,
-                fn() => DateTimeProperty::create('LAST-MODIFIED', $this->lastModified)
+                fn () => DateTimeProperty::create('LAST-MODIFIED', $this->lastModified)
             )
             ->subComponent(...$this->entries);
     }

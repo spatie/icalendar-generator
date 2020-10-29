@@ -2,9 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\Properties;
 
-use DateTime;
 use DateTimeInterface;
-use DateTimeZone;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class DateTimeProperty extends Property

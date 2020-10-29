@@ -342,7 +342,7 @@ class Event extends Component
             )
             ->optional(
                 $this->url,
-                fn() => UriProperty::create('URL', $this->url)
+                fn () => UriProperty::create('URL', $this->url)
             )
             ->subComponent(...$this->resolveAlerts());
 

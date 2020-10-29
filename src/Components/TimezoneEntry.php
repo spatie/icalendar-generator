@@ -3,7 +3,6 @@
 namespace Spatie\IcalendarGenerator\Components;
 
 use DateTimeInterface;
-use DateTimeZone;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
@@ -103,15 +102,15 @@ class TimezoneEntry extends Component
             ->property(TextProperty::create('TZOFFSETTO', $this->offsetTo))
             ->optional(
                 $this->name,
-                fn() => TextProperty::create('TZNAME', $this->name)
+                fn () => TextProperty::create('TZNAME', $this->name)
             )
             ->optional(
                 $this->description,
-                fn() => TextProperty::create('COMMENT', $this->description)
+                fn () => TextProperty::create('COMMENT', $this->description)
             )
             ->optional(
                 $this->rrule,
-                fn() => RRuleProperty::create('RRULE', $this->rrule)
+                fn () => RRuleProperty::create('RRULE', $this->rrule)
             );
     }
 }
