@@ -24,7 +24,7 @@ class CalendarAddressProperty extends Property
 
         if ($this->calendarAddress->participationStatus) {
             $this->addParameter(
-                Parameter::create('PARTSTAT', $this->calendarAddress->participationStatus)
+                Parameter::create('PARTSTAT', (string) $this->calendarAddress->participationStatus)
             );
         }
     }

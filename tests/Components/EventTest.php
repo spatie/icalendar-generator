@@ -40,6 +40,7 @@ class EventTest extends TestCase
         $payload = Event::create('An introduction into event sourcing')
             ->description('By Freek Murze')
             ->createdAt($dateCreated)
+            ->url('http://example.com/pub/calendars/jsmith/mytime.ics')
             ->uniqueIdentifier('Identifier here')
             ->startsAt($dateStarts)
             ->endsAt($dateEnds)
@@ -47,7 +48,7 @@ class EventTest extends TestCase
             ->addressName('Spatie')
             ->resolvePayload();
 
-        $this->assertCount(7, $payload->getProperties());
+        $this->assertCount(8, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction into event sourcing', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'By Freek Murze', $payload);
@@ -56,6 +57,7 @@ class EventTest extends TestCase
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
         $this->assertPropertyEqualsInPayload('LOCATION', 'Antwerp', $payload);
         $this->assertPropertyEqualsInPayload('UID', 'Identifier here', $payload);
+        $this->assertPropertyEqualsInPayload('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics', $payload);
     }
 
     /** @test */
@@ -287,5 +289,25 @@ class EventTest extends TestCase
 
         $this->assertParameterCountInProperty(1, $alert->getProperty('TRIGGER'));
         $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $alert->getProperty('TRIGGER'));
+    }
+
+    /** @test */
+    public function it_can_set_a_url()
+    {
+        $payload = Event::create()
+            ->url('http://example.com/pub/calendars/jsmith/mytime.ics')
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics', $payload);
+    }
+
+    /** @test */
+    public function it_ignores_a_wrong_url()
+    {
+        $payload = Event::create()
+            ->url('xample.com/pub/calendars/jsmith/mytime.ics')
+            ->resolvePayload();
+
+        $this->assertPropertyNotInPayload('URL', $payload);
     }
 }

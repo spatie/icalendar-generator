@@ -48,7 +48,7 @@ class ComponentBuilder
     {
         $lines = [];
 
-        foreach ($this->componentPayload->getProperties() as $key => $property) {
+        foreach ($this->componentPayload->getProperties() as $property) {
             $builder = new PropertyBuilder($property);
 
             $lines = array_merge(

@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 [![Build Status](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Test?label=Tests)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3ATest)
 [![Style](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Check%20&%20fix%20styling?label=Style)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3A%22Check+%26+fix+styling%22)
+[![Psalm](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Psalm?label=Psalm)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3APsalm)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/icalendar-generator.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/icalendar-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
@@ -38,17 +39,15 @@ BEGIN:VEVENT
 UID:5ef5c3f64cb2c
 DTSTAMP;TZID=UTC:20200626T094630
 SUMMARY:Creating calender feeds
-DTSTART;TZID=UTC:20190306T150000
-DTEND;TZID=UTC:20190306T160000
+DTSTART:20190306T150000Z
+DTEND:20190306T160000Z
+DTSTAMP:20190419T135034Z
 END:VEVENT
 END:VCALENDAR
 ```
 
 ## Support us
-
-Learn how to create a package like this one, by watching our premium video course:
-
-[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/icalendar-generator.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/icalendar-generator)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -134,7 +133,7 @@ You can add a location to an event a such:
 
 ``` php
 Event::create()
-    ->address('Samberstraat 69D, 2060 Antwerp, Belgium')
+    ->address('Kruikstraat 22, 2018 Antwerp, Belgium')
     ->addressName('Spatie HQ')
     ->coordinates(51.2343, 4.4287)
     ...
@@ -225,8 +224,8 @@ Calendar::create('Laracon Online')
         Event::create('Creating calender feeds'),
         Event::create('Creating contact lists'),
     ])
-    ...    
-    
+    ...
+
 // As a closure
 Calendar::create('Laracon Online')
     ->event(function(Event $event){
@@ -522,10 +521,11 @@ If you want to add the possibility for users to download a calendar and import i
 ``` php
 $calendar = Calendar::create('Laracon Online');
 
-response($calendar->get())
-    ->header('Content-Type', 'text/calendar')
-    ->header('charset', 'utf-8')
-    ->download('my-awesome-calendar.ics');
+return response($calendar->get(), 200, [
+   'Content-Type' => 'text/calendar',
+   'Content-Disposition' => 'attachment; filename="my-awesome-calendar.ics"',
+   'charset' => 'utf-8',
+]);
 ```
 
 ### Extending the package

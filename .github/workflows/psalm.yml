@@ -4,14 +4,14 @@ on:
     push:
         paths:
             - '**.php'
-            - 'psalm.xml'
+            - 'psalm.xml.dist'
 
 jobs:
     psalm:
         name: psalm
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
 
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
@@ -21,7 +21,8 @@ jobs:
                   coverage: none
 
             - name: Cache composer dependencies
-              uses: actions/cache@v1
+
+              uses: actions/cache@v2
               with:
                   path: vendor
                   key: composer-${{ hashFiles('composer.lock') }}
@@ -30,4 +31,5 @@ jobs:
               run: composer install -n --prefer-dist
 
             - name: Run psalm
-              run: ./vendor/bin/psalm -c psalm.xml
+
+              run: ./vendor/bin/psalm

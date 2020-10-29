@@ -16,6 +16,11 @@ abstract class TestCase extends BaseTestCase
         $this->assertNotNull($componentPayload->getProperty($name));
     }
 
+    protected function assertPropertyNotInPayload(string $name, ComponentPayload $componentPayload): void
+    {
+        $this->assertObjectNotHasAttribute($name, $componentPayload);
+    }
+
     protected function assertPropertyEqualsInPayload(string $name, $value, ComponentPayload $componentPayload): void
     {
         $this->assertEquals($value, $componentPayload->getProperty($name)->getOriginalValue());

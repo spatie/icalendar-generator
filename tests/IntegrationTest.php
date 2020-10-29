@@ -28,6 +28,7 @@ class IntegrationTest extends TestCase
                     ->address('Samberstraat 69D, 2060 Antwerp, Belgium')
                     ->addressName('Spatie HQ')
                     ->coordinates(51.2343, 4.4287)
+                    ->url('http://example.com/pub/calendars/jsmith/mytime.ics')
                     ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes')
                     ->alertMinutesAfter(5, 'Laracon online has ended, see you next year!')
                     ->organizer('ruben@spatie.be', 'Ruben')
@@ -55,7 +56,7 @@ class IntegrationTest extends TestCase
                     ->uniqueIdentifier('uuid')
                     ->createdAt(new DateTime('6 March 2019 16:00:00'))
                     ->startsAt(new DateTime('6 march 2019', new DateTimeZone('Europe/Brussels')))
-                    ->withoutTimezone();
+                    ->url('wrong.uri/is?set=true');
             })
             ->get();
 
@@ -82,6 +83,7 @@ ORGANIZER;CN=Ruben:MAILTO:ruben@spatie.be\r
 ATTENDEE;CN=Brent;PARTSTAT=ACCEPTED:MAILTO:brent@spatie.be\r
 ATTENDEE;CN=Alex;PARTSTAT=DECLINED:MAILTO:alex@spatie.be\r
 ATTENDEE;CN=Freek;PARTSTAT=TENTATIVE:MAILTO:freek@spatie.be\r
+URL:http://example.com/pub/calendars/jsmith/mytime.ics\r
 GEO:51.2343;4.4287\r
 X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-ADDRESS=Samberstraat 69D\, 2060 Ant\r
  werp\, Belgium;X-APPLE-RADIUS=72;X-TITLE=Spatie HQ:51.2343;4.4287\r
@@ -110,9 +112,10 @@ DTEND;TZID=UTC:20190307T150000\r
 END:VEVENT\r
 BEGIN:VEVENT\r
 UID:uuid\r
-DTSTAMP:20190306T160000\r
+DTSTAMP;TZID=UTC:20190306T160000\r
 SUMMARY:In a timezone\r
-DTSTART:20190306T000000\r
+DTSTART;TZID=Europe/Brussels:20190306T000000\r
+URL:\r
 END:VEVENT\r
 END:VCALENDAR
 EOD;

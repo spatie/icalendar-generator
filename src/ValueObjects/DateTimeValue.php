@@ -30,6 +30,23 @@ class DateTimeValue
 
     public function format(): string
     {
+        // Code was changed to this, let check that out
+//        $format = $this->withTime ? 'Ymd\THis' : 'Ymd';
+//
+//        return $this->dateTime->format($format) .
+//            ($this->withTime && ! $this->withTimeZone ? 'Z' : '');
+
+//        $property = new DateTimePropertyType('STARTS', $this->date, true, false);
+//          With time is true and timezone false
+//        $this->assertEquals('20190516T121015Z', $property->getValue());
+
+//        $this->date->setTimezone(new DateTimeZone('Europe/Brussels'));
+//
+//        $property = new DateTimePropertyType('STARTS', $this->date, true, true);
+//          With time and timezone are both true here
+//        $this->assertEquals('20190516T141015', $property->getValue());
+//        $this->assertEquals(1, count($property->getParameters()));
+
         $format = $this->withTime ? 'Ymd\THis' : 'Ymd';
 
         return $this->dateTime->format($format);

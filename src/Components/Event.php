@@ -17,6 +17,7 @@ use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Properties\UriProperty;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
@@ -65,6 +66,9 @@ class Event extends Component
 
     /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[]|\Spatie\IcalendarGenerator\ValueObjects\PeriodValue[]|\Spatie\IcalendarGenerator\ValueObjects\DurationValue[] */
     private array $recurrence_dates = [];
+
+    /** @var string|null */
+    private $url;
 
     public static function create(string $name = null): Event
     {
@@ -275,6 +279,13 @@ class Event extends Component
         throw new Exception("Could not reccur");
     }
 
+    public function url(string $url): Event
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
     protected function payload(): ComponentPayload
     {
         if ($this->isFullDay) {
@@ -328,6 +339,10 @@ class Event extends Component
             ->multiple(
                 $this->attendees,
                 fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+            )
+            ->optional(
+                $this->url,
+                fn() => UriProperty::create('URL', $this->url)
             )
             ->subComponent(...$this->resolveAlerts());
 
