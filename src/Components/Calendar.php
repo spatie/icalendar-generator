@@ -19,6 +19,9 @@ class Calendar extends Component implements HasTimezones
     /** @var \Spatie\IcalendarGenerator\Components\Event[] */
     private array $events = [];
 
+    /** @var \Spatie\IcalendarGenerator\Components\Timezone[] */
+    private array $timezones = [];
+
     private ?string $name = null;
 
     private ?string $description = null;
@@ -99,6 +102,25 @@ class Calendar extends Component implements HasTimezones
         }, is_array($event) ? $event : [$event]);
 
         $this->events = array_merge($this->events, $events);
+
+        return $this;
+    }
+
+    /**
+     * @param $timezone \Spatie\IcalendarGenerator\Components\Event|array
+     *
+     * @return \Spatie\IcalendarGenerator\Components\Calendar
+     */
+    public function timezone($timezone)
+    {
+        if (is_null($timezone)) {
+            return $this;
+        }
+
+        $this->timezones = array_merge(
+            $this->timezones,
+            is_array($timezone) ? $timezone : [$timezone]
+        );
 
         return $this;
     }

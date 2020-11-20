@@ -274,10 +274,41 @@ You can even disable timezones for a whole calendar:
 ``` php
 Calendar::create()
    ->withoutTimezone()
-    ....
+    ...
 ```
 
-It is also possible to define your own timezone components here: **INSERT LINK**
+Each calendar should have Timezone components describing the timezones used within your calendar. Allthough not all calendar clients require this, it is recommanded to add these components.
+
+Creating such Timezone components is quite complicated, that's why this package will automatically add them for you without configuration.
+
+You can disable this behaviour as such:
+
+``` php
+Calendar::create()
+   ->withoutAutoTimezoneComponents()
+    ...
+```
+
+You can manually add timezones to a calendar if desired as such:
+
+```php
+$timezoneEntry = TimezoneEntry::create(
+    TimezoneEntryType::daylight(),
+    new DateTime('23 march 2020'),
+    '+00:00',
+    '+02:00'
+);
+
+$timezone = Timezone::create('Europe/Brussels')
+    ->entry($timezoneEntry)
+    ...
+
+Calendar::create()
+    ->timezone($timezone)
+    ...
+```
+
+We won't go into details here since, it's a more niche feature.
 
 #### Alerts
 
