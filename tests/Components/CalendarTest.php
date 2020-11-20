@@ -245,7 +245,6 @@ EOT, $alternativeTimezoneComponent->toString());
     /** @test */
     public function it_can_add_timezones()
     {
-
         $payload = Calendar::create()->resolvePayload();
     }
 }
