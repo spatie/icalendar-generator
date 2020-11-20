@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\ValueObjects;
+namespace Spatie\IcalendarGenerator\Timezones;
 
 use DateInterval;
 use DateTimeInterface;

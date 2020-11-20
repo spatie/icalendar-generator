@@ -19,9 +19,10 @@
         }
     ],
     "require" : {
-        "php" : "^7.4",
-        "ext-mbstring" : "*",
-        "spatie/enum" : "^3.0"
+        "php": "^7.4",
+        "ext-mbstring": "*",
+        "nesbot/carbon": "^2.41",
+        "spatie/enum": "^3.0"
     },
     "require-dev" : {
         "larapack/dd" : "^1.0",

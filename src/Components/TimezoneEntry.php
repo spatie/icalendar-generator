@@ -10,7 +10,7 @@ use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
-use Spatie\IcalendarGenerator\ValueObjects\TimezoneTransition;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
 
 class TimezoneEntry extends Component
 {
@@ -82,7 +82,7 @@ class TimezoneEntry extends Component
 
     public function getComponentType(): string
     {
-        return $this->type->value;
+        return (string) $this->type->value;
     }
 
     public function getRequiredProperties(): array

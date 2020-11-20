@@ -6,8 +6,10 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use Spatie\IcalendarGenerator\Timezones\HasTimezones;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
-class DateTimeValue
+class DateTimeValue implements HasTimezones
 {
     private DateTimeInterface $dateTime;
 
@@ -75,6 +77,11 @@ class DateTimeValue
         $this->dateTime = $dateTime->setTimezone($dateTimeZone);
 
         return $this;
+    }
+
+    public function getTimezoneRangeCollection(): TimezoneRangeCollection
+    {
+        return TimezoneRangeCollection::create()->add($this->dateTime);
     }
 
     public function __toString()

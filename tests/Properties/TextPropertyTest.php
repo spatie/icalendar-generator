@@ -2,6 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Properties;
 
+use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
@@ -41,27 +42,35 @@ class TextPropertyTest extends TestCase
     {
         $this->assertEquals(
             'a backslash \ ',
-            (new TextProperty('', 'a backslash \ ', true))->getValue()
+            (new TextProperty('', 'a backslash \ '))->withoutEscaping()->getValue()
         );
 
         $this->assertEquals(
             'a quote " ',
-            (new TextProperty('', 'a quote " ', true))->getValue()
+            (new TextProperty('', 'a quote " '))->withoutEscaping()->getValue()
         );
 
         $this->assertEquals(
             'a comma , ',
-            (new TextProperty('', 'a comma , ', true))->getValue()
+            (new TextProperty('', 'a comma , '))->withoutEscaping()->getValue()
         );
 
         $this->assertEquals(
             'a point-comma ; ',
-            (new TextProperty('', 'a point-comma ; ', true))->getValue()
+            (new TextProperty('', 'a point-comma ; '))->withoutEscaping()->getValue()
         );
 
         $this->assertEquals(
             'a return \n ',
-            (new TextProperty('', 'a return \n ', true))->getValue()
+            (new TextProperty('', 'a return \n '))->withoutEscaping()->getValue()
         );
+    }
+
+    /** @test */
+    public function it_can_be_created_from_an_enum()
+    {
+        $property = TextProperty::createFromEnum('', Classification::private());
+
+        $this->assertEquals('PRIVATE', $property->getValue());
     }
 }

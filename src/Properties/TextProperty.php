@@ -2,34 +2,40 @@
 
 namespace Spatie\IcalendarGenerator\Properties;
 
+use Spatie\Enum\Enum;
+
 class TextProperty extends Property
 {
     private string $text;
 
-    private bool $disableEscaping;
+    private bool $escaped = true;
 
-    public static function create(string $name, string $text, $disableEscaping = false): TextProperty
+    public static function create(string $name, string $text): TextProperty
     {
-        return new self($name, $text, $disableEscaping);
+        return new self($name, $text);
     }
 
-    public function __construct(string $name, string $text, $disableEscaping = false)
+    public static function createFromEnum(string $name, Enum $enum): TextProperty
+    {
+        return new self($name, (string) $enum->value);
+    }
+
+    public function __construct(string $name, string $text)
     {
         $this->name = $name;
         $this->text = $text;
-        $this->disableEscaping = $disableEscaping;
     }
 
     public function withoutEscaping(): self
     {
-        $this->disableEscaping = true;
+        $this->escaped = false;
 
         return $this;
     }
 
     public function getValue(): string
     {
-        if ($this->disableEscaping) {
+        if ($this->escaped === false) {
             return $this->text;
         }
 

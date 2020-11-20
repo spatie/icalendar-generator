@@ -2,11 +2,14 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Components\Timezone;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class CalendarTest extends TestCase
@@ -48,6 +51,7 @@ class CalendarTest extends TestCase
 
         $payload = Calendar::create()
             ->event($event)
+            ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
@@ -63,6 +67,7 @@ class CalendarTest extends TestCase
             ->event(function (Event $event) {
                 $event->name('An introduction to event sourcing');
             })
+            ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
@@ -79,6 +84,7 @@ class CalendarTest extends TestCase
 
         $payload = Calendar::create()
             ->event([$firstEvent, $secondEvent])
+            ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
@@ -100,6 +106,7 @@ class CalendarTest extends TestCase
                     $event->name('Websockets what are they?');
                 },
             ])
+            ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
@@ -153,6 +160,7 @@ class CalendarTest extends TestCase
         $payload = Calendar::create()
             ->event($firstEvent)
             ->event([$secondEvent])
+            ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
         $subComponents = $payload->getSubComponents();
@@ -160,5 +168,77 @@ class CalendarTest extends TestCase
         $this->assertCount(2, $subComponents);
         $this->assertEquals($subComponents[0], $firstEvent);
         $this->assertEquals($subComponents[1], $secondEvent);
+    }
+
+    /** @test */
+    public function it_will_automatically_add_timezone_components()
+    {
+        Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
+
+        $utcEvent = Event::create('An event with UTC timezone')
+            ->startsAt(new CarbonImmutable('1 january 2019'))
+            ->endsAt(new CarbonImmutable('1 january 2021'));
+
+        $alternativeTimezoneEvent = Event::create('An event with alternative timezone')
+            ->startsAt(new CarbonImmutable('1 january 2020', 'Europe/Brussels'))
+            ->endsAt(new CarbonImmutable('1 january 2021', 'Europe/Brussels'));
+
+        $withoutTimezoneEvent = Event::create('An event without timezone')
+            ->withoutTimezone()
+            ->startsAt(new CarbonImmutable('1 january 1995', 'Europe/Brussels'))
+            ->endsAt(new CarbonImmutable('1 january 2021', 'Europe/Brussels'));
+
+        $payload = Calendar::create()->event(
+            [$utcEvent, $alternativeTimezoneEvent, $withoutTimezoneEvent]
+        )->resolvePayload();
+
+        $subComponents = $payload->getSubComponents();
+
+        $this->assertCount(5, $subComponents);
+
+        /** @var \Spatie\IcalendarGenerator\Components\Timezone $utcComponent */
+        $utcComponent = $subComponents[0];
+
+        $this->assertInstanceOf(Timezone::class, $utcComponent);
+        $this->assertEquals(<<<EOT
+BEGIN:VTIMEZONE\r
+TZID:UTC\r
+BEGIN:STANDARD\r
+DTSTART:20180406T000000\r
+TZOFFSETFROM:0000\r
+TZOFFSETTO:0000\r
+END:STANDARD\r
+END:VTIMEZONE
+EOT, $utcComponent->toString());
+
+        /** @var \Spatie\IcalendarGenerator\Components\Timezone $utcComponent */
+        $alternativeTimezoneComponent = $subComponents[1];
+
+        $this->assertInstanceOf(Timezone::class, $alternativeTimezoneComponent);
+        $this->assertEquals(<<<EOT
+BEGIN:VTIMEZONE\r
+TZID:Europe/Brussels\r
+BEGIN:STANDARD\r
+DTSTART:20191027T030000\r
+TZOFFSETFROM:0200\r
+TZOFFSETTO:0100\r
+END:STANDARD\r
+BEGIN:DAYLIGHT\r
+DTSTART:20200329T020000\r
+TZOFFSETFROM:0100\r
+TZOFFSETTO:0200\r
+END:DAYLIGHT\r
+BEGIN:STANDARD\r
+DTSTART:20201025T030000\r
+TZOFFSETFROM:0200\r
+TZOFFSETTO:0100\r
+END:STANDARD\r
+BEGIN:DAYLIGHT\r
+DTSTART:20210328T020000\r
+TZOFFSETFROM:0100\r
+TZOFFSETTO:0200\r
+END:DAYLIGHT\r
+END:VTIMEZONE
+EOT, $alternativeTimezoneComponent->toString());
     }
 }

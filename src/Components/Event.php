@@ -18,12 +18,14 @@ use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Properties\UriProperty;
+use Spatie\IcalendarGenerator\Timezones\HasTimezones;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
-class Event extends Component
+class Event extends Component implements HasTimezones
 {
     /** @var \Spatie\IcalendarGenerator\Components\Alert[] */
     private array $alerts = [];
@@ -67,8 +69,7 @@ class Event extends Component
     /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[]|\Spatie\IcalendarGenerator\ValueObjects\PeriodValue[]|\Spatie\IcalendarGenerator\ValueObjects\DurationValue[] */
     private array $recurrence_dates = [];
 
-    /** @var string|null */
-    private $url;
+    private ?string $url = null;
 
     public static function create(string $name = null): Event
     {
@@ -286,6 +287,20 @@ class Event extends Component
         return $this;
     }
 
+    public function getTimezoneRangeCollection(): TimezoneRangeCollection
+    {
+        if($this->withoutTimezone){
+            return TimezoneRangeCollection::create();
+        }
+
+        return TimezoneRangeCollection::create()
+            ->add($this->starts)
+            ->add($this->ends)
+            ->add($this->created)
+            ->add($this->rrule)
+            ->add($this->recurrence_dates);
+    }
+
     protected function payload(): ComponentPayload
     {
         if ($this->isFullDay) {
@@ -298,47 +313,47 @@ class Event extends Component
             ->property(DateTimeProperty::create('DTSTAMP', $this->created, $this->withoutTimezone))
             ->optional(
                 $this->name,
-                fn () => TextProperty::create('SUMMARY', $this->name)
+                fn() => TextProperty::create('SUMMARY', $this->name)
             )
             ->optional(
                 $this->description,
-                fn () => TextProperty::create('DESCRIPTION', $this->description)
+                fn() => TextProperty::create('DESCRIPTION', $this->description)
             )
             ->optional(
                 $this->address,
-                fn () => TextProperty::create('LOCATION', $this->address)
+                fn() => TextProperty::create('LOCATION', $this->address)
             )
             ->optional(
                 $this->classification,
-                fn () => TextProperty::create('CLASS', $this->classification->value)
+                fn() => TextProperty::createFromEnum('CLASS', $this->classification)
             )
             ->optional(
                 $this->status,
-                fn () => TextProperty::create('STATUS', $this->status->value)
+                fn() => TextProperty::createFromEnum('STATUS', $this->status)
             )
             ->optional(
                 $this->transparent,
-                fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
+                fn() => TextProperty::create('TRANSP', 'TRANSPARENT')
             )
             ->optional(
                 $this->starts,
-                fn () => DateTimeProperty::create('DTSTART', $this->starts, $this->withoutTimezone)
+                fn() => DateTimeProperty::create('DTSTART', $this->starts, $this->withoutTimezone)
             )
             ->optional(
                 $this->ends,
-                fn () => DateTimeProperty::create('DTEND', $this->ends, $this->withoutTimezone)
+                fn() => DateTimeProperty::create('DTEND', $this->ends, $this->withoutTimezone)
             )
             ->optional(
                 $this->organizer,
-                fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+                fn() => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
             )
             ->optional(
                 $this->rrule,
-                fn () => RRuleProperty::create('RRULE', $this->rrule)
+                fn() => RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
                 $this->attendees,
-                fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+                fn(CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
             )
             ->optional(
                 $this->url,
@@ -382,7 +397,7 @@ class Event extends Component
         }
 
         return array_map(
-            fn (Alert $alert) => $alert->withoutTimezone(),
+            fn(Alert $alert) => $alert->withoutTimezone(),
             $this->alerts
         );
     }

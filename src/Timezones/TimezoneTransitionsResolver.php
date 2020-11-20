@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\IcalendarGenerator;
+namespace Spatie\IcalendarGenerator\Timezones;
 
 use DateInterval;
 use DateTime;
@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
-use Spatie\IcalendarGenerator\ValueObjects\TimezoneTransition;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
 
 class TimezoneTransitionsResolver
 {
@@ -50,7 +50,7 @@ class TimezoneTransitionsResolver
         }
 
         $found = [];
-        $lastTransition = $transitions[0];
+        $previousTransition = $transitions[0];
 
         // Skip the first to determine the offset
         for ($i = 1; $i < count($transitions); $i++) {
@@ -60,19 +60,19 @@ class TimezoneTransitionsResolver
                 ? TimezoneEntryType::daylight()
                 : TimezoneEntryType::standard();
 
-            $offsetFrom = $this->resolveOffset((int) $lastTransition['offset']);
+            $offsetFrom = $this->resolveOffset((int) $previousTransition['offset']);
             $offsetTo = $this->resolveOffset((int) $transition['offset']);
 
             $offsetDiff = $this->resolveOffsetDiff($offsetFrom, $offsetTo);
 
             $found[] = new TimezoneTransition(
-                $this->resolveStartDate($transition['ts'], $offsetDiff),
+                $this->resolveStartDate((string) $transition['ts'], $offsetDiff),
                 $offsetFrom,
                 $offsetTo,
                 $type
             );
 
-            $lastTransition = $transition;
+            $previousTransition = $transition;
         }
 
         return $found;
@@ -80,16 +80,10 @@ class TimezoneTransitionsResolver
 
     private function resolveOffset(int $offset): DateInterval
     {
-        $hours = floor($offset / 3600);
+        $hours = (int) floor($offset / 3600);
         $minutes = abs(($offset / 60) % 60);
 
-        $interval = new DateInterval(
-            'PT' . abs($hours) . 'H' . abs($minutes) . 'M'
-        );
-
-        $interval->invert = $hours < 0 || $minutes < 0;
-
-        return $interval;
+        return $this->resolveInterval($hours, $minutes);
     }
 
     private function resolveOffsetDiff(DateInterval $from, DateInterval $to): DateInterval
@@ -97,11 +91,18 @@ class TimezoneTransitionsResolver
         $hours = (int) $from->format('%r%h') - (int) $to->format('%r%h');
         $minutes = (int) $from->format('%r%m') - (int) $to->format('%r%m');
 
+        return $this->resolveInterval($hours, $minutes);
+    }
+
+    private function resolveInterval(int $hours, int $minutes): DateInterval
+    {
         $interval = new DateInterval(
             'PT' . abs($hours) . 'H' . abs($minutes) . 'M'
         );
 
-        $interval->invert = $hours < 0 || $minutes < 0;
+        if ($hours < 0 || $minutes < 0) {
+            $interval->invert = 1;
+        }
 
         return $interval;
     }

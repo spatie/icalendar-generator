@@ -4,12 +4,17 @@ namespace Spatie\IcalendarGenerator\Components;
 
 use Closure;
 use DateInterval;
+use DateTimeZone;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Properties\DurationProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Timezones\HasTimezones;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver;
 
-class Calendar extends Component
+class Calendar extends Component implements HasTimezones
 {
     /** @var \Spatie\IcalendarGenerator\Components\Event[] */
     private array $events = [];
@@ -19,6 +24,8 @@ class Calendar extends Component
     private ?string $description = null;
 
     private bool $withoutTimezone = false;
+
+    private bool $withoutAutoTimezoneComponents = false;
 
     private ?DateInterval $refreshInterval = null;
 
@@ -103,6 +110,13 @@ class Calendar extends Component
         return $this;
     }
 
+    public function withoutAutoTimezoneComponents(): self
+    {
+        $this->withoutAutoTimezoneComponents = true;
+
+        return $this;
+    }
+
     public function refreshInterval(int $minutes): Calendar
     {
         $this->refreshInterval = new DateInterval("PT{$minutes}M");
@@ -115,6 +129,15 @@ class Calendar extends Component
         return $this->toString();
     }
 
+    public function getTimezoneRangeCollection(): TimezoneRangeCollection
+    {
+        return TimezoneRangeCollection::create()
+            ->add(...array_map(
+                fn(Event $event) => $event->getTimezoneRangeCollection(),
+                $this->resolveEvents()
+            ));
+    }
+
     protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
@@ -122,20 +145,21 @@ class Calendar extends Component
             ->property(TextProperty::create('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator'))
             ->optional(
                 $this->name,
-                fn () => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
+                fn() => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
             )
             ->optional(
                 $this->description,
-                fn () => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
+                fn() => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
             )
             ->optional(
                 $this->refreshInterval,
-                fn () => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
+                fn() => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
             )
             ->optional(
                 $this->refreshInterval,
-                fn () => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
+                fn() => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
             )
+            ->subComponent(...$this->resolveTimezones())
             ->subComponent(...$this->resolveEvents());
     }
 
@@ -146,8 +170,34 @@ class Calendar extends Component
         }
 
         return array_map(
-            fn (Event $event) => $event->withoutTimezone(),
+            fn(Event $event) => $event->withoutTimezone(),
             $this->events
         );
+    }
+
+    private function resolveTimezones(): array
+    {
+        if ($this->withoutAutoTimezoneComponents) {
+            return [];
+        }
+
+        $timezones = [];
+
+        foreach ($this->getTimezoneRangeCollection()->get() as $timezoneIdentifier => ['min' => $min, 'max' => $max]) {
+            $transitionsResolver = new TimezoneTransitionsResolver(
+                new DateTimeZone($timezoneIdentifier),
+                $min,
+                $max
+            );
+
+            $entries = array_map(
+                fn(TimezoneTransition $transition) => TimezoneEntry::createFromTransition($transition),
+                $transitionsResolver->getTransitions()
+            );
+
+            $timezones[] = Timezone::create($timezoneIdentifier)->entry($entries);
+        }
+
+        return $timezones;
     }
 }

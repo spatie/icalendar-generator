@@ -19,7 +19,9 @@ final class UriProperty extends Property
 
     public function getValue(): string
     {
-        return filter_var($this->uri, FILTER_VALIDATE_URL);
+        $uri = filter_var($this->uri, FILTER_VALIDATE_URL);
+
+        return $uri === false ? '' : $uri;
     }
 
     public function getOriginalValue(): string

@@ -425,7 +425,7 @@ Most of the calendar clients know these identifiers and can find the correct tim
 
 This is a quite complicated feature, that's why when you add a datetime with a timezone to the package we'll generate these blocks for you automatically and you shouldn't think about these issues with timezones again!
 
-If you still want to create your own timezones then you're in the right place, although I advise you to read the [section](https://tools.ietf.org/html/rfc5545#section-3.6.5) on timzones from the RFC first. 
+If you still want to create your own timezones then you're in the right place, although we advise you to read the [section](https://tools.ietf.org/html/rfc5545#section-3.6.5) on timezones from the RFC first. 
 
 You can create a timezone as such:
 
@@ -447,7 +447,7 @@ $timezone = Timezone::create('Europe/Brussels')
     ->url('https://spatie.be');
 ```
 
-A timezone has multiple entries in time where the time of the timezone changed relative to UTC, such entry can be constructed for standard or daylight time:
+A timezone consists of multiple entries where the time of the timezone changed relative to UTC, such entry can be constructed for standard or daylight time:
 
 ```php
 $entry = TimezoneEntry::create(
@@ -455,10 +455,10 @@ $entry = TimezoneEntry::create(
     new DateTime('16 may 2020 12:00:00'),
     '+00:00',
     '+02:00'
-)
+);
 ```
 
-Firstly you provide the type of entry (`standard` or `daylight`), next the point  where the time changes. And then an offset relative to UTC from before the change and an offset relative to UTC during the change.
+Firstly you provide the type of entry (`standard` or `daylight`). Then a `DateTime` when the time changes. Lastly an offset relative to UTC from before the change and an offset relative to UTC after the change.
 
 It is also possible to give this entry a name and description: 
 
@@ -496,7 +496,7 @@ $calendar = Calendar::create('Calendar with timezones')
 	->timezone($timezone);
 ```
 
-And also here it is possible to add multiple timezones:
+It is also possible to add multiple timezones:
 
 ```php
 $calendar = Calendar::create('Calendar with timezones')

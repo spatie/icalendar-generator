@@ -11,8 +11,10 @@ use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Timezones\HasTimezones;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
-class RRule
+class RRule implements HasTimezones
 {
     public RecurrenceFrequency $frequency;
 
@@ -81,7 +83,7 @@ class RRule
     public function exclude($exclude, bool $withTime = false): self
     {
         $exclude = array_map(
-            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            fn(DateTime $date) => DateTimeValue::create($date, $withTime),
             is_array($exclude) ? $exclude : [$exclude]
         );
 
@@ -104,6 +106,7 @@ class RRule
         return $this;
     }
 
+    // TODO: Shouldn't we just use the default timezones from dates
     public function timezone(DateTimeZone $timeZone): self
     {
         $this->timezone = $timeZone;
@@ -192,14 +195,14 @@ class RRule
 
         if (count($this->weekdays) > 0) {
             $properties['BYDAY'] = implode(',', array_map(
-                fn (array $day) => "{$day['index']}{$day['day']->value}",
+                fn(array $day) => "{$day['index']}{$day['day']->value}",
                 $this->weekdays
             ));
         }
 
         if (count($this->months) > 0) {
             $properties['BYMONTH'] = implode(',', array_map(
-                fn (RecurrenceMonth $month) => $month->value,
+                fn(RecurrenceMonth $month) => $month->value,
                 $this->months
             ));
         }
@@ -225,14 +228,21 @@ class RRule
             $properties[] = TextProperty::create(
                 'EXDATE',
                 join(',', array_map(
-                    fn (DateTimeValue $dateTime) => $dateTime->format(),
+                    fn(DateTimeValue $dateTime) => $dateTime->format(),
                     $this->excluded
-                )),
-                true
-            );
+                ))
+            )->withoutEscaping();
         }
 
         return $properties;
+    }
+
+    public function getTimezoneRangeCollection(): TimezoneRangeCollection
+    {
+        return TimezoneRangeCollection::create()
+            ->add($this->until)
+            ->add($this->starting)
+            ->add(...$this->excluded);
     }
 
     private function addAsCollection(array &$collection, $values, Closure $check)

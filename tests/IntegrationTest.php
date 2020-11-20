@@ -18,6 +18,7 @@ class IntegrationTest extends TestCase
     {
         $calendar = Calendar::create('Laracon online')
             ->refreshInterval(5)
+            ->withoutAutoTimezoneComponents()
             ->event(
                 Event::create()
                     ->startsAt(new DateTime('6 March 2019 15:00:00'))

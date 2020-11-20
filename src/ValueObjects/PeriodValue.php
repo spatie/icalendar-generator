@@ -4,8 +4,10 @@ namespace Spatie\IcalendarGenerator\ValueObjects;
 
 use DateTimeInterface;
 use Exception;
+use Spatie\IcalendarGenerator\Timezones\HasTimezones;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
-class PeriodValue
+class PeriodValue implements HasTimezones
 {
     private DateTimeInterface $staring;
 
@@ -49,5 +51,12 @@ class PeriodValue
         }
 
         return DateTimeValue::create($this->staring, true)->format() . '/' . DateTimeValue::create($this->ending, true)->format();
+    }
+
+    public function getTimezoneRangeCollection(): TimezoneRangeCollection
+    {
+        return TimezoneRangeCollection::create()
+            ->add($this->staring)
+            ->add($this->ending);
     }
 }
