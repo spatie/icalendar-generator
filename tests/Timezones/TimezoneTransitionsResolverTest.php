@@ -7,7 +7,6 @@ use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
-use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
 use Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver;
 
 class TimezoneTransitionsResolverTest extends TestCase

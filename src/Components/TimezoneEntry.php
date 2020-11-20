@@ -8,9 +8,9 @@ use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
-use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
 
 class TimezoneEntry extends Component
 {

@@ -107,7 +107,11 @@ class TimezoneRangeCollectionTest extends TestCase
         $hasTimezones = DateTimeValue::create(new DateTime('10 september 2020'));
 
         $ranges = TimezoneRangeCollection::create()->add(
-            $date, $null, $array, $otherRange, $hasTimezones
+            $date,
+            $null,
+            $array,
+            $otherRange,
+            $hasTimezones
         );
 
         $this->assertEquals([

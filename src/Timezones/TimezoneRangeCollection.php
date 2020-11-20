@@ -2,10 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\Timezones;
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use DateTime;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 

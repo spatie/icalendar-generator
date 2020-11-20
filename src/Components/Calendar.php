@@ -133,7 +133,7 @@ class Calendar extends Component implements HasTimezones
     {
         return TimezoneRangeCollection::create()
             ->add(...array_map(
-                fn(Event $event) => $event->getTimezoneRangeCollection(),
+                fn (Event $event) => $event->getTimezoneRangeCollection(),
                 $this->resolveEvents()
             ));
     }
@@ -145,19 +145,19 @@ class Calendar extends Component implements HasTimezones
             ->property(TextProperty::create('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator'))
             ->optional(
                 $this->name,
-                fn() => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
+                fn () => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
             )
             ->optional(
                 $this->description,
-                fn() => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
+                fn () => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
             )
             ->optional(
                 $this->refreshInterval,
-                fn() => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
+                fn () => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
             )
             ->optional(
                 $this->refreshInterval,
-                fn() => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
+                fn () => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
             )
             ->subComponent(...$this->resolveTimezones())
             ->subComponent(...$this->resolveEvents());
@@ -170,7 +170,7 @@ class Calendar extends Component implements HasTimezones
         }
 
         return array_map(
-            fn(Event $event) => $event->withoutTimezone(),
+            fn (Event $event) => $event->withoutTimezone(),
             $this->events
         );
     }
@@ -191,7 +191,7 @@ class Calendar extends Component implements HasTimezones
             );
 
             $entries = array_map(
-                fn(TimezoneTransition $transition) => TimezoneEntry::createFromTransition($transition),
+                fn (TimezoneTransition $transition) => TimezoneEntry::createFromTransition($transition),
                 $transitionsResolver->getTransitions()
             );
 

@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
-use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
 
 class TimezoneTransitionsResolver
 {
