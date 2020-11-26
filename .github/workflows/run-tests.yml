@@ -12,7 +12,6 @@ jobs:
                 php: [7.4, 8.0]
                 dependency-version: [prefer-lowest, prefer-stable]
 
-
         name: PHP ${{ matrix.php }} - ${{ matrix.dependency-version }}
 
         steps:
