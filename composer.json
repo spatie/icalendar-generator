@@ -18,8 +18,9 @@
             "role" : "Developer"
         }
     ],
-    "require" : {
-        "php": "^7.4",
+
+    "require": {
+        "php": "^7.4|^8.0",
         "ext-mbstring": "*",
         "nesbot/carbon": "^2.41",
         "spatie/enum": "^3.0"
