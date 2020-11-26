@@ -1,6 +1,6 @@
 name: Test
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
     test:
@@ -29,9 +29,11 @@ jobs:
                 run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
             -   name: Setup PHP
-                uses: nanasess/setup-php@master
+                uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
+                    extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, redis
+                    coverage: none
 
             -   name: Execute tests
                 run: vendor/bin/phpunit
