@@ -3,6 +3,7 @@
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
+use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
@@ -10,8 +11,11 @@ use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class EventTest extends TestCase
@@ -309,5 +313,133 @@ class EventTest extends TestCase
             ->resolvePayload();
 
         $this->assertPropertyNotInPayload('URL', $payload);
+    }
+
+    /** @test */
+    public function it_will_always_use_utc_for_a_created_date_stamp()
+    {
+        $created = new DateTime('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
+
+        $payload = Event::create()
+            ->createdAt($created)
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload(
+            'DTSTAMP',
+            new DateTime('16 may 2020 10:00:00', new DateTimeZone('UTC')),
+            $payload
+        );
+    }
+
+    /** @test */
+    public function it_can_add_recurrence_dates()
+    {
+        $this->assertBuildPropertyEqualsInPayload(
+            'RDATE',
+            'RDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
+            Event::create()->recurrenceDates(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
+        );
+
+        $this->assertBuildPropertyEqualsInPayload(
+            'RDATE',
+            'RDATE;VALUE=DATE:20200516',
+            Event::create()->recurrenceDates(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
+        );
+    }
+
+    /** @test */
+    public function it_can_add_multiple_recurrence_dates()
+    {
+        $dateA = new DateTime('16 may 2019 12:00:00');
+        $dateB = new DateTime('16 may 2020 15:00:00');
+
+        $dateC = new DateTime('13 august 2019 12:00:00');
+        $dateD = new DateTime('13 august 2020 15:00:00');
+
+        $properties = Event::create()
+            ->recurrenceDates([$dateA, $dateB])
+            ->recurrenceDates([$dateC, $dateD], false)
+            ->resolvePayload()
+            ->getProperties();
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateA, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateB, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateC, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateD, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
+    }
+
+    /** @test */
+    public function it_can_add_excluded_recurrence_dates()
+    {
+        $this->assertBuildPropertyEqualsInPayload(
+            'EXDATE',
+            'EXDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
+            Event::create()->excludeRecurrenceDates(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
+        );
+
+        $this->assertBuildPropertyEqualsInPayload(
+            'EXDATE',
+            'EXDATE;VALUE=DATE:20200516',
+            Event::create()->excludeRecurrenceDates(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
+        );
+    }
+
+    /** @test */
+    public function it_can_add_multiple_excluded_recurrence_dates()
+    {
+        $dateA = new DateTime('16 may 2019 12:00:00');
+        $dateB = new DateTime('16 may 2020 15:00:00');
+
+        $dateC = new DateTime('13 august 2019 12:00:00');
+        $dateD = new DateTime('13 august 2020 15:00:00');
+
+        $properties = Event::create()
+            ->excludeRecurrenceDates([$dateA, $dateB])
+            ->excludeRecurrenceDates([$dateC, $dateD], false)
+            ->resolvePayload()
+            ->getProperties();
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateA, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateB, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateC, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateD, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
     }
 }

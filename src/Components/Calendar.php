@@ -107,7 +107,7 @@ class Calendar extends Component implements HasTimezones
     }
 
     /**
-     * @param $timezone \Spatie\IcalendarGenerator\Components\Event|array
+     * @param $timezone \Spatie\IcalendarGenerator\Components\Timezone|array
      *
      * @return \Spatie\IcalendarGenerator\Components\Calendar
      */
@@ -200,7 +200,7 @@ class Calendar extends Component implements HasTimezones
     private function resolveTimezones(): array
     {
         if ($this->withoutAutoTimezoneComponents) {
-            return [];
+            return $this->timezones;
         }
 
         $timezones = [];

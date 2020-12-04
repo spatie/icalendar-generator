@@ -3,6 +3,7 @@
 namespace Spatie\IcalendarGenerator\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Properties\Property;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -34,5 +35,12 @@ abstract class TestCase extends BaseTestCase
     protected function assertParameterCountInProperty(int $count, Property $propertyType): void
     {
         $this->assertCount($count, $propertyType->getParameters());
+    }
+
+    protected function assertBuildPropertyEqualsInPayload(string $name, string $value, ComponentPayload $componentPayload)
+    {
+        $buildValue = (new PropertyBuilder($componentPayload->getProperty($name)))->build()[0];
+
+        $this->assertEquals($value, $buildValue);
     }
 }

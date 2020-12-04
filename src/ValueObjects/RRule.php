@@ -26,8 +26,6 @@ class RRule implements HasTimezones
 
     public ?DateTimeInterface $starting = null;
 
-    public ?DateTimeZone $timezone = null;
-
     private ?RecurrenceDay $weekStartsOn = null;
 
     /** @var array[] */
@@ -38,9 +36,6 @@ class RRule implements HasTimezones
 
     /** @var int[] */
     public array $monthDays = [];
-
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
-    public array $excluded = [];
 
     public static function frequency(RecurrenceFrequency $frequency): self
     {
@@ -74,24 +69,6 @@ class RRule implements HasTimezones
         return $this;
     }
 
-    /**
-     * @param DateTimeInterface[]|DateTimeInterface $exclude
-     * @param bool $withTime
-     *
-     * @return \Spatie\IcalendarGenerator\ValueObjects\RRule
-     */
-    public function exclude($exclude, bool $withTime = false): self
-    {
-        $exclude = array_map(
-            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
-            is_array($exclude) ? $exclude : [$exclude]
-        );
-
-        $this->excluded = array_merge($this->excluded, $exclude);
-
-        return $this;
-    }
-
     public function starting(DateTimeInterface $starting): self
     {
         $this->starting = $starting;
@@ -102,14 +79,6 @@ class RRule implements HasTimezones
     public function until(DateTimeInterface $until): self
     {
         $this->until = $until;
-
-        return $this;
-    }
-
-    // TODO: Shouldn't we just use the default timezones from dates
-    public function timezone(DateTimeZone $timeZone): self
-    {
-        $this->timezone = $timeZone;
 
         return $this;
     }
@@ -136,7 +105,7 @@ class RRule implements HasTimezones
     }
 
     /**
-     * @param \Spatie\IcalendarGenerator\Enums\RecurrenceMonth[]|\Spatie\IcalendarGenerator\Enums\RecurrenceMonth $months
+     * @param \Spatie\IcalendarGenerator\Enums\RecurrenceMonth[]|\Spatie\IcalendarGenerator\Enums\RecurrenceMonth|int|int[] $months
      */
     public function onMonth($months): self
     {
@@ -214,35 +183,11 @@ class RRule implements HasTimezones
         return $properties;
     }
 
-    public function getProperties(): array
-    {
-        $properties = [];
-
-        // TODO: Test this, add support for excluding dates only without time
-        // TODO: Check how to handle timezones within RRule's
-        // TODO: write docs for this
-        // TODO: implement RDATE, also on timezones
-        // TODO: DTSTAMP must be UTC https://www.kanzaki.com/docs/ical/dtstamp.html
-
-        if ($this->excluded) {
-            $properties[] = TextProperty::create(
-                'EXDATE',
-                join(',', array_map(
-                    fn (DateTimeValue $dateTime) => $dateTime->format(),
-                    $this->excluded
-                ))
-            )->withoutEscaping();
-        }
-
-        return $properties;
-    }
-
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
         return TimezoneRangeCollection::create()
             ->add($this->until)
-            ->add($this->starting)
-            ->add(...$this->excluded);
+            ->add($this->starting);
     }
 
     private function addAsCollection(array &$collection, $values, Closure $check)

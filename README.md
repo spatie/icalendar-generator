@@ -307,12 +307,11 @@ Calendar::create()
     ...
 ```
 
-We won't go into details here since, it's a more niche feature.
+We won't go into details here since it's a more niche feature but reading through the `Timezone` and `TimezoneEntry` component files should get you up and running.
 
 #### Alerts
 
 Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event. An alert always belongs to an event and has a description and the number of minutes before the event it will be triggered:
-
 
 ``` php
 Event::create('Laracon Online')
@@ -340,7 +339,7 @@ Removing timezones on an calendar or event, will also remove timezones on the al
 
 ### Recurrence rules
 
-Recurrence rules or RRule's in short make it possible to add an repeating event in your calendar by describing when it repeats wirthin an RRule. First we have to create a RRule:
+Recurrence rules or RRule's in short make it possible to add a repeating event in your calendar by describing when it repeats within an RRule. First we have to create a RRule:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::daily())

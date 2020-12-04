@@ -39,7 +39,7 @@ class TimezoneTransitionsResolver
         );
 
         if (count($transitions) === 1) {
-            // Add a fake transition for UTC for example
+            // Add a fake transition for UTC for example which does not have transitions
             $transitions[] = [
                 'isdst' => $transitions[0]["isdst"],
                 'offset' => $transitions[0]["offset"],

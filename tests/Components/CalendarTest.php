@@ -10,6 +10,8 @@ use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Components\Timezone;
+use Spatie\IcalendarGenerator\Components\TimezoneEntry;
+use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class CalendarTest extends TestCase
@@ -243,8 +245,26 @@ EOT, $alternativeTimezoneComponent->toString());
     }
 
     /** @test */
-    public function it_can_add_timezones()
+    public function it_can_add_timezone_components_manually()
     {
-        $payload = Calendar::create()->resolvePayload();
+        $timezoneA = Timezone::create('fake/timezone');
+
+        $timezoneB = Timezone::create('fake/timezone');
+
+        $timezoneC = Timezone::create('fake/timezone');
+
+        $payload = Calendar::create()
+            ->withoutAutoTimezoneComponents()
+            ->timezone($timezoneA)
+            ->timezone([$timezoneB, $timezoneC])
+            ->timezone(null)
+            ->resolvePayload();
+
+        $subcomponents = $payload->getSubComponents();
+
+        $this->assertCount(3, $subcomponents);
+        $this->assertContains($timezoneA, $subcomponents);
+        $this->assertContains($timezoneB, $subcomponents);
+        $this->assertContains($timezoneC, $subcomponents);
     }
 }
