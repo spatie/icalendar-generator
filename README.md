@@ -8,6 +8,7 @@
 
 Want to create online calendars so that you can display them on an iPhone's calendar app or in Google Calendar?
 This can be done by generating calendars in the iCalendar format (RFC 5545), a textual format that can be loaded by different applications.
+
 The format of such calendars is defined in [RFC 5545](https://tools.ietf.org/html/rfc5545), which is not a pleasant reading experience.
 This package implements [RFC 5545](https://tools.ietf.org/html/rfc5545) and some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986) to provide you an easy to use API for creating calendars.
 It's not our intention to implement these RFC's entirely but to provide a straightforward API that's easy to use.
@@ -72,7 +73,7 @@ Here's how you can create a calendar:
 $calendar = Calendar::create();
 ```
 
-You can give a calendar a name:
+You can give a name to the calendar:
 
 ``` php
 $calendar = Calendar::create('Laracon Online');
@@ -163,11 +164,13 @@ Event::create()
     ...
 ```
 
-There are three participation statuses:
+There are five participation statuses:
 
 - `ParticipationStatus::accepted()`
 - `ParticipationStatus::declined()`
 - `ParticipationStatus::tentative()`
+- `ParticipationStatus::needs_action()`
+- `ParticipationStatus::delegated()`
 
 An event can be made transparent, so it does not overlap visually with other events in a calendar:
 
@@ -307,7 +310,7 @@ Calendar::create()
     ...
 ```
 
-We won't go into details here since it's a more niche feature, but reading through the `Timezone` and `TimezoneEntry` component files should get you up and running.
+More on these timezones later.
 
 #### Alerts
 
@@ -337,7 +340,7 @@ Event::create('Laracon Online')
 
 Removing timezones on a calendar or event will also remove timezones on the alert.
 
-### Recurrent events
+### Repeating events
 
 It is possible for events to repeat, for example your monthly company dinner. This can be done as such:
 
@@ -352,8 +355,6 @@ And you can also repeat the event on a set of dates:
 Event::create('Laracon Online')
     ->repeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
 ```
-
-It is also possible to repeat events without specifying all the dates with recurrence rules.
 
 #### Recurrence rules
 
@@ -408,7 +409,7 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
 );
 ```
 
-Or on a specific weekday in the month:
+Or on a specific weekday of a week in the month:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
@@ -478,13 +479,32 @@ Event::create('Laracon Online')
     ->doNotRepeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
 ```
 
-### Timezones
 
-When using DateTime's with timezones, the package will output a timezone identifier so the calendar client can calculate the correct time for an event. Such identifier will look like this `Europe\Brussels` for a Belgian timezone or `UTC` for the UTC timezone.
+### Use with Laravel
 
-Most calendar clients know these identifiers and can find the correct timezones, but some don't. That's why you can explicitly define the timezones within your calendar.
+You can use Laravel Responses to stream to calendar applications:
 
-Defining these timezone components is quite complicated. That's why when you add a DateTime with a timezone to the package, we'll generate these blocks for you automatically, and you shouldn't think about these issues with timezones again!
+``` php
+$calendar = Calendar::create('Laracon Online');
+
+return response($calendar->get())
+    ->header('Content-Type', 'text/calendar')
+    ->header('charset', 'utf-8');
+```
+
+If you want to add the possibility for users to download a calendar and import it into a calendar application:
+
+``` php
+$calendar = Calendar::create('Laracon Online');
+
+return response($calendar->get(), 200, [
+   'Content-Type' => 'text/calendar',
+   'Content-Disposition' => 'attachment; filename="my-awesome-calendar.ics"',
+   'charset' => 'utf-8',
+]);
+```
+
+### Crafting Timezones
 
 If you want to craft timezone components yourself, you're in the right place, although we advise you to read the [section](https://tools.ietf.org/html/rfc5545#section-3.6.5) on timezones from the RFC first.
 
@@ -565,30 +585,6 @@ $calendar = Calendar::create('Calendar with timezones')
 ```
 
 
-### Use with Laravel
-
-You can use Laravel Responses to stream to calendar applications:
-
-``` php
-$calendar = Calendar::create('Laracon Online');
-
-return response($calendar->get())
-    ->header('Content-Type', 'text/calendar')
-    ->header('charset', 'utf-8');
-```
-
-If you want to add the possibility for users to download a calendar and import it into a calendar application:
-
-``` php
-$calendar = Calendar::create('Laracon Online');
-
-return response($calendar->get(), 200, [
-   'Content-Type' => 'text/calendar',
-   'Content-Disposition' => 'attachment; filename="my-awesome-calendar.ics"',
-   'charset' => 'utf-8',
-]);
-```
-
 ### Extending the package
 
 We try to keep this package as straightforward as possible. That's why a lot of properties and subcomponents from the RFC are not included in this package. We've made it possible to add other properties or subcomponents to each component if you might need something not included in the package. But be careful! From this moment, you're on your own correctly implementing the RFC's.
@@ -605,7 +601,7 @@ Calendar::create()
     ...
 ```
 
-Here we've added a `TextProperty `, and this is a default key-value property type with a text as value. You can also use the `DateTimeProperty`, the `DurationProperty` or create your own by extending the `Property` class.
+Here we've added a `TextProperty `, and this is a default key-value property type with a text as value. You can also use one of the default properties included in the package or create your own by extending the `Property` class.
 
 Sometimes a property can have some additional parameters, these are key-value entries and can be added to properties as such:
 
