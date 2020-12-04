@@ -337,12 +337,30 @@ Event::create('Laracon Online')
 
 Removing timezones on an calendar or event, will also remove timezones on the alert.
 
-### Recurrence rules
+### Recurrent events
+
+It is possible for events to repeat, for example your monthly company dinner. This can be done as such:
+
+```php
+Event::create('Laracon Online')
+    ->repeatOn(new DateTime('05/16/2020 12:00:00'));
+```
+
+And you can also repeat the event on a set of dates:
+
+```php
+Event::create('Laracon Online')
+    ->repeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
+```
+
+It is also possible to repeat events without specifying all the dates with recurrence rules.
+
+#### Recurrence rules
 
 Recurrence rules or RRule's in short make it possible to add a repeating event in your calendar by describing when it repeats within an RRule. First we have to create a RRule:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily())
+$rrule = RRule::frequeny(RecurrenceFrequency::daily());
 ```
 
 This rule describes an event that will be repeated daily, you can also set the frequency to `secondly`, `minutely`, `hourly`, `weekly`, `monthly` or `yearly`.
@@ -368,27 +386,19 @@ And stop at a certain point:
 $rrule = RRule::frequeny(RecurrenceFrequency::daily())->until(new DateTime('now'));
 ```
 
-It can only be repeated for a few times:
+It can only be repeated for a few times, 10 times for example:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::daily())->times(10);
 ```
 
-This event will repeat itself 10 times, it is also possible to exclude dates:
-
-```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily())->exclude(
-	new DateTime('05/16/2020')
-);
-```
-
-The interval of the repetition can be changed, for example:
+The interval of the repetition can be changed:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::daily())->interval(2);
 ```
 
-When this event starts on monday for example, the next repition of this event will not take place on thuesday but on wednesday. You can do the same for all the frequencies.
+When this event starts on monday for example, the next repetition of this event will not take place on tuesday but on wednesday. You can do the same for all the frequencies.
 
 It is also possible to repeat the event on a specific weekday:
 
@@ -398,8 +408,15 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
 );
 ```
 
-Or on the last weekday of a month:
+Or on a specific weekday in the month:
 
+```php
+$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
+	RecurrenceDay::friday(), 3
+);
+```
+
+Or on the last weekday of a month:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
@@ -415,14 +432,13 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(16);
 
 It is even possible to give an array of days in the month:
 
-
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(
 	[5, 10, 15, 20]
 );
 ```
 
-Repeating can be done for certain months (for example only in the second quarter)
+Repeating can be done for certain months (for example only in the second quarter):
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
@@ -438,12 +454,28 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
 );
 ```
 
-It is possible to set the day where the week starts on:
+It is possible to set the day when the week starts:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->weekStartsOn(
 	ReccurenceDay::monday()
 );
+```
+
+You can provide a specific date on which an event won't be repeated:
+
+```php
+Event::create('Laracon Online')
+    ->rrule(RRule::frequeny(RecurrenceFrequency::daily()))
+    ->doNotRepeatOn(new DateTime('05/16/2020 12:00:00'));
+```
+
+It is also possible to give an array of dates on which the event won't be repeated:
+
+```php
+Event::create('Laracon Online')
+    ->rrule(RRule::frequeny(RecurrenceFrequency::daily()))
+    ->doNotRepeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
 ```
 
 ### Timezones

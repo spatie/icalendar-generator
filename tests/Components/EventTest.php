@@ -337,13 +337,13 @@ class EventTest extends TestCase
         $this->assertBuildPropertyEqualsInPayload(
             'RDATE',
             'RDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
-            Event::create()->recurrenceDates(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
+            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
         );
 
         $this->assertBuildPropertyEqualsInPayload(
             'RDATE',
             'RDATE;VALUE=DATE:20200516',
-            Event::create()->recurrenceDates(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
+            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
         );
     }
 
@@ -357,8 +357,8 @@ class EventTest extends TestCase
         $dateD = new DateTime('13 august 2020 15:00:00');
 
         $properties = Event::create()
-            ->recurrenceDates([$dateA, $dateB])
-            ->recurrenceDates([$dateC, $dateD], false)
+            ->repeatOn([$dateA, $dateB])
+            ->repeatOn([$dateC, $dateD], false)
             ->resolvePayload()
             ->getProperties();
 
@@ -393,13 +393,13 @@ class EventTest extends TestCase
         $this->assertBuildPropertyEqualsInPayload(
             'EXDATE',
             'EXDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
-            Event::create()->excludeRecurrenceDates(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
+            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
         );
 
         $this->assertBuildPropertyEqualsInPayload(
             'EXDATE',
             'EXDATE;VALUE=DATE:20200516',
-            Event::create()->excludeRecurrenceDates(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
+            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
         );
     }
 
@@ -413,8 +413,8 @@ class EventTest extends TestCase
         $dateD = new DateTime('13 august 2020 15:00:00');
 
         $properties = Event::create()
-            ->excludeRecurrenceDates([$dateA, $dateB])
-            ->excludeRecurrenceDates([$dateC, $dateD], false)
+            ->doNotRepeatOn([$dateA, $dateB])
+            ->doNotRepeatOn([$dateC, $dateD], false)
             ->resolvePayload()
             ->getProperties();
 

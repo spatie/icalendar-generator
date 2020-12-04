@@ -272,7 +272,7 @@ class Event extends Component implements HasTimezones
      *
      * @return \Spatie\IcalendarGenerator\Components\Event
      */
-    public function excludeRecurrenceDates($dates, bool $withTime = true): self
+    public function doNotRepeatOn($dates, bool $withTime = true): self
     {
         $dates = array_map(
             fn (DateTime $date) => DateTimeValue::create($date, $withTime),
@@ -290,7 +290,7 @@ class Event extends Component implements HasTimezones
      *
      * @return \Spatie\IcalendarGenerator\Components\Event
      */
-    public function recurrenceDates($dates, bool $withTime = true): self
+    public function repeatOn($dates, bool $withTime = true): self
     {
         $dates = array_map(
             fn (DateTime $date) => DateTimeValue::create($date, $withTime),
