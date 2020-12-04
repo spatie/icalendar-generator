@@ -2,7 +2,7 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
-## 2.0.0
+## 2.0.0 - 2020-11-26
 
 - add support for timezones with automatically generated components
 - add `Timezone` and `TimezoneEntry` components
