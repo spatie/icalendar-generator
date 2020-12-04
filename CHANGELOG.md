@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.0.0 - 2020-11-26
+
+- add support for timezones with automatically generated components
+- add `Timezone` and `TimezoneEntry` components
+- add support for basic RRULE's
+- add support for repeating events on specific dates
+- add support for not repeating events on specific dates
+- add valueObjects for most used types
+- remove `final` classes
+- remove support for < PHP 7.4
+- add Psalm typechecking
+
 ## 1.0.6 - 2020-11-26
 
 - add support for PHP 8.0

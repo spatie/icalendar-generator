@@ -3,14 +3,20 @@
 namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
+use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
-use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
+use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
+use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class EventTest extends TestCase
 {
@@ -21,7 +27,7 @@ class EventTest extends TestCase
 
         $properties = $payload->getProperties();
 
-        $this->assertEquals('EVENT', $payload->getType());
+        $this->assertEquals('VEVENT', $payload->getType());
         $this->assertCount(2, $properties);
 
         $this->assertPropertyExistInPayload('UID', $payload);
@@ -172,7 +178,7 @@ class EventTest extends TestCase
             ->classification(Classification::private())
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('CLASS', Classification::private()->getValue(), $payload);
+        $this->assertPropertyEqualsInPayload('CLASS', Classification::private()->value, $payload);
     }
 
     /** @test */
@@ -209,17 +215,17 @@ class EventTest extends TestCase
             ->resolvePayload()
             ->getProperties();
 
-        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+        $this->assertContainsEquals(CalendarAddressProperty::create(
             'ATTENDEE',
             new CalendarAddress('ruben@spatie.be')
         ), $payload);
 
-        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+        $this->assertContainsEquals(CalendarAddressProperty::create(
             'ATTENDEE',
             new CalendarAddress('brent@spatie.be', 'Brent')
         ), $payload);
 
-        $this->assertContainsEquals(CalendarAddressPropertyType::create(
+        $this->assertContainsEquals(CalendarAddressProperty::create(
             'ATTENDEE',
             new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
         ), $payload);
@@ -234,7 +240,7 @@ class EventTest extends TestCase
 
         $this->assertPropertyEqualsInPayload(
             'STATUS',
-            EventStatus::tentative()->getValue(),
+            EventStatus::tentative()->value,
             $payload
         );
     }
@@ -255,6 +261,41 @@ class EventTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_an_recurrence_rule()
+    {
+        $payload = Event::create('An introduction into event sourcing')
+            ->rrule($rrule = RRule::frequency(RecurrenceFrequency::daily()))
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload('RRULE', $rrule, $payload);
+    }
+
+    /** @test */
+    public function it_can_create_an_event_without_timezones()
+    {
+        $dateAlert = new DateTime('17 may 2019 11:00:00');
+        $dateStarts = new DateTime('17 may 2019 12:00:00');
+        $dateEnds = new DateTime('18 may 2019 13:00:00');
+
+        $payload = Event::create('An introduction into event sourcing')
+            ->withoutTimezone()
+            ->alertAt($dateAlert)
+            ->startsAt($dateStarts)
+            ->endsAt($dateEnds)
+            ->resolvePayload();
+
+        $this->assertParameterCountInProperty(0, $payload->getProperty('DTSTART'));
+        $this->assertParameterCountInProperty(0, $payload->getProperty('DTEND'));
+        $this->assertParameterCountInProperty(0, $payload->getProperty('DTSTAMP'));
+
+        /** @var \Spatie\IcalendarGenerator\ComponentPayload $alert */
+        $alert = $payload->getSubComponents()[0]->resolvePayload();
+
+        $this->assertParameterCountInProperty(1, $alert->getProperty('TRIGGER'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $alert->getProperty('TRIGGER'));
+    }
+
+    /** @test */
     public function it_can_set_a_url()
     {
         $payload = Event::create()
@@ -272,5 +313,133 @@ class EventTest extends TestCase
             ->resolvePayload();
 
         $this->assertPropertyNotInPayload('URL', $payload);
+    }
+
+    /** @test */
+    public function it_will_always_use_utc_for_a_created_date_stamp()
+    {
+        $created = new DateTime('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
+
+        $payload = Event::create()
+            ->createdAt($created)
+            ->resolvePayload();
+
+        $this->assertPropertyEqualsInPayload(
+            'DTSTAMP',
+            new DateTime('16 may 2020 10:00:00', new DateTimeZone('UTC')),
+            $payload
+        );
+    }
+
+    /** @test */
+    public function it_can_add_recurrence_dates()
+    {
+        $this->assertBuildPropertyEqualsInPayload(
+            'RDATE',
+            'RDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
+            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
+        );
+
+        $this->assertBuildPropertyEqualsInPayload(
+            'RDATE',
+            'RDATE;VALUE=DATE:20200516',
+            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
+        );
+    }
+
+    /** @test */
+    public function it_can_add_multiple_recurrence_dates()
+    {
+        $dateA = new DateTime('16 may 2019 12:00:00');
+        $dateB = new DateTime('16 may 2020 15:00:00');
+
+        $dateC = new DateTime('13 august 2019 12:00:00');
+        $dateD = new DateTime('13 august 2020 15:00:00');
+
+        $properties = Event::create()
+            ->repeatOn([$dateA, $dateB])
+            ->repeatOn([$dateC, $dateD], false)
+            ->resolvePayload()
+            ->getProperties();
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateA, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateB, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateC, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateD, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
+    }
+
+    /** @test */
+    public function it_can_add_excluded_recurrence_dates()
+    {
+        $this->assertBuildPropertyEqualsInPayload(
+            'EXDATE',
+            'EXDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
+            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
+        );
+
+        $this->assertBuildPropertyEqualsInPayload(
+            'EXDATE',
+            'EXDATE;VALUE=DATE:20200516',
+            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
+        );
+    }
+
+    /** @test */
+    public function it_can_add_multiple_excluded_recurrence_dates()
+    {
+        $dateA = new DateTime('16 may 2019 12:00:00');
+        $dateB = new DateTime('16 may 2020 15:00:00');
+
+        $dateC = new DateTime('13 august 2019 12:00:00');
+        $dateD = new DateTime('13 august 2020 15:00:00');
+
+        $properties = Event::create()
+            ->doNotRepeatOn([$dateA, $dateB])
+            ->doNotRepeatOn([$dateC, $dateD], false)
+            ->resolvePayload()
+            ->getProperties();
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateA, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateB, true))
+                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateC, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
+
+        $this->assertContainsEquals(
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateD, false))
+                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            $properties
+        );
     }
 }

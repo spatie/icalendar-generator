@@ -13,11 +13,14 @@ use Spatie\Enum\Enum;
  */
 class ParticipationStatus extends Enum
 {
-    const MAP_VALUE = [
-        'needs_action' => 'NEEDS-ACTION',
-        'accepted' => 'ACCEPTED',
-        'declined' => 'DECLINED',
-        'tentative' => 'TENTATIVE',
-        'delegated' => 'DELEGATED',
-    ];
+    protected static function values(): array
+    {
+        return [
+            'needs_action' => 'NEEDS-ACTION',
+            'accepted' => 'ACCEPTED',
+            'declined' => 'DECLINED',
+            'tentative' => 'TENTATIVE',
+            'delegated' => 'DELEGATED',
+        ];
+    }
 }

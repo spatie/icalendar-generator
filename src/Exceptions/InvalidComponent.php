@@ -5,7 +5,7 @@ namespace Spatie\IcalendarGenerator\Exceptions;
 use Exception;
 use Spatie\IcalendarGenerator\Components\Component;
 
-final class InvalidComponent extends Exception
+class InvalidComponent extends Exception
 {
     public static function requiredPropertyMissing(array $properties, Component $component): InvalidComponent
     {

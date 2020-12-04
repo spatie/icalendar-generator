@@ -11,9 +11,12 @@ use Spatie\Enum\Enum;
  */
 class Classification extends Enum
 {
-    const MAP_VALUE = [
-        'public' => 'PUBLIC',
-        'private' => 'PRIVATE',
-        'confidential' => 'CONFIDENTIAL',
-    ];
+    protected static function values(): array
+    {
+        return [
+            'public' => 'PUBLIC',
+            'private' => 'PRIVATE',
+            'confidential' => 'CONFIDENTIAL',
+        ];
+    }
 }

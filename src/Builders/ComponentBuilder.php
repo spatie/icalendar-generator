@@ -4,10 +4,14 @@ namespace Spatie\IcalendarGenerator\Builders;
 
 use Spatie\IcalendarGenerator\ComponentPayload;
 
-final class ComponentBuilder
+class ComponentBuilder
 {
-    /** @var \Spatie\IcalendarGenerator\ComponentPayload */
-    private $componentPayload;
+    private ComponentPayload $componentPayload;
+
+    public static function create(ComponentPayload $componentPayload): self
+    {
+        return new self($componentPayload);
+    }
 
     public function __construct(ComponentPayload $componentPayload)
     {
@@ -27,7 +31,7 @@ final class ComponentBuilder
 
     public function buildComponent(): array
     {
-        $lines[] = "BEGIN:V{$this->componentPayload->getType()}";
+        $lines[] = "BEGIN:{$this->componentPayload->getType()}";
 
         $lines = array_merge(
             $lines,
@@ -35,7 +39,7 @@ final class ComponentBuilder
             $this->buildSubComponents()
         );
 
-        $lines[] = "END:V{$this->componentPayload->getType()}";
+        $lines[] = "END:{$this->componentPayload->getType()}";
 
         return $lines;
     }
@@ -80,7 +84,7 @@ final class ComponentBuilder
         while (strlen($line) > 0) {
             if (strlen($line) > 75) {
                 $chippedLines[] = mb_strcut($line, 0, 75, 'utf-8');
-                $line = ' '.mb_strcut($line, 75, strlen($line), 'utf-8');
+                $line = ' ' . mb_strcut($line, 75, strlen($line), 'utf-8');
             } else {
                 $chippedLines[] = $line;
 

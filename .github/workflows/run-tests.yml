@@ -9,8 +9,8 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                php: [ 7.2, 7.3, 7.4, 8.0 ]
-                dependency-version: [ prefer-lowest, prefer-stable ]
+                php: [7.4, 8.0]
+                dependency-version: [prefer-lowest, prefer-stable]
 
         name: PHP ${{ matrix.php }} - ${{ matrix.dependency-version }}
 

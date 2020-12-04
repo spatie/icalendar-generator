@@ -5,27 +5,27 @@ namespace Spatie\IcalendarGenerator\Components;
 use DateInterval;
 use DateTimeInterface;
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\DurationPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\DurationProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
-final class Alert extends Component
+class Alert extends Component
 {
     private const TRIGGER_START = 'trigger_start';
     private const TRIGGER_END = 'trigger_end';
     private const TRIGGER_DATE = 'trigger_date';
 
-    /** @var \DateTimeInterface */
-    private $triggerDate;
+    private DateTimeValue $triggerDate;
 
-    /** @var DateInterval */
-    private $triggerInterval;
+    private DateInterval $triggerInterval;
 
-    /** @var string */
-    private $triggerMode = self::TRIGGER_DATE;
+    private string $triggerMode = self::TRIGGER_DATE;
 
-    /** @var null|string */
-    private $message;
+    private ?string $message;
+
+    private bool $withoutTimezone = false;
 
     public static function date(DateTimeInterface $date, string $description = null): Alert
     {
@@ -70,7 +70,7 @@ final class Alert extends Component
 
     public function getComponentType(): string
     {
-        return 'ALARM';
+        return 'VALARM';
     }
 
     public function getRequiredProperties(): array
@@ -92,7 +92,7 @@ final class Alert extends Component
     public function triggerDate(DateTimeInterface $triggerAt): Alert
     {
         $this->triggerMode = self::TRIGGER_DATE;
-        $this->triggerDate = $triggerAt;
+        $this->triggerDate = DateTimeValue::create($triggerAt, true);
 
         return $this;
     }
@@ -113,25 +113,32 @@ final class Alert extends Component
         return $this;
     }
 
+    public function withoutTimezone(): Alert
+    {
+        $this->withoutTimezone = true;
+
+        return $this;
+    }
+
     protected function payload(): ComponentPayload
     {
         return ComponentPayload::create($this->getComponentType())
-            ->textProperty('ACTION', 'DISPLAY')
-            ->textProperty('DESCRIPTION', $this->message)
+            ->property(TextProperty::create('ACTION', 'DISPLAY'))
+            ->optional($this->message, fn () => TextProperty::create('DESCRIPTION', $this->message))
             ->property($this->resolveTriggerProperty());
     }
 
     private function resolveTriggerProperty()
     {
         if ($this->triggerMode === self::TRIGGER_DATE) {
-            return DateTimePropertyType::create(
+            return DateTimeProperty::create(
                 'TRIGGER',
                 $this->triggerDate,
-                true
+                $this->withoutTimezone
             )->addParameter(new Parameter('VALUE', 'DATE-TIME'));
         }
 
-        $property = DurationPropertyType::create('TRIGGER', $this->triggerInterval);
+        $property = DurationProperty::create('TRIGGER', $this->triggerInterval);
 
         if ($this->triggerMode === self::TRIGGER_END) {
             return $property->addParameter(new Parameter('RELATED', 'END'));

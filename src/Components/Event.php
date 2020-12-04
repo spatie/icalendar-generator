@@ -2,75 +2,76 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
+use Amp\ByteStream\Payload;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
-use Spatie\IcalendarGenerator\PropertyTypes\CalendarAddressPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\CoordinatesPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\Parameter;
+use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
+use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
+use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Properties\RRuleProperty;
+use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Properties\UriProperty;
+use Spatie\IcalendarGenerator\Timezones\HasTimezones;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
-final class Event extends Component
+class Event extends Component implements HasTimezones
 {
-    /** @var array */
-    private $alerts = [];
+    /** @var \Spatie\IcalendarGenerator\Components\Alert[] */
+    private array $alerts = [];
 
-    /** @var \DateTimeInterface */
-    private $starts;
+    private ?DateTimeValue $starts = null;
 
-    /** @var \DateTimeInterface */
-    private $ends;
+    private ?DateTimeValue $ends = null;
 
-    /** @var string */
-    private $name;
+    private DateTimeValue $created;
 
-    /** @var string|null */
-    private $description;
+    private ?string $name = null;
 
-    /** @var string|null */
-    private $address;
+    private ?string $description = null;
 
-    /** @var string|null */
-    private $addressName;
+    private ?string $address = null;
 
-    /** @var float|null */
-    private $lat;
+    private ?string $addressName = null;
 
-    /** @var float|null */
-    private $lng;
+    private ?float $lat = null;
 
-    /** @var string */
-    private $uuid;
+    private ?float $lng = null;
 
-    /** @var \DateTimeInterface */
-    private $created;
+    private string $uuid;
 
-    /** @var bool */
-    private $withTimezone = false;
+    private bool $withoutTimezone = false;
 
-    /** @var bool */
-    private $isFullDay = false;
+    private bool $isFullDay = false;
 
-    /** @var \Spatie\IcalendarGenerator\Enums\Classification|null */
-    private $classification = null;
+    private ?Classification $classification = null;
 
-    /** @var bool|null */
-    private $transparent = null;
+    private ?bool $transparent = null;
 
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress[] */
-    private $attendees = [];
+    private array $attendees = [];
 
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\CalendarAddress|null */
-    private $organizer = null;
+    private ?CalendarAddress $organizer = null;
 
-    /** @var \Spatie\IcalendarGenerator\Enums\EventStatus|null */
-    private $status = null;
+    private ?EventStatus $status = null;
 
-    /** @var string|null */
-    private $url;
+    private ?RRule $rrule = null;
+
+    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
+    private array $recurrence_dates = [];
+
+    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
+    public array $excluded_recurrence_dates = [];
+
+    private ?string $url = null;
 
     public static function create(string $name = null): Event
     {
@@ -81,12 +82,12 @@ final class Event extends Component
     {
         $this->name = $name;
         $this->uuid = uniqid();
-        $this->created = new DateTimeImmutable();
+        $this->created = DateTimeValue::create(new DateTimeImmutable());
     }
 
     public function getComponentType(): string
     {
-        return 'EVENT';
+        return 'VEVENT';
     }
 
     public function getRequiredProperties(): array
@@ -98,24 +99,27 @@ final class Event extends Component
         ];
     }
 
-    public function startsAt(DateTimeInterface $starts): Event
+    public function startsAt(DateTimeInterface $starts, bool $withTime = true): Event
     {
-        $this->starts = $starts;
+        $this->starts = DateTimeValue::create($starts, $withTime);
 
         return $this;
     }
 
-    public function endsAt(DateTimeInterface $ends): Event
+    public function endsAt(DateTimeInterface $ends, bool $withTime = true): Event
     {
-        $this->ends = $ends;
+        $this->ends = DateTimeValue::create($ends, $withTime);
 
         return $this;
     }
 
-    public function period(DateTimeInterface $starts, DateTimeInterface $ends): Event
-    {
-        $this->starts = $starts;
-        $this->ends = $ends;
+    public function period(
+        DateTimeInterface $starts,
+        DateTimeInterface $ends,
+        bool $withTime = true
+    ): Event {
+        $this->starts = DateTimeValue::create($starts, $withTime);
+        $this->ends = DateTimeValue::create($ends, $withTime);
 
         return $this;
     }
@@ -167,16 +171,17 @@ final class Event extends Component
         return $this;
     }
 
-    public function createdAt(DateTimeInterface $created): Event
+    public function createdAt(DateTimeInterface $created, bool $withTime = true): Event
     {
-        $this->created = $created;
+        $this->created = DateTimeValue::create($created, $withTime)
+            ->convertToTimezone(new DateTimeZone('UTC'));
 
         return $this;
     }
 
-    public function withTimezone(): Event
+    public function withoutTimezone(): Event
     {
-        $this->withTimezone = true;
+        $this->withoutTimezone = true;
 
         return $this;
     }
@@ -191,6 +196,13 @@ final class Event extends Component
     public function alert(Alert $alert): Event
     {
         $this->alerts[] = $alert;
+
+        return $this;
+    }
+
+    public function alertAt(DateTimeInterface $alert, string $message = null)
+    {
+        $this->alerts[] = Alert::date($alert, $message);
 
         return $this;
     }
@@ -247,6 +259,49 @@ final class Event extends Component
         return $this;
     }
 
+    public function rrule(RRule $rrule): Event
+    {
+        $this->rrule = $rrule;
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimeInterface[]|DateTimeInterface $dates
+     * @param bool $withTime
+     *
+     * @return \Spatie\IcalendarGenerator\Components\Event
+     */
+    public function doNotRepeatOn($dates, bool $withTime = true): self
+    {
+        $dates = array_map(
+            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            is_array($dates) ? $dates : [$dates]
+        );
+
+        $this->excluded_recurrence_dates = array_merge($this->excluded_recurrence_dates, $dates);
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimeInterface[]|DateTimeInterface $dates
+     * @param bool $withTime
+     *
+     * @return \Spatie\IcalendarGenerator\Components\Event
+     */
+    public function repeatOn($dates, bool $withTime = true): self
+    {
+        $dates = array_map(
+            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            is_array($dates) ? $dates : [$dates]
+        );
+
+        $this->recurrence_dates = array_merge($this->recurrence_dates, $dates);
+
+        return $this;
+    }
+
     public function url(string $url): Event
     {
         $this->url = $url;
@@ -254,58 +309,140 @@ final class Event extends Component
         return $this;
     }
 
+    public function getTimezoneRangeCollection(): TimezoneRangeCollection
+    {
+        if ($this->withoutTimezone) {
+            return TimezoneRangeCollection::create();
+        }
+
+        return TimezoneRangeCollection::create()
+            ->add($this->starts)
+            ->add($this->ends)
+            ->add($this->created)
+            ->add($this->rrule)
+            ->add($this->recurrence_dates)
+            ->add($this->excluded_recurrence_dates);
+    }
+
     protected function payload(): ComponentPayload
     {
-        $payload = ComponentPayload::create($this->getComponentType())
-            ->textProperty('UID', $this->uuid)
-            ->textProperty('SUMMARY', $this->name)
-            ->textProperty('DESCRIPTION', $this->description)
-            ->textProperty('LOCATION', $this->address)
-            ->textProperty('CLASS', $this->classification)
-            ->textProperty('TRANSP', $this->transparent ? 'TRANSPARENT' : null)
-            ->textProperty('STATUS', $this->status)
-            ->uriProperty('URL', $this->url)
-            ->dateTimeProperty('DTSTART', $this->starts, ! $this->isFullDay, $this->withTimezone)
-            ->dateTimeProperty('DTEND', $this->ends, ! $this->isFullDay, $this->withTimezone)
-            ->dateTimeProperty('DTSTAMP', $this->created, true, $this->withTimezone)
-            ->subComponent(...$this->alerts);
+        $payload = ComponentPayload::create($this->getComponentType());
 
-        if ($this->organizer) {
-            $payload->property(CalendarAddressPropertyType::create('ORGANIZER', $this->organizer));
-        }
-
-        foreach ($this->attendees as $attendee) {
-            $payload->property(CalendarAddressPropertyType::create('ATTENDEE', $attendee));
-        }
-
-        $payload = $this->resolveLocationProperties($payload);
+        $this
+            ->resolveProperties($payload)
+            ->resolveLocationProperties($payload)
+            ->resolveAlerts($payload);
 
         return $payload;
     }
 
-    private function resolveLocationProperties(ComponentPayload $payload): ComponentPayload
+    private function resolveProperties(ComponentPayload $payload): self
+    {
+        if ($this->isFullDay) {
+            $this->starts = DateTimeValue::create($this->starts->getDateTime(), false);
+            $this->ends = DateTimeValue::create($this->ends->getDateTime(), false);
+        }
+
+        $payload
+            ->property(TextProperty::create('UID', $this->uuid))
+            ->property(DateTimeProperty::create('DTSTAMP', $this->created, $this->withoutTimezone))
+            ->optional(
+                $this->name,
+                fn () => TextProperty::create('SUMMARY', $this->name)
+            )
+            ->optional(
+                $this->description,
+                fn () => TextProperty::create('DESCRIPTION', $this->description)
+            )
+            ->optional(
+                $this->address,
+                fn () => TextProperty::create('LOCATION', $this->address)
+            )
+            ->optional(
+                $this->classification,
+                fn () => TextProperty::createFromEnum('CLASS', $this->classification)
+            )
+            ->optional(
+                $this->status,
+                fn () => TextProperty::createFromEnum('STATUS', $this->status)
+            )
+            ->optional(
+                $this->transparent,
+                fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
+            )
+            ->optional(
+                $this->starts,
+                fn () => DateTimeProperty::create('DTSTART', $this->starts, $this->withoutTimezone)
+            )
+            ->optional(
+                $this->ends,
+                fn () => DateTimeProperty::create('DTEND', $this->ends, $this->withoutTimezone)
+            )
+            ->optional(
+                $this->organizer,
+                fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+            )
+            ->optional(
+                $this->rrule,
+                fn () => RRuleProperty::create('RRULE', $this->rrule)
+            )
+            ->multiple(
+                $this->attendees,
+                fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+            )
+            ->optional(
+                $this->url,
+                fn () => UriProperty::create('URL', $this->url)
+            )->multiple(
+                $this->recurrence_dates,
+                fn (DateTimeValue $dateTime) => DateTimeProperty::create('RDATE', $dateTime)->addParameter(
+                    Parameter::create('VALUE', $dateTime->hasTime() ? 'DATE-TIME' : 'DATE')
+                )
+            )->multiple(
+                $this->excluded_recurrence_dates,
+                fn (DateTimeValue $dateTime) => DateTimeProperty::create('EXDATE', $dateTime)->addParameter(
+                    Parameter::create('VALUE', $dateTime->hasTime() ? 'DATE-TIME' : 'DATE')
+                )
+            );
+
+        return $this;
+    }
+
+    private function resolveLocationProperties(ComponentPayload $payload): self
     {
         if (is_null($this->lng) && is_null($this->lat)) {
-            return $payload;
+            return $this;
         }
 
-        $payload->property(CoordinatesPropertyType::create('GEO', $this->lat, $this->lng));
+        $payload->property(CoordinatesProperty::create('GEO', $this->lat, $this->lng));
 
         if (is_null($this->address) || is_null($this->addressName)) {
-            return $payload;
+            return $this;
         }
 
-        $property = CoordinatesPropertyType::create(
+        $property = CoordinatesProperty::create(
             'X-APPLE-STRUCTURED-LOCATION',
             $this->lat,
             $this->lng
         )->addParameter(Parameter::create('VALUE', 'URI'))
             ->addParameter(Parameter::create('X-ADDRESS', $this->address))
-            ->addParameter(Parameter::create('X-APPLE-RADIUS', '72'))
+            ->addParameter(Parameter::create('X-APPLE-RADIUS', 72))
             ->addParameter(Parameter::create('X-TITLE', $this->addressName));
 
         $payload->property($property);
 
-        return $payload;
+        return $this;
+    }
+
+    private function resolveAlerts(ComponentPayload $payload): self
+    {
+        $alerts = array_map(
+            fn (Alert $alert) => $this->withoutTimezone ? $alert->withoutTimezone() : $alert,
+            $this->alerts
+        );
+
+        $payload->subComponent(...$alerts);
+
+        return $this;
     }
 }

@@ -3,25 +3,17 @@
 namespace Spatie\IcalendarGenerator;
 
 use Closure;
-use DateTimeInterface;
 use Exception;
-use Spatie\Enum\Enum;
 use Spatie\IcalendarGenerator\Components\Component;
-use Spatie\IcalendarGenerator\PropertyTypes\DateTimePropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\PropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\TextPropertyType;
-use Spatie\IcalendarGenerator\PropertyTypes\UriPropertyType;
+use Spatie\IcalendarGenerator\Properties\Property;
 
-final class ComponentPayload
+class ComponentPayload
 {
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var array */
-    private $properties = [];
+    private array $properties = [];
 
-    /** @var array */
-    private $subComponents = [];
+    private array $subComponents = [];
 
     public static function create(string $type): ComponentPayload
     {
@@ -33,7 +25,7 @@ final class ComponentPayload
         $this->type = $type;
     }
 
-    public function property(PropertyType $property, array $parameters = null): ComponentPayload
+    public function property(Property $property, array $parameters = null): ComponentPayload
     {
         $property->addParameters($parameters ?? []);
 
@@ -42,79 +34,30 @@ final class ComponentPayload
         return $this;
     }
 
-    /**
-     * @param array|string $names
-     * @param \DateTimeInterface|null $value
-     * @param bool $withTime
-     * @param bool $withTimeZone
-     *
-     * @return \Spatie\IcalendarGenerator\ComponentPayload
-     */
-    public function dateTimeProperty(
-        $names,
-        ?DateTimeInterface $value,
-        bool $withTime = false,
-        bool $withTimeZone = false
-    ): ComponentPayload {
-        if ($value === null) {
-            return $this;
-        }
-
-        return $this->property(new DateTimePropertyType($names, $value, $withTime, $withTimeZone));
-    }
-
-    /**
-     * @param array|string $names
-     * @param string|\Spatie\Enum\Enum|null $value
-     *
-     * @param bool $disableEscaping
-     *
-     * @return \Spatie\IcalendarGenerator\ComponentPayload
-     */
-    public function textProperty(
-        $names,
-        ?string $value,
-        bool $disableEscaping = false
-    ): ComponentPayload {
-        if ($value === null) {
-            return $this;
-        }
-
-        if ($value instanceof Enum) {
-            $value = (string) $value;
-        }
-
-        return $this->property(new TextPropertyType($names, $value, $disableEscaping));
-    }
-
-    /**
-     * @param array|string $names
-     * @param string|null $value
-     *
-     * @return \Spatie\IcalendarGenerator\ComponentPayload
-     */
-    public function uriProperty($names, ?string $value): ComponentPayload
+    public function optional($when, Closure $closure): self
     {
-        if ($value === null) {
+        if ($when === null || $when === false) {
             return $this;
         }
 
-        return filter_var($value, FILTER_VALIDATE_URL) ? $this->property(new UriPropertyType($names, $value)) : $this;
+        $this->properties[] = $closure();
+
+        return $this;
+    }
+
+    public function multiple(array $items, Closure $closure): self
+    {
+        foreach ($items as $item) {
+            $this->property($closure($item));
+        }
+
+        return $this;
     }
 
     public function subComponent(Component ...$components): ComponentPayload
     {
         foreach ($components as $component) {
             $this->subComponents[] = $component;
-        }
-
-        return $this;
-    }
-
-    public function when(bool $condition, Closure $closure): ComponentPayload
-    {
-        if ($condition) {
-            $closure($this);
         }
 
         return $this;
@@ -130,12 +73,12 @@ final class ComponentPayload
         return $this->properties;
     }
 
-    public function getProperty(string $name): PropertyType
+    public function getProperty(string $name): Property
     {
         $filteredProperties = array_filter(
             $this->properties,
-            function (PropertyType $property) use ($name) {
-                return in_array($name, $property->getNames());
+            function (Property $property) use ($name) {
+                return in_array($name, $property->getNameAndAliases());
             }
         );
 

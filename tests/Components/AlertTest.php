@@ -16,14 +16,29 @@ class AlertTest extends TestCase
 
         $payload = (new Alert('It is time'))->triggerDate($trigger)->resolvePayload();
 
-        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals('VALARM', $payload->getType());
         $this->assertCount(3, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is time', $payload);
         $this->assertPropertyEqualsInPayload('TRIGGER', $trigger, $payload);
+        $this->assertParameterCountInProperty(2, $payload->getProperty('TRIGGER'));
         $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
+        $this->assertParameterEqualsInProperty('TZID', 'UTC', $payload->getProperty('TRIGGER'));
+    }
+
+    /** @test */
+    public function it_can_create_an_alert_without_timezone_at_a_date()
+    {
+        $trigger = new DateTime('16 may 2019');
+
+        $payload = (new Alert('It is time'))
+            ->withoutTimezone()
+            ->triggerDate($trigger)
+            ->resolvePayload();
+
         $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
     }
 
     /** @test */
@@ -35,7 +50,7 @@ class AlertTest extends TestCase
             ->triggerAtStart($trigger)
             ->resolvePayload();
 
-        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals('VALARM', $payload->getType());
         $this->assertCount(2, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
@@ -52,7 +67,7 @@ class AlertTest extends TestCase
             ->triggerAtEnd($trigger)
             ->resolvePayload();
 
-        $this->assertEquals('ALARM', $payload->getType());
+        $this->assertEquals('VALARM', $payload->getType());
         $this->assertCount(2, $payload->getProperties());
 
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);

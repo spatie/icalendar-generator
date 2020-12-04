@@ -7,13 +7,11 @@ use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 class CalendarAddress
 {
     /** @var string */
-    public $email;
+    public string $email;
 
-    /** @var null|string */
-    public $name = null;
+    public ?string $name = null;
 
-    /** @var \Spatie\IcalendarGenerator\Enums\ParticipationStatus|null */
-    public $participationStatus = null;
+    public ?ParticipationStatus $participationStatus = null;
 
     public function __construct(
         string $email,

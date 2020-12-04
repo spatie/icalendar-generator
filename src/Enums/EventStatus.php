@@ -11,9 +11,12 @@ use Spatie\Enum\Enum;
  */
 class EventStatus extends Enum
 {
-    const MAP_VALUE = [
-        'tentative' => 'TENTATIVE',
-        'confirmed' => 'CONFIRMED',
-        'cancelled' => 'CANCELLED',
-    ];
+    protected static function values(): array
+    {
+        return [
+            'tentative' => 'TENTATIVE',
+            'confirmed' => 'CONFIRMED',
+            'cancelled' => 'CANCELLED',
+        ];
+    }
 }
