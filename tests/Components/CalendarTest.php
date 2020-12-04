@@ -10,8 +10,6 @@ use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Components\Timezone;
-use Spatie\IcalendarGenerator\Components\TimezoneEntry;
-use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class CalendarTest extends TestCase

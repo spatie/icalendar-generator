@@ -3,14 +3,11 @@
 namespace Spatie\IcalendarGenerator\ValueObjects;
 
 use Closure;
-use DateTime;
 use DateTimeInterface;
-use DateTimeZone;
 use Exception;
 use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
-use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Timezones\HasTimezones;
 use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
