@@ -6,9 +6,9 @@
 [![Psalm](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Psalm?label=Psalm)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3APsalm)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
-Want to create online calendars, so you can display them on an iPhone's calendar app or in Google Calendar? 
-This can be done by generating calendars in the iCalendar format (RFC 5545), which is a textual format that can be loaded by different applications.
-The format of such calendars is defined in [RFC 5545](https://tools.ietf.org/html/rfc5545) which is not a pleasant reading experience.
+Want to create online calendars so that you can display them on an iPhone's calendar app or in Google Calendar?
+This can be done by generating calendars in the iCalendar format (RFC 5545), a textual format that can be loaded by different applications.
+The format of such calendars is defined in [RFC 5545](https://tools.ietf.org/html/rfc5545), which is not a pleasant reading experience.
 This package implements [RFC 5545](https://tools.ietf.org/html/rfc5545) and some extensions from [RFC 7986](https://tools.ietf.org/html/rfc7986) to provide you an easy to use API for creating calendars.
 It's not our intention to implement these RFC's entirely but to provide a straightforward API that's easy to use.
 
@@ -37,7 +37,7 @@ X-WR-CALNAME:Laracon online
 BEGIN:VEVENT
 UID:5ef5c3f64cb2c
 DTSTAMP;TZID=UTC:20200626T094630
-SUMMARY:Creating calender feeds
+SUMMARY:Creating calendar feeds
 DTSTART:20190306T150000Z
 DTEND:20190306T160000Z
 DTSTAMP:20190419T135034Z
@@ -62,7 +62,7 @@ composer require spatie/icalendar-generator
 
 ## Upgrading
 
-There were some substantial changes between v1 and v2 of the package, check the [upgrade](https://github.com/spatie/icalendar-generator/blob/master/UPGRADING.md) guide for more information.
+There were some substantial changes between v1 and v2 of the package. Check the [upgrade](https://github.com/spatie/icalendar-generator/blob/master/UPGRADING.md) guide for more information.
 
 ## Usage
 
@@ -86,13 +86,13 @@ $calendar = Calendar::create()
     ->description('Experience Laracon all around the world');
 ```
 
-In the end, you want to convert your calendar to text, so it can be streamed or downloaded to the user. Here's how you do that:
+In the end, you want to convert your calendar to text so that it can be streamed or downloaded to the user. Here's how you do that:
 
 ``` php
 Calendar::create('Laracon Online')->get(); // BEGIN:VCALENDAR ...
 ```
 
-When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the refresh interval for the calendar by duration in minutes. When setting this, the calendar application will check your server every time after the specified duration for changes to the calendar:
+When [streaming](#use-with-laravel) a calendar to an application, it is possible to set the calendar's refresh interval by duration in minutes. When setting this, the calendar application will check your server every time after the specified duration for changes to the calendar:
 
 ``` php
 Calendar::create('Laracon Online')
@@ -121,7 +121,7 @@ Event::create()
     ->endsAt(new DateTime('6 march 2019 16:00'));
 ```
 
-Want to create an event quickly with start and end date?
+Want to create an event quickly with a start and end date?
 
 ``` php
 Event::create('Laracon Online')
@@ -146,7 +146,7 @@ Event::create()
     ...
 ```
 
-Attendees of an event can be added as such
+Attendees of an event can be added as such:
 
 ``` php
 Event::create()
@@ -247,7 +247,7 @@ Event::create('Laracon Online')
 
 #### Timezones
 
-Events will use the [timezones]((https://www.php.net/manual/en/datetime.settimezone.php)) defined in the `DateTime` objects you provide. These timezones are always set by PHP in a `DateTime` object. By default this will be the UTC timezone but it is possible to [change](https://www.php.net/manual/en/function.date-default-timezone-set.php) this.
+Events will use the [timezones]((https://www.php.net/manual/en/datetime.settimezone.php)) defined in the `DateTime` objects you provide. PHP always sets these timezones in a `DateTime` object. By default, this will be the UTC timezone, but it is possible to [change](https://www.php.net/manual/en/function.date-default-timezone-set.php) this.
 
 Just a reminder: do not use PHP's `setTimezone` function on a `DateTime` object, it will change the time according to the timezone! It is better to create a new `DateTime` object with a timezone as such:
 
@@ -255,7 +255,7 @@ Just a reminder: do not use PHP's `setTimezone` function on a `DateTime` object,
 new DateTime('6 march 2019 15:00', new DateTimeZone('Europe/Brussels'))
 ```
 
-A point can be made for omitting timezones. This can happen in the case where you want to show an event at noon in the world. We define noon at 12 o'clock but that time is actually relative. It is not the same for people in Belgium, Australia or any other country in the world.
+A point can be made for omitting timezones. For example, when you want to show an event at noon in the world. We define noon at 12 o'clock, but that time is relative. It is not the same for people in Belgium, Australia, or any other country in the world.
 
 That's why you can disable timezones on events:
 
@@ -276,9 +276,9 @@ Calendar::create()
     ...
 ```
 
-Each calendar should have Timezone components describing the timezones used within your calendar. Allthough not all calendar clients require this, it is recommanded to add these components.
+Each calendar should have Timezone components describing the timezones used within your calendar. Although not all calendar clients require this, it is recommended to add these components.
 
-Creating such Timezone components is quite complicated, that's why this package will automatically add them for you without configuration.
+Creating such Timezone components is quite complicated. That's why this package will automatically add them for you without configuration.
 
 You can disable this behaviour as such:
 
@@ -307,15 +307,15 @@ Calendar::create()
     ...
 ```
 
-We won't go into details here since it's a more niche feature but reading through the `Timezone` and `TimezoneEntry` component files should get you up and running.
+We won't go into details here since it's a more niche feature, but reading through the `Timezone` and `TimezoneEntry` component files should get you up and running.
 
 #### Alerts
 
-Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event. An alert always belongs to an event and has a description and the number of minutes before the event it will be triggered:
+Alerts allow calendar clients to send reminders about specific events. For example, Apple Mail on an iPhone will send users a notification about the event. An alert always belongs to an event has a description and a number of minutes before the event it will be triggered:
 
 ``` php
 Event::create('Laracon Online')
-    ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes');
+    ->alertMinutesBefore(5, 'Laracon online is going to start in five minutes');
 ```
 
 You can also trigger an alert after the event:
@@ -330,12 +330,12 @@ Or trigger an alert on a specific date:
 ``` php
 Event::create('Laracon Online')
     ->alertAt(
-    	new DateTime('05/16/2020 12:00:00'), 
-    	'Laracon online has ended, see you next year!'
+       new DateTime('05/16/2020 12:00:00'), 
+       'Laracon online has ended, see you next year!'
     );
 ```
 
-Removing timezones on an calendar or event, will also remove timezones on the alert.
+Removing timezones on a calendar or event will also remove timezones on the alert.
 
 ### Recurrent events
 
@@ -357,13 +357,13 @@ It is also possible to repeat events without specifying all the dates with recur
 
 #### Recurrence rules
 
-Recurrence rules or RRule's in short make it possible to add a repeating event in your calendar by describing when it repeats within an RRule. First we have to create a RRule:
+Recurrence rules or RRule's in short, make it possible to add a repeating event in your calendar by describing when it repeats within an RRule. First, we have to create an RRule:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::daily());
 ```
 
-This rule describes an event that will be repeated daily, you can also set the frequency to `secondly`, `minutely`, `hourly`, `weekly`, `monthly` or `yearly`.
+This rule describes an event that will be repeated daily. You can also set the frequency to `secondly`, `minutely`, `hourly`, `weekly`, `monthly` or `yearly`.
 
 The RRULE can be added to an event as such:
 
@@ -372,7 +372,7 @@ Event::create('Laracon Online')
     ->rrule(RRule::frequeny(RecurrenceFrequency::monthly()));
 ```
 
-It is possible to finetune the RRule to your personal taste, lets have a look!
+It is possible to finetune the RRule to your personal taste; let's have a look!
 
 A RRule can start from a certain point in time:
 
@@ -398,13 +398,13 @@ The interval of the repetition can be changed:
 $rrule = RRule::frequeny(RecurrenceFrequency::daily())->interval(2);
 ```
 
-When this event starts on monday for example, the next repetition of this event will not take place on tuesday but on wednesday. You can do the same for all the frequencies.
+When this event starts on Monday, for example, the next repetition of this event will not occur on Tuesday but Wednesday. You can do the same for all the frequencies.
 
 It is also possible to repeat the event on a specific weekday:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
-	RecurrenceDay::friday()
+   RecurrenceDay::friday()
 );
 ```
 
@@ -412,7 +412,7 @@ Or on a specific weekday in the month:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
-	RecurrenceDay::friday(), 3
+   RecurrenceDay::friday(), 3
 );
 ```
 
@@ -420,7 +420,7 @@ Or on the last weekday of a month:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
-	RecurrenceDay::sunday(), -1
+   RecurrenceDay::sunday(), -1
 );
 ```
 
@@ -434,7 +434,7 @@ It is even possible to give an array of days in the month:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(
-	[5, 10, 15, 20]
+   [5, 10, 15, 20]
 );
 ```
 
@@ -442,7 +442,7 @@ Repeating can be done for certain months (for example only in the second quarter
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
-	[RecurrenceMonth::april(), RecurrenceMonth::may(), RecurrenceMonth::june()]
+   [RecurrenceMonth::april(), RecurrenceMonth::may(), RecurrenceMonth::june()]
 );
 ```
 
@@ -450,7 +450,7 @@ Or just on one month only:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
-	RecurrenceMonth::october()
+   RecurrenceMonth::october()
 );
 ```
 
@@ -458,7 +458,7 @@ It is possible to set the day when the week starts:
 
 ```php
 $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->weekStartsOn(
-	ReccurenceDay::monday()
+   ReccurenceDay::monday()
 );
 ```
 
@@ -480,13 +480,13 @@ Event::create('Laracon Online')
 
 ### Timezones
 
-When using datetimes with timezones the package will output a timezone identifier so the calendar client can calculate the correct time for an event. Such identifier will look like this `Europe\Brussels` for a Belgian timezone or `UTC` for the UTC timezone.
+When using DateTime's with timezones, the package will output a timezone identifier so the calendar client can calculate the correct time for an event. Such identifier will look like this `Europe\Brussels` for a Belgian timezone or `UTC` for the UTC timezone.
 
-Most of the calendar clients know these identifiers and can find the correct timezones but some don't, that's why you can explicitly define the timezones within your calendar.
+Most calendar clients know these identifiers and can find the correct timezones, but some don't. That's why you can explicitly define the timezones within your calendar.
 
-This is a quite complicated feature, that's why when you add a datetime with a timezone to the package we'll generate these blocks for you automatically and you shouldn't think about these issues with timezones again!
+Defining these timezone components is quite complicated. That's why when you add a DateTime with a timezone to the package, we'll generate these blocks for you automatically, and you shouldn't think about these issues with timezones again!
 
-If you still want to create your own timezones then you're in the right place, although we advise you to read the [section](https://tools.ietf.org/html/rfc5545#section-3.6.5) on timezones from the RFC first. 
+If you want to craft timezone components yourself, you're in the right place, although we advise you to read the [section](https://tools.ietf.org/html/rfc5545#section-3.6.5) on timezones from the RFC first.
 
 You can create a timezone as such:
 
@@ -519,9 +519,9 @@ $entry = TimezoneEntry::create(
 );
 ```
 
-Firstly you provide the type of entry (`standard` or `daylight`). Then a `DateTime` when the time changes. Lastly an offset relative to UTC from before the change and an offset relative to UTC after the change.
+Firstly you provide the type of entry (`standard` or `daylight`). Then a `DateTime` when the time changes. Lastly, an offset relative to UTC from before the change and an offset relative to UTC after the change.
 
-It is also possible to give this entry a name and description: 
+It is also possible to give this entry a name and description:
 
 ```php
 $entry = TimezoneEntry::create(...)
@@ -540,28 +540,28 @@ In the end you can add an entry to a timezone:
 
 ```php
 $timezone = Timezone::create('Europe/Brussels')
-	->entry($timezoneEntry);
+   ->entry($timezoneEntry);
 ```
 
 Or even add multiple entries:
 
 ```php
 $timezone = Timezone::create('Europe/Brussels')
-	->entry([$timezoneEntryOne, $timezoneEntryTwo]);
+   ->entry([$timezoneEntryOne, $timezoneEntryTwo]);
 ```
 
 Now we've constructed our timezone it is time(👀) to add this timezone to our calendar:
 
 ```php
 $calendar = Calendar::create('Calendar with timezones')
-	->timezone($timezone);
+   ->timezone($timezone);
 ```
 
 It is also possible to add multiple timezones:
 
 ```php
 $calendar = Calendar::create('Calendar with timezones')
-	->timezone([$timezoneOne, $timezoneTwo]);
+   ->timezone([$timezoneOne, $timezoneTwo]);
 ```
 
 
@@ -591,7 +591,7 @@ return response($calendar->get(), 200, [
 
 ### Extending the package
 
-We try to keep this package as straightforward as possible. That's why a lot of properties and subcomponents from the RFC are not included in this package. We've made it possible to add other properties or subcomponents to each component in case you might need something not included in the package. But be careful! From this moment, you're on your own correctly implementing the RFC's.
+We try to keep this package as straightforward as possible. That's why a lot of properties and subcomponents from the RFC are not included in this package. We've made it possible to add other properties or subcomponents to each component if you might need something not included in the package. But be careful! From this moment, you're on your own correctly implementing the RFC's.
 
 #### Appending properties
 
@@ -641,7 +641,7 @@ composer test
 
 ### Alternatives
 
-We strive for a simple and easy to use API, want something more? Then check out this [package](https://github.com/markuspoerschke/iCal) by markus poerschke.
+We strive for a simple and easy to use API. Want something more? Then check out this [package](https://github.com/markuspoerschke/iCal) by Markus Poerschke.
 
 ### Changelog
 
