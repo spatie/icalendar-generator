@@ -572,7 +572,7 @@ You can use Laravel Responses to stream to calendar applications:
 ``` php
 $calendar = Calendar::create('Laracon Online');
 
-response($calendar->get())
+return response($calendar->get())
     ->header('Content-Type', 'text/calendar')
     ->header('charset', 'utf-8');
 ```
