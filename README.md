@@ -361,7 +361,7 @@ Event::create('Laracon Online')
 Recurrence rules or RRule's in short, make it possible to add a repeating event in your calendar by describing when it repeats within an RRule. First, we have to create an RRule:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily());
+$rrule = RRule::frequency(RecurrenceFrequency::daily());
 ```
 
 This rule describes an event that will be repeated daily. You can also set the frequency to `secondly`, `minutely`, `hourly`, `weekly`, `monthly` or `yearly`.
@@ -370,7 +370,7 @@ The RRULE can be added to an event as such:
 
 ``` php
 Event::create('Laracon Online')
-    ->rrule(RRule::frequeny(RecurrenceFrequency::monthly()));
+    ->rrule(RRule::frequency(RecurrenceFrequency::monthly()));
 ```
 
 It is possible to finetune the RRule to your personal taste; let's have a look!
@@ -378,25 +378,25 @@ It is possible to finetune the RRule to your personal taste; let's have a look!
 A RRule can start from a certain point in time:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily())->starting(new DateTime('now'));
+$rrule = RRule::frequency(RecurrenceFrequency::daily())->starting(new DateTime('now'));
 ```
 
 And stop at a certain point:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily())->until(new DateTime('now'));
+$rrule = RRule::frequency(RecurrenceFrequency::daily())->until(new DateTime('now'));
 ```
 
 It can only be repeated for a few times, 10 times for example:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily())->times(10);
+$rrule = RRule::frequency(RecurrenceFrequency::daily())->times(10);
 ```
 
 The interval of the repetition can be changed:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::daily())->interval(2);
+$rrule = RRule::frequency(RecurrenceFrequency::daily())->interval(2);
 ```
 
 When this event starts on Monday, for example, the next repetition of this event will not occur on Tuesday but Wednesday. You can do the same for all the frequencies.
@@ -404,7 +404,7 @@ When this event starts on Monday, for example, the next repetition of this event
 It is also possible to repeat the event on a specific weekday:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onWeekDay(
    RecurrenceDay::friday()
 );
 ```
@@ -412,7 +412,7 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
 Or on a specific weekday of a week in the month:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onWeekDay(
    RecurrenceDay::friday(), 3
 );
 ```
@@ -420,7 +420,7 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
 Or on the last weekday of a month:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onWeekDay(
    RecurrenceDay::sunday(), -1
 );
 ```
@@ -428,13 +428,13 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onWeekDay(
 You can repeat on a specific day in the month:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(16);
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonthDay(16);
 ```
 
 It is even possible to give an array of days in the month:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonthDay(
    [5, 10, 15, 20]
 );
 ```
@@ -442,7 +442,7 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonthDay(
 Repeating can be done for certain months (for example only in the second quarter):
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonth(
    [RecurrenceMonth::april(), RecurrenceMonth::may(), RecurrenceMonth::june()]
 );
 ```
@@ -450,7 +450,7 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
 Or just on one month only:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonth(
    RecurrenceMonth::october()
 );
 ```
@@ -458,7 +458,7 @@ $rrule = RRule::frequeny(RecurrenceFrequency::monthly())->onMonth(
 It is possible to set the day when the week starts:
 
 ```php
-$rrule = RRule::frequeny(RecurrenceFrequency::monthly())->weekStartsOn(
+$rrule = RRule::frequency(RecurrenceFrequency::monthly())->weekStartsOn(
    ReccurenceDay::monday()
 );
 ```
@@ -467,7 +467,7 @@ You can provide a specific date on which an event won't be repeated:
 
 ```php
 Event::create('Laracon Online')
-    ->rrule(RRule::frequeny(RecurrenceFrequency::daily()))
+    ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
     ->doNotRepeatOn(new DateTime('05/16/2020 12:00:00'));
 ```
 
@@ -475,7 +475,7 @@ It is also possible to give an array of dates on which the event won't be repeat
 
 ```php
 Event::create('Laracon Online')
-    ->rrule(RRule::frequeny(RecurrenceFrequency::daily()))
+    ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
     ->doNotRepeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
 ```
 
