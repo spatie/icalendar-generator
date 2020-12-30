@@ -38,7 +38,17 @@ class TimezoneTransitionsResolver
             $this->end->getTimestamp(),
         );
 
-        if (count($transitions) === 1) {
+        // for timezone '+00:00' DateTimeZone::getTransitions() returns boolean false,
+        // so check for that first and create the fake entry to make it work
+        if ($transitions === false) {
+            $transitions = [[
+                'isdst' => false,
+                'offset' => 0,
+                'ts' => $this->start->getTimestamp(),
+                'abbr' => 'UTC'
+            ]];
+
+        } else if (count($transitions) === 1) {
             // Add a fake transition for UTC for example which does not have transitions
             $transitions[] = [
                 'isdst' => $transitions[0]["isdst"],
