@@ -171,7 +171,7 @@ class CalendarTest extends TestCase
     }
 
     /** @test */
-    public function it_will_automatically_add_timezone_components()
+    public function it_will_automatically_add_multiple_timezone_components()
     {
         Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
 
@@ -185,8 +185,8 @@ class CalendarTest extends TestCase
 
         $withoutTimezoneEvent = Event::create('An event without timezone')
             ->withoutTimezone()
-            ->startsAt(new CarbonImmutable('1 january 1995', 'Europe/Brussels'))
-            ->endsAt(new CarbonImmutable('1 january 2021', 'Europe/Brussels'));
+            ->startsAt(new CarbonImmutable('1 january 1995', 'America/New_York'))
+            ->endsAt(new CarbonImmutable('1 january 2021', 'America/New_York'));
 
         $payload = Calendar::create()->event(
             [$utcEvent, $alternativeTimezoneEvent, $withoutTimezoneEvent]
@@ -195,6 +195,40 @@ class CalendarTest extends TestCase
         $subComponents = $payload->getSubComponents();
 
         $this->assertCount(5, $subComponents);
+
+        $this->assertInstanceOf(Timezone::class, $subComponents[0]);
+        $this->assertInstanceOf(Timezone::class, $subComponents[1]);
+        $this->assertNotInstanceOf(Timezone::class, $subComponents[2]);
+        $this->assertNotInstanceOf(Timezone::class, $subComponents[3]);
+        $this->assertNotInstanceOf(Timezone::class, $subComponents[4]);
+
+        $this->assertPropertyEqualsInPayload('TZID', 'UTC', $subComponents[0]->resolvePayload());
+        $this->assertPropertyEqualsInPayload('TZID', 'Europe/Brussels', $subComponents[1]->resolvePayload());
+    }
+
+
+    /** @test */
+    public function it_will_automatically_add_timezone_components()
+    {
+        Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
+
+        $utcEvent = Event::create('An event with UTC timezone')
+            ->startsAt(new CarbonImmutable('1 january 2019'))
+            ->endsAt(new CarbonImmutable('1 january 2021'));
+
+        $alternativeTimezoneEvent = Event::create('An event with alternative timezone')
+            ->startsAt(new CarbonImmutable('1 january 2020', 'Europe/Brussels'))
+            ->endsAt(new CarbonImmutable('1 january 2021', 'Europe/Brussels'));
+
+        $negativeOffsetTimezoneEvent = Event::create('An event with a negative timezone offset')
+            ->startsAt(new CarbonImmutable('1 january 2020', 'America/New_York'))
+            ->endsAt(new CarbonImmutable('1 january 2021', 'America/New_York'));
+
+        $payload = Calendar::create()->event(
+            [$utcEvent, $alternativeTimezoneEvent, $negativeOffsetTimezoneEvent]
+        )->resolvePayload();
+
+        $subComponents = $payload->getSubComponents();
 
         /** @var \Spatie\IcalendarGenerator\Components\Timezone $utcComponent */
         $utcComponent = $subComponents[0];
@@ -205,13 +239,13 @@ BEGIN:VTIMEZONE\r
 TZID:UTC\r
 BEGIN:STANDARD\r
 DTSTART:20180406T000000\r
-TZOFFSETFROM:0000\r
-TZOFFSETTO:0000\r
+TZOFFSETFROM:+0000\r
+TZOFFSETTO:+0000\r
 END:STANDARD\r
 END:VTIMEZONE
 EOT, $utcComponent->toString());
 
-        /** @var \Spatie\IcalendarGenerator\Components\Timezone $utcComponent */
+        /** @var \Spatie\IcalendarGenerator\Components\Timezone $alternativeTimezoneComponent */
         $alternativeTimezoneComponent = $subComponents[1];
 
         $this->assertInstanceOf(Timezone::class, $alternativeTimezoneComponent);
@@ -220,26 +254,56 @@ BEGIN:VTIMEZONE\r
 TZID:Europe/Brussels\r
 BEGIN:STANDARD\r
 DTSTART:20191027T030000\r
-TZOFFSETFROM:0200\r
-TZOFFSETTO:0100\r
+TZOFFSETFROM:+0200\r
+TZOFFSETTO:+0100\r
 END:STANDARD\r
 BEGIN:DAYLIGHT\r
 DTSTART:20200329T020000\r
-TZOFFSETFROM:0100\r
-TZOFFSETTO:0200\r
+TZOFFSETFROM:+0100\r
+TZOFFSETTO:+0200\r
 END:DAYLIGHT\r
 BEGIN:STANDARD\r
 DTSTART:20201025T030000\r
-TZOFFSETFROM:0200\r
-TZOFFSETTO:0100\r
+TZOFFSETFROM:+0200\r
+TZOFFSETTO:+0100\r
 END:STANDARD\r
 BEGIN:DAYLIGHT\r
 DTSTART:20210328T020000\r
-TZOFFSETFROM:0100\r
-TZOFFSETTO:0200\r
+TZOFFSETFROM:+0100\r
+TZOFFSETTO:+0200\r
 END:DAYLIGHT\r
 END:VTIMEZONE
 EOT, $alternativeTimezoneComponent->toString());
+
+        /** @var \Spatie\IcalendarGenerator\Components\Timezone $negativeOffsetTimezoneComponent */
+        $negativeOffsetTimezoneComponent = $subComponents[2];
+
+        $this->assertInstanceOf(Timezone::class, $negativeOffsetTimezoneComponent);
+        $this->assertEquals(<<<EOT
+BEGIN:VTIMEZONE\r
+TZID:America/New_York\r
+BEGIN:STANDARD\r
+DTSTART:20191103T020000\r
+TZOFFSETFROM:-0400\r
+TZOFFSETTO:-0500\r
+END:STANDARD\r
+BEGIN:DAYLIGHT\r
+DTSTART:20200308T020000\r
+TZOFFSETFROM:-0500\r
+TZOFFSETTO:-0400\r
+END:DAYLIGHT\r
+BEGIN:STANDARD\r
+DTSTART:20201101T020000\r
+TZOFFSETFROM:-0400\r
+TZOFFSETTO:-0500\r
+END:STANDARD\r
+BEGIN:DAYLIGHT\r
+DTSTART:20210314T020000\r
+TZOFFSETFROM:-0500\r
+TZOFFSETTO:-0400\r
+END:DAYLIGHT\r
+END:VTIMEZONE
+EOT, $negativeOffsetTimezoneComponent->toString());
     }
 
     /** @test */

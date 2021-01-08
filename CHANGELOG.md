@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.0.2 - 2020-01-07
+
+- fix positive timezone offsets
+
 ## 2.0.1 - 2020-01-07
 
 - fix case when getTransitions() returns a false value (#38)
