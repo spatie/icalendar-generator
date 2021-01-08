@@ -38,16 +38,20 @@ class TimezoneTransitionsResolver
             $this->end->getTimestamp(),
         );
 
-        // for timezone '+00:00' DateTimeZone::getTransitions() returns boolean false,
-        // so check for that first and create the fake entry to make it work
         if ($transitions === false) {
-            $transitions = [[
-                'isdst' => false,
-                'offset' => 0,
-                'ts' => $this->start->getTimestamp(),
-                'abbr' => 'UTC',
-            ]];
-        } elseif (count($transitions) === 1) {
+            // for timezone '+00:00' DateTimeZone::getTransitions() returns boolean false,
+            // so check for that first and create the fake entry to make it work
+            $transitions = [
+                [
+                    'isdst' => false,
+                    'offset' => 0,
+                    'ts' => $this->start->getTimestamp(),
+                    'abbr' => 'UTC',
+                ],
+            ];
+        }
+
+        if (count($transitions) === 1) {
             // Add a fake transition for UTC for example which does not have transitions
             $transitions[] = [
                 'isdst' => $transitions[0]["isdst"],
@@ -68,8 +72,8 @@ class TimezoneTransitionsResolver
                 ? TimezoneEntryType::daylight()
                 : TimezoneEntryType::standard();
 
-            $offsetFrom = $this->resolveOffset((int) $previousTransition['offset']);
-            $offsetTo = $this->resolveOffset((int) $transition['offset']);
+            $offsetFrom = $this->resolveOffset($previousTransition['offset']);
+            $offsetTo = $this->resolveOffset($transition['offset']);
 
             $offsetDiff = $this->resolveOffsetDiff($offsetFrom, $offsetTo);
 
