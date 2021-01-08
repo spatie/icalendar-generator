@@ -45,10 +45,9 @@ class TimezoneTransitionsResolver
                 'isdst' => false,
                 'offset' => 0,
                 'ts' => $this->start->getTimestamp(),
-                'abbr' => 'UTC'
+                'abbr' => 'UTC',
             ]];
-
-        } else if (count($transitions) === 1) {
+        } elseif (count($transitions) === 1) {
             // Add a fake transition for UTC for example which does not have transitions
             $transitions[] = [
                 'isdst' => $transitions[0]["isdst"],
