@@ -206,7 +206,6 @@ class CalendarTest extends TestCase
         $this->assertPropertyEqualsInPayload('TZID', 'Europe/Brussels', $subComponents[1]->resolvePayload());
     }
 
-
     /** @test */
     public function it_will_automatically_add_timezone_components()
     {
