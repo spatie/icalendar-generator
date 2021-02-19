@@ -34,6 +34,7 @@ class PeriodValue implements HasTimezones
     public static function create(DateTimeInterface $staring, $ending): self
     {
         if ($ending instanceof DateTimeInterface) {
+            /** @psalm-suppress InvalidArgument */
             return new self($staring, $ending, null);
         }
 
