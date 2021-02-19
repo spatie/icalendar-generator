@@ -336,7 +336,7 @@ class EventTest extends TestCase
     {
         $this->assertBuildPropertyEqualsInPayload(
             'RDATE',
-            'RDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
+            'RDATE;VALUE=DATE-TIME:20200516T120000Z',
             Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
         );
 
@@ -392,7 +392,7 @@ class EventTest extends TestCase
     {
         $this->assertBuildPropertyEqualsInPayload(
             'EXDATE',
-            'EXDATE;TZID=UTC;VALUE=DATE-TIME:20200516T120000',
+            'EXDATE;VALUE=DATE-TIME:20200516T120000Z',
             Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
         );
 

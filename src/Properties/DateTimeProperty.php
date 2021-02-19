@@ -3,11 +3,14 @@
 namespace Spatie\IcalendarGenerator\Properties;
 
 use DateTimeInterface;
+use DateTimeZone;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class DateTimeProperty extends Property
 {
     private DateTimeValue $dateTimeValue;
+
+    private DateTimeZone $dateTimeZone;
 
     public static function fromDateTime(
         string $name,
@@ -33,21 +36,29 @@ class DateTimeProperty extends Property
     ) {
         $this->name = $name;
         $this->dateTimeValue = $dateTimeValue;
+        $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
 
-        if ($dateTimeValue->hasTime() && $withoutTimeZone === false) {
-            $timezone = $dateTimeValue->getDateTime()->getTimezone()->getName();
-
-            $this->addParameter(new Parameter('TZID', $timezone));
+        if ($withoutTimeZone || ! $dateTimeValue->hasTime() || $this->isUTC()) {
+            return;
         }
+
+        $this->addParameter(new Parameter('TZID', $this->dateTimeZone->getName()));
     }
 
     public function getValue(): string
     {
-        return $this->dateTimeValue->format();
+        return $this->isUTC() && $this->dateTimeValue->hasTime()
+            ? "{$this->dateTimeValue->format()}Z"
+            : $this->dateTimeValue->format();
     }
 
     public function getOriginalValue(): DateTimeInterface
     {
         return $this->dateTimeValue->getDateTime();
+    }
+
+    private function isUTC(): bool
+    {
+        return $this->dateTimeZone->getName() === 'UTC';
     }
 }

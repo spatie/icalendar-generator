@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.1.0 - 2020-02-19
+
+- add the use 'Z' within UTC timestamps and remove the TZID parameter
+
 ## 2.0.2 - 2020-01-07
 
 - fix positive timezone offsets

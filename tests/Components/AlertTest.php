@@ -22,9 +22,8 @@ class AlertTest extends TestCase
         $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
         $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is time', $payload);
         $this->assertPropertyEqualsInPayload('TRIGGER', $trigger, $payload);
-        $this->assertParameterCountInProperty(2, $payload->getProperty('TRIGGER'));
+        $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
         $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('TZID', 'UTC', $payload->getProperty('TRIGGER'));
     }
 
     /** @test */

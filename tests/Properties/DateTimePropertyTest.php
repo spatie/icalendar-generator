@@ -38,15 +38,37 @@ class DateTimePropertyTest extends TestCase
     }
 
     /** @test */
-    public function it_will_format_the_date_and_time_correctly_with_a_conversion_to_utc_timezone()
+    public function it_will_use_a_specific_utc_format()
     {
         $this->date->setTimezone(new DateTimeZone('UTC'));
 
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
 
-        $this->assertEquals('20190516T101015', $property->getValue());
+        $this->assertEquals('20190516T101015Z', $property->getValue());
+        $this->assertCount(0, $property->getParameters());
+    }
+
+    /** @test */
+    public function it_will_not_use_a_specific_utc_format_when_time_is_not_given()
+    {
+        $this->date->setTimezone(new DateTimeZone('UTC'));
+
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date);
+
+        $this->assertEquals('20190516', $property->getValue());
+        $this->assertCount(0, $property->getParameters());
+    }
+
+    /** @test */
+    public function it_will_format_the_date_and_time_correctly_with_a_conversion_to_another_timezone()
+    {
+        $this->date->setTimezone(new DateTimeZone('Europe/Brussels'));
+
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
+
+        $this->assertEquals('20190516T121015', $property->getValue());
         $this->assertCount(1, $property->getParameters());
-        $this->assertParameterEqualsInProperty('TZID', 'UTC', $property);
+        $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
     }
 
     /** @test */
