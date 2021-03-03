@@ -5,7 +5,6 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
-use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
@@ -459,6 +458,4 @@ class EventTest extends TestCase
             $properties
         );
     }
-
-
 }
