@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
+use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
@@ -93,6 +94,22 @@ class EventTest extends TestCase
 
         $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
         $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
+    }
+
+    /** @test */
+    public function an_event_can_be_a_full_day_without_specifying_an_end()
+    {
+        $dateStarts = new DateTime('17 may 2019');
+
+        $payload = Event::create('An introduction into event sourcing')
+            ->fullDay()
+            ->startsAt($dateStarts)
+            ->resolvePayload();
+
+        $payload->getProperty('DTSTART');
+
+        $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
+        $this->assertPropertyEqualsInPayload('DTEND', $dateStarts, $payload);
     }
 
     /** @test */
@@ -442,4 +459,6 @@ class EventTest extends TestCase
             $properties
         );
     }
+
+
 }

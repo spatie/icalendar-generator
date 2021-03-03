@@ -340,7 +340,10 @@ class Event extends Component implements HasTimezones
     {
         if ($this->isFullDay) {
             $this->starts = DateTimeValue::create($this->starts->getDateTime(), false);
-            $this->ends = DateTimeValue::create($this->ends->getDateTime(), false);
+            $this->ends = DateTimeValue::create(
+                $this->ends ? $this->ends->getDateTime() : $this->starts->getDateTime(),
+                false
+            );
         }
 
         $payload

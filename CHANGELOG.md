@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.1.1 - 2020-03-03
+
+- allow a full day event without specifying the end date
+
 ## 2.1.0 - 2020-02-19
 
 - add the use 'Z' within UTC timestamps and remove the TZID parameter
