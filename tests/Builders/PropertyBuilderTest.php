@@ -3,6 +3,7 @@
 namespace Spatie\IcalendarGenerator\Tests\Builders;
 
 use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
+use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;
@@ -57,6 +58,17 @@ class PropertyBuilderTest extends TestCase
                 'location:Antwerp\, Belgium',
                 'geo:Antwerp\, Belgium',
             ],
+            (new PropertyBuilder($property))->build()
+        );
+    }
+
+    /** @test */
+    public function it_can_build_properties_without_value()
+    {
+        $property = new EmptyProperty('contact', [Parameter::create('NON-SMOKER', true)]);
+
+        $this->assertEquals(
+            ['contact;NON-SMOKER=BOOLEAN:TRUE'],
             (new PropertyBuilder($property))->build()
         );
     }

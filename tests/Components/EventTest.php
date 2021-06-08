@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
 use DateTimeZone;
+use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
@@ -89,10 +90,11 @@ class EventTest extends TestCase
             ->period($dateStarts, $dateEnds)
             ->resolvePayload();
 
-        $payload->getProperty('DTSTART');
+        $this->assertPropertyEqualsInPayload('DTSTART', null, $payload);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE:20190517', $payload->getProperty('DTSTART'));
 
-        $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
-        $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
+        $this->assertPropertyEqualsInPayload('DTEND', null, $payload);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE:20190518', $payload->getProperty('DTEND'));
     }
 
     /** @test */
@@ -105,10 +107,10 @@ class EventTest extends TestCase
             ->startsAt($dateStarts)
             ->resolvePayload();
 
-        $payload->getProperty('DTSTART');
+        $this->assertPropertyEqualsInPayload('DTSTART', null, $payload);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE:20190517', $payload->getProperty('DTSTART'));
 
-        $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
-        $this->assertPropertyEqualsInPayload('DTEND', $dateStarts, $payload);
+        $this->assertPropertyNotInPayload('DTEND', $payload);
     }
 
     /** @test */

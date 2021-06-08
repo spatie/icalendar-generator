@@ -65,4 +65,22 @@ class IntegrationTest extends TestCase
 
         $this->assertMatchesSnapshot($calendar);
     }
+
+    /** @test */
+    public function it_can_create_a_full_day_event()
+    {
+        $calendar = Calendar::create('Laracon online')
+            ->withoutTimezone()
+            ->event(
+                Event::create('Laracon online')
+                    ->fullDay()
+                    ->uniqueIdentifier('uuid_2')
+                    ->createdAt(new DateTime('6 March 2019 15:00:00'))
+                    ->startsAt(new DateTime('6 March 2019'))
+                    ->endsAt(new DateTime('6 March 2019'))
+            )
+            ->get();
+
+        $this->assertMatchesSnapshot($calendar);
+    }
 }

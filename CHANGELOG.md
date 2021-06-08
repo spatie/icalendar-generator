@@ -2,6 +2,12 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.2.0 - 2020-06-08
+
+- follow the RFC more exactly with full days
+- add support for multiple value types within parameters
+- add an `EmptyProperty` without value and only parameters
+
 ## 2.1.1 - 2020-03-03
 
 - allow a full day event without specifying the end date

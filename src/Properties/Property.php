@@ -12,7 +12,7 @@ abstract class Property
 
     protected array $aliases = [];
 
-    abstract public function getValue(): string;
+    abstract public function getValue(): ?string;
 
     abstract public function getOriginalValue();
 

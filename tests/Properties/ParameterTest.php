@@ -2,8 +2,11 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Properties;
 
+use DateTime;
+use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Tests\TestCase;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class ParameterTest extends TestCase
 {
@@ -62,6 +65,45 @@ class ParameterTest extends TestCase
         $this->assertEquals(
             'a return \n ',
             (new Parameter('', 'a return \n ', true))->getValue()
+        );
+    }
+
+    /** @test */
+    public function it_can_format_a_boolean()
+    {
+        $this->assertEquals(
+            'BOOLEAN:TRUE',
+            (new Parameter('', true))->getValue()
+        );
+
+        $this->assertEquals(
+            'BOOLEAN:FALSE',
+            (new Parameter('', false))->getValue()
+        );
+    }
+
+    /** @test */
+    public function it_can_format_an_enum()
+    {
+        $this->assertEquals(
+            'CANCELLED',
+            (new Parameter('', EventStatus::cancelled()))->getValue()
+        );
+    }
+
+    /** @test */
+    public function it_can_format_a_date_time_value()
+    {
+        $dateTime = new DateTime('16 may 1994');
+
+        $this->assertEquals(
+            'DATE-TIME:19940516T000000',
+            (new Parameter('', DateTimeValue::create($dateTime)))->getValue()
+        );
+
+        $this->assertEquals(
+            'DATE:19940516',
+            (new Parameter('', DateTimeValue::create($dateTime, false)))->getValue()
         );
     }
 }
