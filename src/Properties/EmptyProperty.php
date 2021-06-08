@@ -14,6 +14,7 @@ class EmptyProperty extends Property
         $this->name = $name;
         $this->parameters = $parameters;
     }
+
     public function getValue(): ?string
     {
         return null;

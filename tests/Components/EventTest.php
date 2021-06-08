@@ -4,7 +4,6 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 
 use DateTime;
 use DateTimeZone;
-use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;

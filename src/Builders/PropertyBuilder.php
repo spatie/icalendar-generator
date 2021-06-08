@@ -21,7 +21,7 @@ class PropertyBuilder
         $value = $this->property->getValue();
 
         return array_map(
-            fn(string $name) => $value !== null
+            fn (string $name) => $value !== null
                 ? "{$name}{$parameters}:{$value}"
                 : "{$name}{$parameters}",
             $this->property->getNameAndAliases()

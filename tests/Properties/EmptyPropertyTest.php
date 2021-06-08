@@ -2,9 +2,7 @@
 
 namespace Spatie\IcalendarGenerator\Tests\Properties;
 
-use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
-use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class EmptyPropertyTest extends TestCase
