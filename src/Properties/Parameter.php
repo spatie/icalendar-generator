@@ -59,7 +59,7 @@ class Parameter
         }
 
         if ($this->value instanceof Enum) {
-            return $this->value->value;
+            return (string) $this->value->value;
         }
 
         if ($this->value instanceof DateTimeValue) {
