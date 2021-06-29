@@ -177,7 +177,7 @@ class EventTest extends TestCase
 
         $property = $payload->getProperty('X-APPLE-STRUCTURED-LOCATION');
 
-        $this->assertEquals('51.2343;4.4287', $property->getValue());
+        $this->assertEquals('geo:51.2343,4.4287', $property->getValue());
         $this->assertEquals([
             'lat' => 51.2343,
             'lng' => 4.4287,
