@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.2.1 - 2020-07-08
+
+- fix coordinates with Apple calendar (#51)
+
 ## 2.2.0 - 2020-06-08
 
 - follow the RFC more exactly with full days
