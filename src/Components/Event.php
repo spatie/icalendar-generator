@@ -12,6 +12,7 @@ use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
+use Spatie\IcalendarGenerator\Properties\AppleLocationCoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
@@ -428,14 +429,12 @@ class Event extends Component implements HasTimezones
             return $this;
         }
 
-        $property = CoordinatesProperty::create(
-            'X-APPLE-STRUCTURED-LOCATION',
+        $property = AppleLocationCoordinatesProperty::create(
             $this->lat,
-            $this->lng
-        )->addParameter(Parameter::create('VALUE', 'URI'))
-            ->addParameter(Parameter::create('X-ADDRESS', $this->address))
-            ->addParameter(Parameter::create('X-APPLE-RADIUS', 72))
-            ->addParameter(Parameter::create('X-TITLE', $this->addressName));
+            $this->lng,
+            $this->address,
+            $this->addressName
+        );
 
         $payload->property($property);
 
