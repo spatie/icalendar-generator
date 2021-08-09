@@ -38,7 +38,7 @@ class DateTimeProperty extends Property
         $this->dateTimeValue = $dateTimeValue;
         $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
 
-        if ($withoutTimeZone || ! $dateTimeValue->hasTime() || $this->isUTC()) {
+        if ($withoutTimeZone || $this->isUTC()) {
             return;
         }
 
