@@ -60,6 +60,16 @@ class DateTimePropertyTest extends TestCase
     }
 
     /** @test */
+    public function it_will_use_a_non_utc_timezone_format_when_time_is_not_given()
+    {
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date, false);
+
+        $this->assertEquals('20190516', $property->getValue());
+        $this->assertCount(1, $property->getParameters());
+        $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
+    }
+
+    /** @test */
     public function it_will_format_the_date_and_time_correctly_with_a_conversion_to_another_timezone()
     {
         $this->date->setTimezone(new DateTimeZone('Europe/Brussels'));
