@@ -14,7 +14,6 @@ use Spatie\IcalendarGenerator\Properties\AppleLocationCoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
-use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
@@ -404,15 +403,9 @@ class Event extends Component implements HasTimezones
             return $this;
         }
 
-        if (! $this->isFullDay) {
-            $payload->property(DateTimeProperty::create($name, $value, $this->withoutTimezone));
-
-            return $this;
-        }
-
-        $payload->property(EmptyProperty::create($name, [
-            Parameter::create('VALUE', DateTimeValue::create($value->getDateTime(), false)),
-        ]));
+        $payload->property(
+            DateTimeProperty::fromDateTime($name, $value->getDateTime(), !$this->isFullDay, $this->withoutTimezone)
+        );
 
         return $this;
     }
