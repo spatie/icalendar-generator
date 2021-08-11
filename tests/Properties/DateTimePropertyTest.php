@@ -56,7 +56,10 @@ class DateTimePropertyTest extends TestCase
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date);
 
         $this->assertEquals('20190516', $property->getValue());
-        $this->assertCount(0, $property->getParameters());
+
+        foreach ($property->getParameters() as $parameter) {
+            self::assertNotSame('TZID', $parameter->getName());
+        }
     }
 
     /** @test */
@@ -65,8 +68,9 @@ class DateTimePropertyTest extends TestCase
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, false);
 
         $this->assertEquals('20190516', $property->getValue());
-        $this->assertCount(1, $property->getParameters());
+        $this->assertCount(2, $property->getParameters());
         $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $property);
     }
 
     /** @test */
