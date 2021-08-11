@@ -45,7 +45,6 @@ class DateTimeProperty extends Property
         if (!$dateTimeValue->hasTime()) {
             $this->addParameter(new Parameter('VALUE', 'DATE'));
         }
-
     }
 
     public function getValue(): string

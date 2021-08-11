@@ -384,17 +384,19 @@ class Event extends Component implements HasTimezones
                 fn () => UriProperty::create('URL', $this->url)
             )->multiple(
                 $this->recurrence_dates,
-                fn(DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
+                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
             )->multiple(
                 $this->excluded_recurrence_dates,
-                fn(DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
+                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
             );
 
         return $this;
     }
 
-    private static function dateTimePropertyWithSpecifiedType(string $name, DateTimeValue $dateTimeValue): DateTimeProperty
-    {
+    private static function dateTimePropertyWithSpecifiedType(
+        string $name,
+        DateTimeValue $dateTimeValue
+    ): DateTimeProperty {
         $property = DateTimeProperty::create($name, $dateTimeValue);
         if ($dateTimeValue->hasTime()) {
             $property->addParameter(Parameter::create('VALUE', 'DATE-TIME'));
