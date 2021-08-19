@@ -412,7 +412,7 @@ class Event extends Component implements HasTimezones
         }
 
         $payload->property(
-            DateTimeProperty::fromDateTime($name, $value->getDateTime(), !$this->isFullDay, $this->withoutTimezone)
+            DateTimeProperty::fromDateTime($name, $value->getDateTime(), ! $this->isFullDay, $this->withoutTimezone)
         );
 
         return $this;
