@@ -23,7 +23,7 @@ class AlertTest extends TestCase
             ->expectPropertyCount(3)
             ->expectPropertyValue('ACTION', 'DISPLAY')
             ->expectPropertyValue('DESCRIPTION', 'It is time')
-            ->expectProperty('TRIGGER', function(PropertyExpectation  $expectation) use ($trigger) {
+            ->expectProperty('TRIGGER', function (PropertyExpectation  $expectation) use ($trigger) {
                 $expectation
                     ->expectValue($trigger)
                     ->expectParameterCount(1)

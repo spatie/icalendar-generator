@@ -72,7 +72,7 @@ class CalendarTest extends TestCase
 
         PayloadExpectation::create($payload)
             ->expectSubComponentCount(1)
-            ->expectSubComponent(0, function(PayloadExpectation  $expectation){
+            ->expectSubComponent(0, function (PayloadExpectation  $expectation) {
                 $expectation->expectPropertyValue('SUMMARY', 'An introduction to event sourcing');
             });
     }
@@ -110,10 +110,10 @@ class CalendarTest extends TestCase
 
         PayloadExpectation::create($payload)
             ->expectSubComponentCount(2)
-            ->expectSubComponent(0, function(PayloadExpectation  $expectation){
+            ->expectSubComponent(0, function (PayloadExpectation  $expectation) {
                 $expectation->expectPropertyValue('SUMMARY', 'An introduction to event sourcing');
             })
-            ->expectSubComponent(1, function(PayloadExpectation  $expectation){
+            ->expectSubComponent(1, function (PayloadExpectation  $expectation) {
                 $expectation->expectPropertyValue('SUMMARY', 'Websockets what are they?');
             });
     }
@@ -178,10 +178,10 @@ class CalendarTest extends TestCase
 
         PayloadExpectation::create($payload)
             ->expectSubComponentCount(5)
-            ->expectSubComponent(0, function (PayloadExpectation $expectation){
+            ->expectSubComponent(0, function (PayloadExpectation $expectation) {
                 $expectation->expectType('VTIMEZONE')->expectPropertyValue('TZID', 'UTC');
             })
-            ->expectSubComponent(1, function (PayloadExpectation $expectation){
+            ->expectSubComponent(1, function (PayloadExpectation $expectation) {
                 $expectation->expectType('VTIMEZONE')->expectPropertyValue('TZID', 'Europe/Brussels');
             })
             ->expectSubComponentNotInstanceOf(2, Timezone::class)

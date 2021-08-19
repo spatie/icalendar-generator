@@ -94,7 +94,7 @@ class ComponentPayload
             throw new Exception("Property `{$name}` does not exist in the payload");
         }
 
-        if(count($properties) === 1){
+        if (count($properties) === 1) {
             return $properties[0];
         }
 

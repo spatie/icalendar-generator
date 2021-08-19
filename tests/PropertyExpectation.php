@@ -17,7 +17,7 @@ class PropertyExpectation
      */
     public static function create($instance, string $name = null): self
     {
-        if($instance instanceof Property){
+        if ($instance instanceof Property) {
             return new self($instance);
         }
 
