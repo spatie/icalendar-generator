@@ -8,6 +8,7 @@ use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\Components\Timezone;
 use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
+use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class TimezoneTest extends TestCase
@@ -17,7 +18,8 @@ class TimezoneTest extends TestCase
     {
         $payload = Timezone::create('Europe/Brussels')->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('TZID', 'Europe/Brussels', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('TZID', 'Europe/Brussels');
     }
 
     /** @test */
@@ -27,11 +29,8 @@ class TimezoneTest extends TestCase
             ->lastModified(new DateTime('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels')))
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload(
-            'LAST-MODIFIED',
-            new DateTime('16 may 2020 10:00:00', new DateTimeZone('UTC')),
-            $payload
-        );
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('LAST-MODIFIED', new DateTime('16 may 2020 10:00:00', new DateTimeZone('UTC')));
     }
 
     /** @test */
@@ -41,7 +40,8 @@ class TimezoneTest extends TestCase
             ->url('https://spatie.be')
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('TZURL', 'https://spatie.be', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('TZURL', 'https://spatie.be');
     }
 
     /** @test */
@@ -54,7 +54,7 @@ class TimezoneTest extends TestCase
             ->entry($this->createTimezoneEntry())
             ->resolvePayload();
 
-        $this->assertCount(4, $payload->getSubComponents());
+        PayloadExpectation::create($payload)->expectSubComponentCount(4);
     }
 
     /** @test */

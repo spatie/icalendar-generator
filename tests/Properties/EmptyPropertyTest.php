@@ -3,6 +3,7 @@
 namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class EmptyPropertyTest extends TestCase
@@ -15,5 +16,10 @@ class EmptyPropertyTest extends TestCase
         $this->assertEquals('CONTACT', $propertyType->getName());
         $this->assertEquals(null, $propertyType->getValue());
         $this->assertEquals(null, $propertyType->getOriginalValue());
+
+        PropertyExpectation::create($propertyType)
+            ->expectName('CONTACT')
+            ->expectValue(null)
+            ->expectOutput(null);
     }
 }

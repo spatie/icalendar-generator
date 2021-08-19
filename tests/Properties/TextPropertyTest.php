@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class TextPropertyTest extends TestCase
@@ -71,6 +72,8 @@ class TextPropertyTest extends TestCase
     {
         $property = TextProperty::createFromEnum('', Classification::private());
 
-        $this->assertEquals('PRIVATE', $property->getValue());
+        PropertyExpectation::create($property)
+            ->expectOutput('PRIVATE')
+            ->expectValue('PRIVATE');
     }
 }

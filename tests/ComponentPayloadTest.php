@@ -68,7 +68,10 @@ class ComponentPayloadTest extends TestCase
         $payload->optional(false, fn () => TextProperty::create('text', 'Some text here'));
         $payload->optional(true, fn () => TextProperty::create('text', 'Other text here'));
 
-        $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
+        PayloadExpectation::create($payload)->expectPropertyValue(
+            'text',
+            'Other text here'
+        );
     }
 
     /** @test */
@@ -79,7 +82,10 @@ class ComponentPayloadTest extends TestCase
         $payload->optional(null, fn () => TextProperty::create('text', 'Some text here'));
         $payload->optional('something', fn () => TextProperty::create('text', 'Other text here'));
 
-        $this->assertPropertyEqualsInPayload('text', 'Other text here', $payload);
+        PayloadExpectation::create($payload)->expectPropertyValue(
+            'text',
+            'Other text here'
+        );
     }
 
     /** @test */

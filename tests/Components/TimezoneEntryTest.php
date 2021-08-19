@@ -7,6 +7,7 @@ use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
+use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
@@ -22,10 +23,11 @@ class TimezoneEntryTest extends TestCase
             '+02:00'
         )->resolvePayload();
 
-        $this->assertEquals('STANDARD', $payload->getType());
-        $this->assertPropertyEqualsInPayload('DTSTART', new DateTime('16 may 2020 12:00:00'), $payload);
-        $this->assertPropertyEqualsInPayload('TZOFFSETFROM', '+00:00', $payload);
-        $this->assertPropertyEqualsInPayload('TZOFFSETTO', '+02:00', $payload);
+        PayloadExpectation::create($payload)
+            ->expectType('STANDARD')
+            ->expectPropertyValue('DTSTART', new DateTime('16 may 2020 12:00:00'))
+            ->expectPropertyValue('TZOFFSETFROM', '+00:00')
+            ->expectPropertyValue('TZOFFSETTO', '+02:00');
     }
 
     /** @test */
@@ -38,10 +40,11 @@ class TimezoneEntryTest extends TestCase
             '-02:00'
         )->resolvePayload();
 
-        $this->assertEquals('STANDARD', $payload->getType());
-        $this->assertPropertyEqualsInPayload('DTSTART', new DateTime('16 may 2020 12:00:00'), $payload);
-        $this->assertPropertyEqualsInPayload('TZOFFSETFROM', '-00:00', $payload);
-        $this->assertPropertyEqualsInPayload('TZOFFSETTO', '-02:00', $payload);
+        PayloadExpectation::create($payload)
+            ->expectType('STANDARD')
+            ->expectPropertyValue('DTSTART', new DateTime('16 may 2020 12:00:00'))
+            ->expectPropertyValue('TZOFFSETFROM', '-00:00')
+            ->expectPropertyValue('TZOFFSETTO', '-02:00');
     }
 
     /** @test */
@@ -54,10 +57,11 @@ class TimezoneEntryTest extends TestCase
             '+02:00'
         )->resolvePayload();
 
-        $this->assertEquals('DAYLIGHT', $payload->getType());
-        $this->assertPropertyEqualsInPayload('DTSTART', new DateTime('16 may 2020 12:00:00'), $payload);
-        $this->assertPropertyEqualsInPayload('TZOFFSETFROM', '+00:00', $payload);
-        $this->assertPropertyEqualsInPayload('TZOFFSETTO', '+02:00', $payload);
+        PayloadExpectation::create($payload)
+            ->expectType('DAYLIGHT')
+            ->expectPropertyValue('DTSTART', new DateTime('16 may 2020 12:00:00'))
+            ->expectPropertyValue('TZOFFSETFROM', '+00:00')
+            ->expectPropertyValue('TZOFFSETTO', '+02:00');
     }
 
     /** @test */
@@ -73,8 +77,9 @@ class TimezoneEntryTest extends TestCase
             ->description('Belgian timezones ftw!')
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('TZNAME', 'Europe - Brussels', $payload);
-        $this->assertPropertyEqualsInPayload('COMMENT', 'Belgian timezones ftw!', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('TZNAME', 'Europe - Brussels')
+            ->expectPropertyValue('COMMENT', 'Belgian timezones ftw!');
     }
 
     /** @test */
@@ -89,7 +94,8 @@ class TimezoneEntryTest extends TestCase
             ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('RRULE', RRule::frequency(RecurrenceFrequency::daily()), $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('RRULE', RRule::frequency(RecurrenceFrequency::daily()));
     }
 
     /** @test */

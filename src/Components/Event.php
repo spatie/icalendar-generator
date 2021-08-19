@@ -73,6 +73,9 @@ class Event extends Component implements HasTimezones
 
     private ?string $url = null;
 
+    /** @var string[] */
+    private array $attachments = [];
+
     public static function create(string $name = null): Event
     {
         return new self($name);
@@ -275,7 +278,7 @@ class Event extends Component implements HasTimezones
     public function doNotRepeatOn($dates, bool $withTime = true): self
     {
         $dates = array_map(
-            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            fn(DateTime $date) => DateTimeValue::create($date, $withTime),
             is_array($dates) ? $dates : [$dates]
         );
 
@@ -293,7 +296,7 @@ class Event extends Component implements HasTimezones
     public function repeatOn($dates, bool $withTime = true): self
     {
         $dates = array_map(
-            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            fn(DateTime $date) => DateTimeValue::create($date, $withTime),
             is_array($dates) ? $dates : [$dates]
         );
 
@@ -305,6 +308,13 @@ class Event extends Component implements HasTimezones
     public function url(string $url): Event
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function attachment(string ...$urls): Event
+    {
+        $this->attachments = array_merge($this->attachments, $urls);
 
         return $this;
     }
@@ -345,49 +355,55 @@ class Event extends Component implements HasTimezones
             ->property(DateTimeProperty::create('DTSTAMP', $this->created, $this->withoutTimezone))
             ->optional(
                 $this->name,
-                fn () => TextProperty::create('SUMMARY', $this->name)
+                fn() => TextProperty::create('SUMMARY', $this->name)
             )
             ->optional(
                 $this->description,
-                fn () => TextProperty::create('DESCRIPTION', $this->description)
+                fn() => TextProperty::create('DESCRIPTION', $this->description)
             )
             ->optional(
                 $this->address,
-                fn () => TextProperty::create('LOCATION', $this->address)
+                fn() => TextProperty::create('LOCATION', $this->address)
             )
             ->optional(
                 $this->classification,
-                fn () => TextProperty::createFromEnum('CLASS', $this->classification)
+                fn() => TextProperty::createFromEnum('CLASS', $this->classification)
             )
             ->optional(
                 $this->status,
-                fn () => TextProperty::createFromEnum('STATUS', $this->status)
+                fn() => TextProperty::createFromEnum('STATUS', $this->status)
             )
             ->optional(
                 $this->transparent,
-                fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
+                fn() => TextProperty::create('TRANSP', 'TRANSPARENT')
             )
             ->optional(
                 $this->organizer,
-                fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
+                fn() => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
             )
             ->optional(
                 $this->rrule,
-                fn () => RRuleProperty::create('RRULE', $this->rrule)
+                fn() => RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
                 $this->attendees,
-                fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
+                fn(CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
             )
             ->optional(
                 $this->url,
-                fn () => UriProperty::create('URL', $this->url)
-            )->multiple(
+                fn() => UriProperty::create('URL', $this->url)
+            )
+            ->multiple(
                 $this->recurrence_dates,
-                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
-            )->multiple(
+                fn(DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
+            )
+            ->multiple(
                 $this->excluded_recurrence_dates,
-                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
+                fn(DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
+            )
+            ->multiple(
+                $this->attachments,
+                fn(string $url) => UriProperty::create('ATTACH', $url)
             );
 
         return $this;
@@ -445,7 +461,7 @@ class Event extends Component implements HasTimezones
     private function resolveAlerts(ComponentPayload $payload): self
     {
         $alerts = array_map(
-            fn (Alert $alert) => $this->withoutTimezone ? $alert->withoutTimezone() : $alert,
+            fn(Alert $alert) => $this->withoutTimezone ? $alert->withoutTimezone() : $alert,
             $this->alerts
         );
 

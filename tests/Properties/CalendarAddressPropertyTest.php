@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 
@@ -17,10 +18,10 @@ class CalendarAddressPropertyTest extends TestCase
             new CalendarAddress('ruben@spatie.be')
         );
 
-        $this->assertEquals('ORGANIZER', $property->getName());
-        $this->assertEquals('MAILTO:ruben@spatie.be', $property->getValue());
-
-        $this->assertParameterCountInProperty(0, $property);
+        PropertyExpectation::create($property)
+            ->expectName('ORGANIZER')
+            ->expectOutput('MAILTO:ruben@spatie.be')
+            ->expectParameterCount(0);
     }
 
     /** @test */
@@ -31,11 +32,11 @@ class CalendarAddressPropertyTest extends TestCase
             new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::accepted())
         );
 
-        $this->assertEquals('ORGANIZER', $property->getName());
-        $this->assertEquals('MAILTO:ruben@spatie.be', $property->getValue());
-
-        $this->assertParameterCountInProperty(2, $property);
-        $this->assertParameterEqualsInProperty('CN', 'Ruben', $property);
-        $this->assertParameterEqualsInProperty('PARTSTAT', ParticipationStatus::accepted()->value, $property);
+        PropertyExpectation::create($property)
+            ->expectName('ORGANIZER')
+            ->expectOutput('MAILTO:ruben@spatie.be')
+            ->expectParameterCount(2)
+            ->expectParameterValue('CN', 'Ruben')
+            ->expectParameterValue('PARTSTAT', ParticipationStatus::accepted()->value);
     }
 }

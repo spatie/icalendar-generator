@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
@@ -16,8 +17,9 @@ class RRulePropertyTest extends TestCase
 
         $propertyType = RRuleProperty::create('RRULE', $recurrenceRule);
 
-        $this->assertEquals('RRULE', $propertyType->getName());
-        $this->assertEquals('FREQ=DAILY', $propertyType->getValue());
-        $this->assertEquals($recurrenceRule, $propertyType->getOriginalValue());
+        PropertyExpectation::create($propertyType)
+            ->expectName('RRULE')
+            ->expectOutput('FREQ=DAILY')
+            ->expectValue($recurrenceRule);
     }
 }

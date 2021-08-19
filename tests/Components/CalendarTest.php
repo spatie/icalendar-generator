@@ -10,6 +10,8 @@ use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Components\Timezone;
+use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class CalendarTest extends TestCase
@@ -19,12 +21,11 @@ class CalendarTest extends TestCase
     {
         $payload = Calendar::create()->resolvePayload();
 
-        $this->assertEquals('VCALENDAR', $payload->getType());
-
-        $this->assertCount(2, $payload->getProperties());
-
-        $this->assertPropertyEqualsInPayload('VERSION', '2.0', $payload);
-        $this->assertPropertyEqualsInPayload('PRODID', 'spatie/icalendar-generator', $payload);
+        PayloadExpectation::create($payload)
+            ->expectType('VCALENDAR')
+            ->expectPropertyCount(2)
+            ->expectPropertyValue('VERSION', '2.0')
+            ->expectPropertyValue('PRODID', 'spatie/icalendar-generator');
     }
 
     /** @test */
@@ -36,12 +37,12 @@ class CalendarTest extends TestCase
             ->productIdentifier('Ruben\'s calendar creator machine')
             ->resolvePayload();
 
-        $this->assertCount(4, $payload->getProperties());
-
-        $this->assertPropertyEqualsInPayload('NAME', 'Full Stack Europe Schedule', $payload);
-        $this->assertPropertyEqualsInPayload('X-WR-CALNAME', 'Full Stack Europe Schedule', $payload);
-        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'What events are going to happen?', $payload);
-        $this->assertPropertyEqualsInPayload('PRODID', 'Ruben\'s calendar creator machine', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyCount(4)
+            ->expectPropertyValue('NAME', 'Full Stack Europe Schedule')
+            ->expectPropertyValue('X-WR-CALNAME', 'Full Stack Europe Schedule')
+            ->expectPropertyValue('DESCRIPTION', 'What events are going to happen?')
+            ->expectPropertyValue('PRODID', 'Ruben\'s calendar creator machine');
     }
 
     /** @test */
@@ -54,10 +55,9 @@ class CalendarTest extends TestCase
             ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
-        $subComponents = $payload->getSubComponents();
-
-        $this->assertCount(1, $subComponents);
-        $this->assertEquals($subComponents[0], $event);
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(1)
+            ->expectSubComponents($event);
     }
 
     /** @test */
@@ -70,10 +70,11 @@ class CalendarTest extends TestCase
             ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
-        $subComponents = $payload->getSubComponents();
-
-        $this->assertCount(1, $subComponents);
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->resolvePayload());
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(1)
+            ->expectSubComponent(0, function(PayloadExpectation  $expectation){
+                $expectation->expectPropertyValue('SUMMARY', 'An introduction to event sourcing');
+            });
     }
 
     /** @test */
@@ -87,11 +88,9 @@ class CalendarTest extends TestCase
             ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
-        $subComponents = $payload->getSubComponents();
-
-        $this->assertCount(2, $subComponents);
-        $this->assertEquals($subComponents[0], $firstEvent);
-        $this->assertEquals($subComponents[1], $secondEvent);
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(2)
+            ->expectSubComponents($firstEvent, $secondEvent);
     }
 
     /** @test */
@@ -109,11 +108,14 @@ class CalendarTest extends TestCase
             ->withoutAutoTimezoneComponents()
             ->resolvePayload();
 
-        $subComponents = $payload->getSubComponents();
-
-        $this->assertCount(2, $subComponents);
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction to event sourcing', $subComponents[0]->resolvePayload());
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'Websockets what are they?', $subComponents[1]->resolvePayload());
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(2)
+            ->expectSubComponent(0, function(PayloadExpectation  $expectation){
+                $expectation->expectPropertyValue('SUMMARY', 'An introduction to event sourcing');
+            })
+            ->expectSubComponent(1, function(PayloadExpectation  $expectation){
+                $expectation->expectPropertyValue('SUMMARY', 'Websockets what are they?');
+            });
     }
 
     /** @test */
@@ -147,27 +149,9 @@ class CalendarTest extends TestCase
             ->refreshInterval(5)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('REFRESH-INTERVAL', new DateInterval('PT5M'), $payload);
-        $this->assertParameterEqualsInProperty('VALUE', 'DURATION', $payload->getProperty('REFRESH-INTERVAL'));
-    }
-
-    /** @test */
-    public function it_is_possible_to_add_multiple_events()
-    {
-        $firstEvent = Event::create('An introduction to event sourcing');
-        $secondEvent = Event::create('An introduction to event sourcing');
-
-        $payload = Calendar::create()
-            ->event($firstEvent)
-            ->event([$secondEvent])
-            ->withoutAutoTimezoneComponents()
-            ->resolvePayload();
-
-        $subComponents = $payload->getSubComponents();
-
-        $this->assertCount(2, $subComponents);
-        $this->assertEquals($subComponents[0], $firstEvent);
-        $this->assertEquals($subComponents[1], $secondEvent);
+        PropertyExpectation::create($payload, 'REFRESH-INTERVAL')
+            ->expectValue(new DateInterval('PT5M'))
+            ->expectParameterValue('VALUE', 'DURATION');
     }
 
     /** @test */
@@ -192,18 +176,17 @@ class CalendarTest extends TestCase
             [$utcEvent, $alternativeTimezoneEvent, $withoutTimezoneEvent]
         )->resolvePayload();
 
-        $subComponents = $payload->getSubComponents();
-
-        $this->assertCount(5, $subComponents);
-
-        $this->assertInstanceOf(Timezone::class, $subComponents[0]);
-        $this->assertInstanceOf(Timezone::class, $subComponents[1]);
-        $this->assertNotInstanceOf(Timezone::class, $subComponents[2]);
-        $this->assertNotInstanceOf(Timezone::class, $subComponents[3]);
-        $this->assertNotInstanceOf(Timezone::class, $subComponents[4]);
-
-        $this->assertPropertyEqualsInPayload('TZID', 'UTC', $subComponents[0]->resolvePayload());
-        $this->assertPropertyEqualsInPayload('TZID', 'Europe/Brussels', $subComponents[1]->resolvePayload());
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(5)
+            ->expectSubComponent(0, function (PayloadExpectation $expectation){
+                $expectation->expectType('VTIMEZONE')->expectPropertyValue('TZID', 'UTC');
+            })
+            ->expectSubComponent(1, function (PayloadExpectation $expectation){
+                $expectation->expectType('VTIMEZONE')->expectPropertyValue('TZID', 'Europe/Brussels');
+            })
+            ->expectSubComponentNotInstanceOf(2, Timezone::class)
+            ->expectSubComponentNotInstanceOf(3, Timezone::class)
+            ->expectSubComponentNotInstanceOf(4, Timezone::class);
     }
 
     /** @test */
@@ -331,11 +314,8 @@ EOT, $negativeOffsetTimezoneComponent->toString());
             ->timezone(null)
             ->resolvePayload();
 
-        $subcomponents = $payload->getSubComponents();
-
-        $this->assertCount(3, $subcomponents);
-        $this->assertContains($timezoneA, $subcomponents);
-        $this->assertContains($timezoneB, $subcomponents);
-        $this->assertContains($timezoneC, $subcomponents);
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(3)
+            ->expectSubComponents($timezoneA, $timezoneB, $timezoneC);
     }
 }
