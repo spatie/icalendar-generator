@@ -56,7 +56,19 @@ class DateTimePropertyTest extends TestCase
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date);
 
         $this->assertEquals('20190516', $property->getValue());
-        $this->assertCount(0, $property->getParameters());
+        $this->assertParameterCountInProperty(1, $property);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $property);
+    }
+
+    /** @test */
+    public function it_will_use_a_non_utc_timezone_format_when_time_is_not_given()
+    {
+        $property = DateTimeProperty::fromDateTime('STARTS', $this->date, false);
+
+        $this->assertEquals('20190516', $property->getValue());
+        $this->assertCount(2, $property->getParameters());
+        $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $property);
     }
 
     /** @test */

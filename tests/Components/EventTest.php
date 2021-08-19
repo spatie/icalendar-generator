@@ -89,11 +89,31 @@ class EventTest extends TestCase
             ->period($dateStarts, $dateEnds)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('DTSTART', null, $payload);
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE:20190517', $payload->getProperty('DTSTART'));
+        $this->assertParameterCountInProperty(1, $payload->getProperty('DTSTART'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTSTART'));
 
-        $this->assertPropertyEqualsInPayload('DTEND', null, $payload);
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE:20190518', $payload->getProperty('DTEND'));
+        $this->assertParameterCountInProperty(1, $payload->getProperty('DTEND'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTEND'));
+    }
+
+    /** @test */
+    public function an_event_can_be_a_full_day_with_timezones()
+    {
+        $dateStarts = new DateTime('17 may 2019', new DateTimeZone('Europe/London'));
+        $dateEnds = new DateTime('18 may 2019', new DateTimeZone('Europe/London'));
+
+        $payload = Event::create('An introduction into event sourcing')
+            ->fullDay()
+            ->period($dateStarts, $dateEnds)
+            ->resolvePayload();
+
+        $this->assertParameterCountInProperty(2, $payload->getProperty('DTSTART'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTSTART'));
+        $this->assertParameterEqualsInProperty('TZID', 'Europe/London', $payload->getProperty('DTSTART'));
+
+        $this->assertParameterCountInProperty(2, $payload->getProperty('DTEND'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTEND'));
+        $this->assertParameterEqualsInProperty('TZID', 'Europe/London', $payload->getProperty('DTEND'));
     }
 
     /** @test */
@@ -106,8 +126,8 @@ class EventTest extends TestCase
             ->startsAt($dateStarts)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('DTSTART', null, $payload);
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE:20190517', $payload->getProperty('DTSTART'));
+        $this->assertParameterCountInProperty(1, $payload->getProperty('DTSTART'));
+        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTSTART'));
 
         $this->assertPropertyNotInPayload('DTEND', $payload);
     }
@@ -392,14 +412,12 @@ class EventTest extends TestCase
         );
 
         $this->assertContainsEquals(
-            DateTimeProperty::create('RDATE', DateTimeValue::create($dateC, false))
-                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateC, false)),
             $properties
         );
 
         $this->assertContainsEquals(
-            DateTimeProperty::create('RDATE', DateTimeValue::create($dateD, false))
-                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            DateTimeProperty::create('RDATE', DateTimeValue::create($dateD, false)),
             $properties
         );
     }
@@ -448,14 +466,12 @@ class EventTest extends TestCase
         );
 
         $this->assertContainsEquals(
-            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateC, false))
-                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateC, false)),
             $properties
         );
 
         $this->assertContainsEquals(
-            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateD, false))
-                ->addParameter(Parameter::create('VALUE', 'DATE')),
+            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateD, false)),
             $properties
         );
     }

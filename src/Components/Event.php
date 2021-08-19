@@ -14,7 +14,6 @@ use Spatie\IcalendarGenerator\Properties\AppleLocationCoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
-use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\RRuleProperty;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
@@ -385,17 +384,25 @@ class Event extends Component implements HasTimezones
                 fn () => UriProperty::create('URL', $this->url)
             )->multiple(
                 $this->recurrence_dates,
-                fn (DateTimeValue $dateTime) => DateTimeProperty::create('RDATE', $dateTime)->addParameter(
-                    Parameter::create('VALUE', $dateTime->hasTime() ? 'DATE-TIME' : 'DATE')
-                )
+                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
             )->multiple(
                 $this->excluded_recurrence_dates,
-                fn (DateTimeValue $dateTime) => DateTimeProperty::create('EXDATE', $dateTime)->addParameter(
-                    Parameter::create('VALUE', $dateTime->hasTime() ? 'DATE-TIME' : 'DATE')
-                )
+                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
             );
 
         return $this;
+    }
+
+    private static function dateTimePropertyWithSpecifiedType(
+        string $name,
+        DateTimeValue $dateTimeValue
+    ): DateTimeProperty {
+        $property = DateTimeProperty::create($name, $dateTimeValue);
+        if ($dateTimeValue->hasTime()) {
+            $property->addParameter(Parameter::create('VALUE', 'DATE-TIME'));
+        }
+
+        return $property;
     }
 
     private function resolveDateProperty(ComponentPayload $payload, ?DateTimeValue $value, string $name): self
@@ -404,15 +411,9 @@ class Event extends Component implements HasTimezones
             return $this;
         }
 
-        if (! $this->isFullDay) {
-            $payload->property(DateTimeProperty::create($name, $value, $this->withoutTimezone));
-
-            return $this;
-        }
-
-        $payload->property(EmptyProperty::create($name, [
-            Parameter::create('VALUE', DateTimeValue::create($value->getDateTime(), false)),
-        ]));
+        $payload->property(
+            DateTimeProperty::fromDateTime($name, $value->getDateTime(), !$this->isFullDay, $this->withoutTimezone)
+        );
 
         return $this;
     }
