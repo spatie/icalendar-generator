@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.2.2 - 2020-08-19
+
+- fix date timezones on all day events (#55)
+
 ## 2.2.1 - 2020-07-08
 
 - fix coordinates with Apple calendar (#51)
