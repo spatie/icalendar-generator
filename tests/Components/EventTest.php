@@ -487,10 +487,10 @@ class EventTest extends TestCase
 
         PayloadExpectation::create($payload)->expectProperty(
             'ATTACH',
-            fn(PropertyExpectation $expectation) => $expectation
+            fn (PropertyExpectation $expectation) => $expectation
                 ->expectParameterCount(0)
                 ->expectValue('http://spatie.be/logo.svg'),
-            fn(PropertyExpectation $expectation) => $expectation
+            fn (PropertyExpectation $expectation) => $expectation
                 ->expectParameterCount(1)
                 ->expectParameterValue('FMTTYPE', 'application/html')
                 ->expectValue('http://spatie.be/logo.jpg'),
