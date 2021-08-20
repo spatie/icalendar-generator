@@ -482,26 +482,18 @@ class EventTest extends TestCase
     {
         $payload = Event::create()
             ->attachment('http://spatie.be/logo.svg')
+            ->attachment('http://spatie.be/logo.jpg', 'application/html')
             ->resolvePayload();
 
-        PayloadExpectation::create($payload)
-            ->expectPropertyValue('ATTACH', 'http://spatie.be/logo.svg');
-    }
-
-    /** @test */
-    public function it_can_add_multiple_attachment_to_an_event()
-    {
-        $payload = Event::create()
-            ->attachment('http://spatie.be/logo.svg', 'http://spatie.be/logo.png')
-            ->attachment('http://spatie.be/logo.jpg')
-            ->resolvePayload();
-
-        PayloadExpectation::create($payload)
-            ->expectPropertyValue(
-                'ATTACH',
-                'http://spatie.be/logo.svg',
-                'http://spatie.be/logo.png',
-                'http://spatie.be/logo.jpg'
-            );
+        PayloadExpectation::create($payload)->expectProperty(
+            'ATTACH',
+            fn(PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(0)
+                ->expectValue('http://spatie.be/logo.svg'),
+            fn(PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(1)
+                ->expectParameterValue('FMTTYPE', 'application/html')
+                ->expectValue('http://spatie.be/logo.jpg'),
+        );
     }
 }
