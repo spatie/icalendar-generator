@@ -3,6 +3,7 @@
 namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class CoordinatesPropertyTest extends TestCase
@@ -12,11 +13,9 @@ class CoordinatesPropertyTest extends TestCase
     {
         $propertyType = new CoordinatesProperty('GEO', 10.5, 20.5);
 
-        $this->assertEquals('GEO', $propertyType->getName());
-        $this->assertEquals('10.5;20.5', $propertyType->getValue());
-        $this->assertEquals([
-            'lat' => 10.5,
-            'lng' => 20.5,
-        ], $propertyType->getOriginalValue());
+        PropertyExpectation::create($propertyType)
+            ->expectName('GEO')
+            ->expectOutput('10.5;20.5')
+            ->expectValue(['lat' => 10.5, 'lng' => 20.5]);
     }
 }

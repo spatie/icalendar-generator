@@ -5,6 +5,8 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 use DateInterval;
 use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
+use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class AlertTest extends TestCase
@@ -16,14 +18,17 @@ class AlertTest extends TestCase
 
         $payload = (new Alert('It is time'))->triggerDate($trigger)->resolvePayload();
 
-        $this->assertEquals('VALARM', $payload->getType());
-        $this->assertCount(3, $payload->getProperties());
-
-        $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
-        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'It is time', $payload);
-        $this->assertPropertyEqualsInPayload('TRIGGER', $trigger, $payload);
-        $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
+        PayloadExpectation::create($payload)
+            ->expectType('VALARM')
+            ->expectPropertyCount(3)
+            ->expectPropertyValue('ACTION', 'DISPLAY')
+            ->expectPropertyValue('DESCRIPTION', 'It is time')
+            ->expectProperty('TRIGGER', function (PropertyExpectation  $expectation) use ($trigger) {
+                $expectation
+                    ->expectValue($trigger)
+                    ->expectParameterCount(1)
+                    ->expectParameterValue('VALUE', 'DATE-TIME');
+            });
     }
 
     /** @test */
@@ -36,8 +41,9 @@ class AlertTest extends TestCase
             ->triggerDate($trigger)
             ->resolvePayload();
 
-        $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $payload->getProperty('TRIGGER'));
+        PropertyExpectation::create($payload, 'TRIGGER')
+            ->expectParameterCount(1)
+            ->expectParameterValue('VALUE', 'DATE-TIME');
     }
 
     /** @test */
@@ -49,12 +55,13 @@ class AlertTest extends TestCase
             ->triggerAtStart($trigger)
             ->resolvePayload();
 
-        $this->assertEquals('VALARM', $payload->getType());
-        $this->assertCount(2, $payload->getProperties());
-
-        $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
-        $this->assertPropertyEqualsInPayload('TRIGGER', $trigger, $payload);
-        $this->assertParameterCountInProperty(0, $payload->getProperty('TRIGGER'));
+        PayloadExpectation::create($payload)
+            ->expectType('VALARM')
+            ->expectPropertyCount(2)
+            ->expectPropertyValue('ACTION', 'DISPLAY')
+            ->expectProperty('TRIGGER', function (PropertyExpectation $expectation) use ($trigger) {
+                $expectation->expectValue($trigger)->expectParameterCount(0);
+            });
     }
 
     /** @test */
@@ -66,13 +73,15 @@ class AlertTest extends TestCase
             ->triggerAtEnd($trigger)
             ->resolvePayload();
 
-        $this->assertEquals('VALARM', $payload->getType());
-        $this->assertCount(2, $payload->getProperties());
-
-        $this->assertPropertyEqualsInPayload('ACTION', 'DISPLAY', $payload);
-        $this->assertPropertyEqualsInPayload('TRIGGER', $trigger, $payload);
-        $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('RELATED', 'END', $payload->getProperty('TRIGGER'));
+        PayloadExpectation::create($payload)
+            ->expectType('VALARM')
+            ->expectPropertyCount(2)
+            ->expectPropertyValue('ACTION', 'DISPLAY')
+            ->expectProperty('TRIGGER', function (PropertyExpectation $expectation) use ($trigger) {
+                $expectation->expectValue($trigger)
+                    ->expectParameterCount(1)
+                    ->expectParameterValue('RELATED', 'END');
+            });
     }
 
     /** @test */
@@ -83,27 +92,31 @@ class AlertTest extends TestCase
         $payload = Alert::minutesBeforeStart(5)->resolvePayload();
         $interval->invert = 1;
 
-        $this->assertPropertyEqualsInPayload('TRIGGER', $interval, $payload);
-        $this->assertParameterCountInProperty(0, $payload->getProperty('TRIGGER'));
+        PropertyExpectation::create($payload, 'TRIGGER')
+            ->expectValue($interval)
+            ->expectParameterCount(0);
 
         $payload = Alert::minutesAfterStart(5)->resolvePayload();
         $interval->invert = 0;
 
-        $this->assertPropertyEqualsInPayload('TRIGGER', $interval, $payload);
-        $this->assertParameterCountInProperty(0, $payload->getProperty('TRIGGER'));
+        PropertyExpectation::create($payload, 'TRIGGER')
+            ->expectValue($interval)
+            ->expectParameterCount(0);
 
         $payload = Alert::minutesBeforeEnd(5)->resolvePayload();
         $interval->invert = 1;
 
-        $this->assertPropertyEqualsInPayload('TRIGGER', $interval, $payload);
-        $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('RELATED', 'END', $payload->getProperty('TRIGGER'));
+        PropertyExpectation::create($payload, 'TRIGGER')
+            ->expectValue($interval)
+            ->expectParameterCount(1)
+            ->expectParameterValue('RELATED', 'END');
 
         $payload = Alert::minutesAfterEnd(5)->resolvePayload();
         $interval->invert = 0;
 
-        $this->assertPropertyEqualsInPayload('TRIGGER', $interval, $payload);
-        $this->assertParameterCountInProperty(1, $payload->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('RELATED', 'END', $payload->getProperty('TRIGGER'));
+        PropertyExpectation::create($payload, 'TRIGGER')
+            ->expectValue($interval)
+            ->expectParameterCount(1)
+            ->expectParameterValue('RELATED', 'END');
     }
 }

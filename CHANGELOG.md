@@ -2,6 +2,11 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.3.0 - 2020-08-20
+
+- add support for attachments on events
+- add a new expectation testing mechanism for internal tests
+
 ## 2.2.2 - 2020-08-19
 
 - fix date timezones on all day events (#55)

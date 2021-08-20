@@ -10,12 +10,11 @@ use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
-use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
-use Spatie\IcalendarGenerator\Properties\Parameter;
+use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
-use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class EventTest extends TestCase
@@ -25,13 +24,11 @@ class EventTest extends TestCase
     {
         $payload = Event::create()->resolvePayload();
 
-        $properties = $payload->getProperties();
-
-        $this->assertEquals('VEVENT', $payload->getType());
-        $this->assertCount(2, $properties);
-
-        $this->assertPropertyExistInPayload('UID', $payload);
-        $this->assertPropertyExistInPayload('DTSTAMP', $payload);
+        PayloadExpectation::create($payload)
+            ->expectType('VEVENT')
+            ->expectPropertyCount(2)
+            ->expectPropertyExists('UID')
+            ->expectPropertyExists('DTSTAMP');
     }
 
     /** @test */
@@ -52,16 +49,16 @@ class EventTest extends TestCase
             ->addressName('Spatie')
             ->resolvePayload();
 
-        $this->assertCount(8, $payload->getProperties());
-
-        $this->assertPropertyEqualsInPayload('SUMMARY', 'An introduction into event sourcing', $payload);
-        $this->assertPropertyEqualsInPayload('DESCRIPTION', 'By Freek Murze', $payload);
-        $this->assertPropertyEqualsInPayload('DTSTAMP', $dateCreated, $payload);
-        $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
-        $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
-        $this->assertPropertyEqualsInPayload('LOCATION', 'Antwerp', $payload);
-        $this->assertPropertyEqualsInPayload('UID', 'Identifier here', $payload);
-        $this->assertPropertyEqualsInPayload('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyCount(8)
+            ->expectPropertyValue('SUMMARY', 'An introduction into event sourcing')
+            ->expectPropertyValue('DESCRIPTION', 'By Freek Murze')
+            ->expectPropertyValue('DTSTAMP', $dateCreated)
+            ->expectPropertyValue('DTSTART', $dateStarts)
+            ->expectPropertyValue('DTEND', $dateEnds)
+            ->expectPropertyValue('LOCATION', 'Antwerp')
+            ->expectPropertyValue('UID', 'Identifier here')
+            ->expectPropertyValue('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics');
     }
 
     /** @test */
@@ -74,8 +71,9 @@ class EventTest extends TestCase
             ->period($dateStarts, $dateEnds)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('DTSTART', $dateStarts, $payload);
-        $this->assertPropertyEqualsInPayload('DTEND', $dateEnds, $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('DTSTART', $dateStarts)
+            ->expectPropertyValue('DTEND', $dateEnds);
     }
 
     /** @test */
@@ -89,11 +87,13 @@ class EventTest extends TestCase
             ->period($dateStarts, $dateEnds)
             ->resolvePayload();
 
-        $this->assertParameterCountInProperty(1, $payload->getProperty('DTSTART'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTSTART'));
+        PropertyExpectation::create($payload, 'DTSTART')
+            ->expectParameterCount(1)
+            ->expectParameterValue('VALUE', 'DATE');
 
-        $this->assertParameterCountInProperty(1, $payload->getProperty('DTEND'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTEND'));
+        PropertyExpectation::create($payload, 'DTEND')
+            ->expectParameterCount(1)
+            ->expectParameterValue('VALUE', 'DATE');
     }
 
     /** @test */
@@ -107,13 +107,15 @@ class EventTest extends TestCase
             ->period($dateStarts, $dateEnds)
             ->resolvePayload();
 
-        $this->assertParameterCountInProperty(2, $payload->getProperty('DTSTART'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTSTART'));
-        $this->assertParameterEqualsInProperty('TZID', 'Europe/London', $payload->getProperty('DTSTART'));
+        PropertyExpectation::create($payload, 'DTSTART')
+            ->expectParameterCount(2)
+            ->expectParameterValue('VALUE', 'DATE')
+            ->expectParameterValue('TZID', 'Europe/London');
 
-        $this->assertParameterCountInProperty(2, $payload->getProperty('DTEND'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTEND'));
-        $this->assertParameterEqualsInProperty('TZID', 'Europe/London', $payload->getProperty('DTEND'));
+        PropertyExpectation::create($payload, 'DTEND')
+            ->expectParameterCount(2)
+            ->expectParameterValue('VALUE', 'DATE')
+            ->expectParameterValue('TZID', 'Europe/London');
     }
 
     /** @test */
@@ -126,10 +128,13 @@ class EventTest extends TestCase
             ->startsAt($dateStarts)
             ->resolvePayload();
 
-        $this->assertParameterCountInProperty(1, $payload->getProperty('DTSTART'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $payload->getProperty('DTSTART'));
-
-        $this->assertPropertyNotInPayload('DTEND', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyMissing('DTEND')
+            ->expectProperty('DTSTART', function (PropertyExpectation $expectation) {
+                $expectation
+                    ->expectParameterCount(1)
+                    ->expectParameterValue('VALUE', 'DATE');
+            });
     }
 
     /** @test */
@@ -139,10 +144,9 @@ class EventTest extends TestCase
             ->alertMinutesBefore(5)
             ->resolvePayload();
 
-        $subcomponents = $payload->getSubComponents();
-
-        $this->assertCount(1, $subcomponents);
-        $this->assertInstanceOf(Alert::class, $subcomponents[0]);
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(1)
+            ->expectSubComponentInstanceOf(0, Alert::class);
     }
 
     /** @test */
@@ -152,10 +156,9 @@ class EventTest extends TestCase
             ->alertMinutesAfter(5)
             ->resolvePayload();
 
-        $subcomponents = $payload->getSubComponents();
-
-        $this->assertCount(1, $subcomponents);
-        $this->assertInstanceOf(Alert::class, $subcomponents[0]);
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(1)
+            ->expectSubComponentInstanceOf(0, Alert::class);
     }
 
     /** @test */
@@ -165,10 +168,9 @@ class EventTest extends TestCase
             ->alert(new Alert('Test'))
             ->resolvePayload();
 
-        $subcomponents = $payload->getSubComponents();
-
-        $this->assertCount(1, $subcomponents);
-        $this->assertInstanceOf(Alert::class, $subcomponents[0]);
+        PayloadExpectation::create($payload)
+            ->expectSubComponentCount(1)
+            ->expectSubComponentInstanceOf(0, Alert::class);
     }
 
     /** @test */
@@ -178,10 +180,8 @@ class EventTest extends TestCase
             ->coordinates(51.2343, 4.4287)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('GEO', [
-            'lat' => 51.2343,
-            'lng' => 4.4287,
-        ], $payload);
+        PropertyExpectation::create($payload, 'GEO')
+            ->expectValue(['lat' => 51.2343, 'lng' => 4.4287]);
     }
 
     /** @test */
@@ -193,19 +193,13 @@ class EventTest extends TestCase
             ->addressName('Spatie HQ')
             ->resolvePayload();
 
-        $this->assertPropertyExistInPayload('X-APPLE-STRUCTURED-LOCATION', $payload);
-
-        $property = $payload->getProperty('X-APPLE-STRUCTURED-LOCATION');
-
-        $this->assertEquals('geo:51.2343,4.4287', $property->getValue());
-        $this->assertEquals([
-            'lat' => 51.2343,
-            'lng' => 4.4287,
-        ], $property->getOriginalValue());
-        $this->assertParameterEqualsInProperty('VALUE', 'URI', $property);
-        $this->assertParameterEqualsInProperty('X-ADDRESS', 'Samberstraat 69D\, 2060 Antwerpen\, Belgium', $property);
-        $this->assertParameterEqualsInProperty('X-APPLE-RADIUS', 72, $property);
-        $this->assertParameterEqualsInProperty('X-TITLE', 'Spatie HQ', $property);
+        PropertyExpectation::create($payload, 'X-APPLE-STRUCTURED-LOCATION')
+            ->expectValue(['lat' => 51.2343, 'lng' => 4.4287,])
+            ->expectOutput('geo:51.2343,4.4287')
+            ->expectParameterValue('VALUE', 'URI')
+            ->expectParameterValue('X-ADDRESS', 'Samberstraat 69D\, 2060 Antwerpen\, Belgium')
+            ->expectParameterValue('X-APPLE-RADIUS', 72)
+            ->expectParameterValue('X-TITLE', 'Spatie HQ');
     }
 
     /** @test */
@@ -215,7 +209,9 @@ class EventTest extends TestCase
             ->classification(Classification::private())
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('CLASS', Classification::private()->value, $payload);
+        PropertyExpectation::create($payload, 'CLASS')
+            ->expectValue(Classification::private()->value)
+            ->expectOutput(Classification::private()->value);
     }
 
     /** @test */
@@ -225,7 +221,8 @@ class EventTest extends TestCase
             ->transparent()
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('TRANSP', 'TRANSPARENT', $payload);
+        PropertyExpectation::create($payload, 'TRANSP')
+            ->expectValue('TRANSPARENT');
     }
 
     /** @test */
@@ -235,11 +232,8 @@ class EventTest extends TestCase
             ->organizer('ruben@spatie.be', 'Ruben')
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload(
-            'ORGANIZER',
-            new CalendarAddress('ruben@spatie.be', 'Ruben'),
-            $payload
-        );
+        PropertyExpectation::create($payload, 'ORGANIZER')
+            ->expectValue(new CalendarAddress('ruben@spatie.be', 'Ruben'));
     }
 
     /** @test */
@@ -249,23 +243,14 @@ class EventTest extends TestCase
             ->attendee('ruben@spatie.be')
             ->attendee('brent@spatie.be', 'Brent')
             ->attendee('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
-            ->resolvePayload()
-            ->getProperties();
+            ->resolvePayload();
 
-        $this->assertContainsEquals(CalendarAddressProperty::create(
+        PayloadExpectation::create($payload)->expectPropertyValue(
             'ATTENDEE',
-            new CalendarAddress('ruben@spatie.be')
-        ), $payload);
-
-        $this->assertContainsEquals(CalendarAddressProperty::create(
-            'ATTENDEE',
-            new CalendarAddress('brent@spatie.be', 'Brent')
-        ), $payload);
-
-        $this->assertContainsEquals(CalendarAddressProperty::create(
-            'ATTENDEE',
+            new CalendarAddress('ruben@spatie.be'),
+            new CalendarAddress('brent@spatie.be', 'Brent'),
             new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
-        ), $payload);
+        );
     }
 
     /** @test */
@@ -275,11 +260,8 @@ class EventTest extends TestCase
             ->status(EventStatus::tentative())
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload(
-            'STATUS',
-            EventStatus::tentative()->value,
-            $payload
-        );
+        PropertyExpectation::create($payload, 'STATUS')
+            ->expectValue(EventStatus::tentative()->value);
     }
 
     /** @test */
@@ -294,7 +276,8 @@ class EventTest extends TestCase
             ->address('Antwerp')
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('LOCATION', 'Antwerp', $payload);
+        PropertyExpectation::create($payload, 'LOCATION')
+            ->expectValue('Antwerp');
     }
 
     /** @test */
@@ -304,7 +287,8 @@ class EventTest extends TestCase
             ->rrule($rrule = RRule::frequency(RecurrenceFrequency::daily()))
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('RRULE', $rrule, $payload);
+        PropertyExpectation::create($payload, 'RRULE')
+            ->expectValue($rrule);
     }
 
     /** @test */
@@ -321,15 +305,17 @@ class EventTest extends TestCase
             ->endsAt($dateEnds)
             ->resolvePayload();
 
-        $this->assertParameterCountInProperty(0, $payload->getProperty('DTSTART'));
-        $this->assertParameterCountInProperty(0, $payload->getProperty('DTEND'));
-        $this->assertParameterCountInProperty(0, $payload->getProperty('DTSTAMP'));
+        PropertyExpectation::create($payload, 'DTSTART')->expectParameterCount(0);
+        PropertyExpectation::create($payload, 'DTEND')->expectParameterCount(0);
+        PropertyExpectation::create($payload, 'DTSTAMP')->expectParameterCount(0);
 
-        /** @var \Spatie\IcalendarGenerator\ComponentPayload $alert */
-        $alert = $payload->getSubComponents()[0]->resolvePayload();
-
-        $this->assertParameterCountInProperty(1, $alert->getProperty('TRIGGER'));
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE-TIME', $alert->getProperty('TRIGGER'));
+        PayloadExpectation::create($payload)->expectSubComponent(0, function (PayloadExpectation $expectation) {
+            $expectation->expectProperty('TRIGGER', function (PropertyExpectation $expectation) {
+                $expectation
+                    ->expectParameterCount(1)
+                    ->expectParameterValue('VALUE', 'DATE-TIME');
+            });
+        });
     }
 
     /** @test */
@@ -339,7 +325,8 @@ class EventTest extends TestCase
             ->url('http://example.com/pub/calendars/jsmith/mytime.ics')
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics');
     }
 
     /** @test */
@@ -349,7 +336,8 @@ class EventTest extends TestCase
             ->url('xample.com/pub/calendars/jsmith/mytime.ics')
             ->resolvePayload();
 
-        $this->assertPropertyNotInPayload('URL', $payload);
+        PayloadExpectation::create($payload)
+            ->expectPropertyMissing('URL');
     }
 
     /** @test */
@@ -361,27 +349,22 @@ class EventTest extends TestCase
             ->createdAt($created)
             ->resolvePayload();
 
-        $this->assertPropertyEqualsInPayload(
-            'DTSTAMP',
-            new DateTime('16 may 2020 10:00:00', new DateTimeZone('UTC')),
-            $payload
-        );
+        PayloadExpectation::create($payload)
+            ->expectPropertyValue('DTSTAMP', new DateTime('16 may 2020 10:00:00', new DateTimeZone('UTC')));
     }
 
     /** @test */
     public function it_can_add_recurrence_dates()
     {
-        $this->assertBuildPropertyEqualsInPayload(
-            'RDATE',
-            'RDATE;VALUE=DATE-TIME:20200516T120000Z',
-            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
-        );
+        PropertyExpectation::create(
+            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload(),
+            'RDATE'
+        )->expectBuilt('RDATE;VALUE=DATE-TIME:20200516T120000Z');
 
-        $this->assertBuildPropertyEqualsInPayload(
-            'RDATE',
-            'RDATE;VALUE=DATE:20200516',
-            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
-        );
+        PropertyExpectation::create(
+            Event::create()->repeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload(),
+            'RDATE'
+        )->expectBuilt('RDATE;VALUE=DATE:20200516');
     }
 
     /** @test */
@@ -393,49 +376,57 @@ class EventTest extends TestCase
         $dateC = new DateTime('13 august 2019 12:00:00');
         $dateD = new DateTime('13 august 2020 15:00:00');
 
-        $properties = Event::create()
+        $payload = Event::create()
             ->repeatOn([$dateA, $dateB])
             ->repeatOn([$dateC, $dateD], false)
-            ->resolvePayload()
-            ->getProperties();
+            ->resolvePayload();
 
-        $this->assertContainsEquals(
-            DateTimeProperty::create('RDATE', DateTimeValue::create($dateA, true))
-                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
-            $properties
-        );
-
-        $this->assertContainsEquals(
-            DateTimeProperty::create('RDATE', DateTimeValue::create($dateB, true))
-                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
-            $properties
-        );
-
-        $this->assertContainsEquals(
-            DateTimeProperty::create('RDATE', DateTimeValue::create($dateC, false)),
-            $properties
-        );
-
-        $this->assertContainsEquals(
-            DateTimeProperty::create('RDATE', DateTimeValue::create($dateD, false)),
-            $properties
-        );
+        PayloadExpectation::create($payload)
+            ->expectProperty(
+                'RDATE',
+                function (PropertyExpectation $expectation) use ($dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateA)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE-TIME');
+                },
+                function (PropertyExpectation $expectation) use ($dateB, $dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateB)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE-TIME');
+                },
+                function (PropertyExpectation $expectation) use ($dateC, $dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateC)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE');
+                },
+                function (PropertyExpectation $expectation) use ($dateD, $dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateD)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE');
+                }
+            );
     }
 
     /** @test */
     public function it_can_add_excluded_recurrence_dates()
     {
-        $this->assertBuildPropertyEqualsInPayload(
-            'EXDATE',
-            'EXDATE;VALUE=DATE-TIME:20200516T120000Z',
-            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload()
-        );
+        PropertyExpectation::create(
+            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'))->resolvePayload(),
+            'EXDATE'
+        )->expectBuilt('EXDATE;VALUE=DATE-TIME:20200516T120000Z');
 
-        $this->assertBuildPropertyEqualsInPayload(
-            'EXDATE',
-            'EXDATE;VALUE=DATE:20200516',
-            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload()
-        );
+        PropertyExpectation::create(
+            Event::create()->doNotRepeatOn(new DateTime('16 may 2020 12:00:00'), false)->resolvePayload(),
+            'EXDATE'
+        )->expectBuilt('EXDATE;VALUE=DATE:20200516');
     }
 
     /** @test */
@@ -447,32 +438,62 @@ class EventTest extends TestCase
         $dateC = new DateTime('13 august 2019 12:00:00');
         $dateD = new DateTime('13 august 2020 15:00:00');
 
-        $properties = Event::create()
+        $payload = Event::create()
             ->doNotRepeatOn([$dateA, $dateB])
             ->doNotRepeatOn([$dateC, $dateD], false)
-            ->resolvePayload()
-            ->getProperties();
+            ->resolvePayload();
 
-        $this->assertContainsEquals(
-            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateA, true))
-                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
-            $properties
-        );
+        PayloadExpectation::create($payload)
+            ->expectProperty(
+                'EXDATE',
+                function (PropertyExpectation $expectation) use ($dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateA)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE-TIME');
+                },
+                function (PropertyExpectation $expectation) use ($dateB, $dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateB)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE-TIME');
+                },
+                function (PropertyExpectation $expectation) use ($dateC, $dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateC)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE');
+                },
+                function (PropertyExpectation $expectation) use ($dateD, $dateA) {
+                    $expectation
+                        ->expectInstanceOf(DateTimeProperty::class)
+                        ->expectValue($dateD)
+                        ->expectParameterCount(1)
+                        ->expectParameterValue('VALUE', 'DATE');
+                }
+            );
+    }
 
-        $this->assertContainsEquals(
-            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateB, true))
-                ->addParameter(Parameter::create('VALUE', 'DATE-TIME')),
-            $properties
-        );
+    /** @test */
+    public function it_can_add_an_attachment_to_an_event()
+    {
+        $payload = Event::create()
+            ->attachment('http://spatie.be/logo.svg')
+            ->attachment('http://spatie.be/logo.jpg', 'application/html')
+            ->resolvePayload();
 
-        $this->assertContainsEquals(
-            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateC, false)),
-            $properties
-        );
-
-        $this->assertContainsEquals(
-            DateTimeProperty::create('EXDATE', DateTimeValue::create($dateD, false)),
-            $properties
+        PayloadExpectation::create($payload)->expectProperty(
+            'ATTACH',
+            fn (PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(0)
+                ->expectValue('http://spatie.be/logo.svg'),
+            fn (PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(1)
+                ->expectParameterValue('FMTTYPE', 'application/html')
+                ->expectValue('http://spatie.be/logo.jpg'),
         );
     }
 }

@@ -73,7 +73,13 @@ class ComponentPayload
         return $this->properties;
     }
 
-    public function getProperty(string $name): Property
+    /**
+     * @param string $name
+     *
+     * @return Property[]|Property
+     * @throws \Exception
+     */
+    public function getProperty(string $name)
     {
         $filteredProperties = array_filter(
             $this->properties,
@@ -88,7 +94,11 @@ class ComponentPayload
             throw new Exception("Property `{$name}` does not exist in the payload");
         }
 
-        return $properties[0];
+        if (count($properties) === 1) {
+            return $properties[0];
+        }
+
+        return $properties;
     }
 
     public function getSubComponents(): array

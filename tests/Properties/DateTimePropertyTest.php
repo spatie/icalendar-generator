@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator\Tests\Properties;
 use DateTime;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
@@ -24,7 +25,7 @@ class DateTimePropertyTest extends TestCase
     {
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date);
 
-        $this->assertEquals('20190516', $property->getValue());
+        PropertyExpectation::create($property)->expectOutput('20190516');
     }
 
     /** @test */
@@ -32,9 +33,10 @@ class DateTimePropertyTest extends TestCase
     {
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
 
-        $this->assertEquals('20190516T121015', $property->getValue());
-        $this->assertCount(1, $property->getParameters());
-        $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
+        PropertyExpectation::create($property)
+            ->expectOutput('20190516T121015')
+            ->expectParameterCount(1)
+            ->expectParameterValue('TZID', 'Europe/Brussels');
     }
 
     /** @test */
@@ -44,8 +46,9 @@ class DateTimePropertyTest extends TestCase
 
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
 
-        $this->assertEquals('20190516T101015Z', $property->getValue());
-        $this->assertCount(0, $property->getParameters());
+        PropertyExpectation::create($property)
+            ->expectOutput('20190516T101015Z')
+            ->expectParameterCount(0);
     }
 
     /** @test */
@@ -55,9 +58,10 @@ class DateTimePropertyTest extends TestCase
 
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date);
 
-        $this->assertEquals('20190516', $property->getValue());
-        $this->assertParameterCountInProperty(1, $property);
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $property);
+        PropertyExpectation::create($property)
+            ->expectOutput('20190516')
+            ->expectParameterCount(1)
+            ->expectParameterValue('VALUE', 'DATE');
     }
 
     /** @test */
@@ -65,10 +69,11 @@ class DateTimePropertyTest extends TestCase
     {
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, false);
 
-        $this->assertEquals('20190516', $property->getValue());
-        $this->assertCount(2, $property->getParameters());
-        $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
-        $this->assertParameterEqualsInProperty('VALUE', 'DATE', $property);
+        PropertyExpectation::create($property)
+            ->expectOutput('20190516')
+            ->expectParameterCount(2)
+            ->expectParameterValue('TZID', 'Europe/Brussels')
+            ->expectParameterValue('VALUE', 'DATE');
     }
 
     /** @test */
@@ -78,9 +83,10 @@ class DateTimePropertyTest extends TestCase
 
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true);
 
-        $this->assertEquals('20190516T121015', $property->getValue());
-        $this->assertCount(1, $property->getParameters());
-        $this->assertParameterEqualsInProperty('TZID', 'Europe/Brussels', $property);
+        PropertyExpectation::create($property)
+            ->expectOutput('20190516T121015')
+            ->expectParameterCount(1)
+            ->expectParameterValue('TZID', 'Europe/Brussels');
     }
 
     /** @test */
@@ -88,7 +94,7 @@ class DateTimePropertyTest extends TestCase
     {
         $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true, true);
 
-        $this->assertEquals('20190516T121015', $property->getValue());
+        PropertyExpectation::create($property)->expectOutput('20190516T121015');
     }
 
     /** @test */
@@ -99,6 +105,6 @@ class DateTimePropertyTest extends TestCase
             DateTimeValue::create($this->date)
         );
 
-        $this->assertEquals('20190516T121015', $property->getValue());
+        PropertyExpectation::create($property)->expectOutput('20190516T121015');
     }
 }

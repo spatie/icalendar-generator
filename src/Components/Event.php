@@ -73,6 +73,9 @@ class Event extends Component implements HasTimezones
 
     private ?string $url = null;
 
+    /** @var array[] */
+    private array $attachments = [];
+
     public static function create(string $name = null): Event
     {
         return new self($name);
@@ -309,6 +312,16 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    public function attachment(string $url, ?string $mediaType = null): Event
+    {
+        $this->attachments[] = [
+            'url' => $url,
+            'type' => $mediaType,
+        ];
+
+        return $this;
+    }
+
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
         if ($this->withoutTimezone) {
@@ -382,12 +395,20 @@ class Event extends Component implements HasTimezones
             ->optional(
                 $this->url,
                 fn () => UriProperty::create('URL', $this->url)
-            )->multiple(
+            )
+            ->multiple(
                 $this->recurrence_dates,
                 fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
-            )->multiple(
+            )
+            ->multiple(
                 $this->excluded_recurrence_dates,
                 fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
+            )
+            ->multiple(
+                $this->attachments,
+                fn (array $attachment) => $attachment['type'] !== null
+                    ? UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type']))
+                    : UriProperty::create('ATTACH', $attachment['url'])
             );
 
         return $this;

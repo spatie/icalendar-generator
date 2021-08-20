@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests\Properties;
 
 use DateInterval;
 use Spatie\IcalendarGenerator\Properties\DurationProperty;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 
 class DurationPropertyTest extends TestCase
@@ -15,8 +16,9 @@ class DurationPropertyTest extends TestCase
 
         $property = new DurationProperty('DURATION', $interval);
 
-        $this->assertEquals('DURATION', $property->getName());
-        $this->assertEquals($interval, $property->getOriginalValue());
-        $this->assertEquals('PT5M', $property->getValue());
+        PropertyExpectation::create($property)
+            ->expectName('DURATION')
+            ->expectValue($interval)
+            ->expectOutput('PT5M');
     }
 }

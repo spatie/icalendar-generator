@@ -210,6 +210,15 @@ Event::create()
     ...
 ```
 
+You can add an attachment as such:
+
+```php
+Event::create()
+    ->attachment('https://spatie.be/logo.svg')
+    ->attachment('https://spatie.be/feed.xml', 'application/json')
+    ...
+```
+
 After creating your event, it should be added to a calendar. There are multiple options to do this:
 
 ``` php

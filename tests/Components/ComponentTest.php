@@ -5,6 +5,7 @@ namespace Spatie\IcalendarGenerator\Tests\Components;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
+use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
@@ -54,11 +55,8 @@ class ComponentTest extends TestCase
             TextProperty::create('organizer', 'ruben@spatie.be')
         );
 
-        $this->assertPropertyEqualsInPayload(
-            'organizer',
-            'ruben@spatie.be',
-            $dummy->resolvePayload()
-        );
+        PayloadExpectation::create($dummy->resolvePayload())
+            ->expectPropertyValue('organizer', 'ruben@spatie.be');
     }
 
     /** @test */
@@ -66,14 +64,12 @@ class ComponentTest extends TestCase
     {
         $dummy = new DummyComponent('Dummy');
 
-        $component = new Alert();
+        $component = Alert::minutesBeforeEnd(10);
 
         $dummy->appendSubComponent($component);
 
-        $this->assertCount(1, $dummy->resolvePayload()->getSubComponents());
-        $this->assertEquals(
-            $component,
-            $dummy->resolvePayload()->getSubComponents()[0]
-        );
+        PayloadExpectation::create($dummy->resolvePayload())
+            ->expectSubComponentCount(1)
+            ->expectSubComponents($component);
     }
 }
