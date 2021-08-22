@@ -47,7 +47,7 @@ class RRule implements HasTimezones
     public function interval(int $interval = 1): self
     {
         if ($interval < 1) {
-            throw new Exception('Recurrence rule interval should be grater then 1');
+            throw new Exception('Recurrence rule interval should be greater then 1');
         }
 
         $this->interval = $interval;
@@ -58,7 +58,7 @@ class RRule implements HasTimezones
     public function times(int $count): self
     {
         if ($count < 1) {
-            throw new Exception('Recurrence rule count should be grater then 1');
+            throw new Exception('Recurrence rule count should be greater then 1');
         }
 
         $this->count = $count;
