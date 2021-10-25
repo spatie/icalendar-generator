@@ -241,9 +241,10 @@ class Event extends Component implements HasTimezones
     public function attendee(
         string $email,
         string $name = null,
-        ParticipationStatus $participationStatus = null
+        ParticipationStatus $participationStatus = null,
+        bool $requiresResponse = false
     ): Event {
-        $this->attendees[] = new CalendarAddress($email, $name, $participationStatus);
+        $this->attendees[] = new CalendarAddress($email, $name, $participationStatus, $requiresResponse);
 
         return $this;
     }
