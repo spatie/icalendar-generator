@@ -23,7 +23,7 @@ class CalendarAddressProperty extends Property
         }
 
         if($this->calendarAddress->requiresResponse) {
-            $this->addParameter(Parameter::create('RSVP', "TRUE"));
+            $this->addParameter(Parameter::create('RSVP', 'TRUE'));
         }
 
         if ($this->calendarAddress->participationStatus) {
