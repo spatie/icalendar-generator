@@ -39,4 +39,21 @@ class CalendarAddressPropertyTest extends TestCase
             ->expectParameterValue('CN', 'Ruben')
             ->expectParameterValue('PARTSTAT', ParticipationStatus::accepted()->value);
     }
+
+     /** @test */
+     public function it_can_set_rsvp_to_true()
+    {
+        $property = new CalendarAddressProperty(
+            'ATTENDEE',
+            new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::needs_action(), true)
+        );
+
+        PropertyExpectation::create($property)
+            ->expectName('ATTENDEE')
+            ->expectOutput('MAILTO:ruben@spatie.be')
+            ->expectParameterCount(3)
+            ->expectParameterValue('CN', 'Ruben')
+            ->expectParameterValue('RSVP', 'TRUE')
+            ->expectParameterValue('PARTSTAT', ParticipationStatus::needs_action()->value);
+    }
 }
