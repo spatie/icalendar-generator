@@ -172,6 +172,15 @@ There are five participation statuses:
 - `ParticipationStatus::needs_action()`
 - `ParticipationStatus::delegated()`
 
+
+You can indicate that an attendee is required to RSVP to an event:
+
+``` php
+Event::create()
+    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::needs_action(), true) //true as the fourth parameter
+    ...
+```
+
 An event can be made transparent, so it does not overlap visually with other events in a calendar:
 
 ``` php
