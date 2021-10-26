@@ -243,13 +243,15 @@ class EventTest extends TestCase
             ->attendee('ruben@spatie.be')
             ->attendee('brent@spatie.be', 'Brent')
             ->attendee('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
+            ->attendee('john@spatie.be', 'John', ParticipationStatus::needs_action(), true)
             ->resolvePayload();
 
         PayloadExpectation::create($payload)->expectPropertyValue(
             'ATTENDEE',
             new CalendarAddress('ruben@spatie.be'),
             new CalendarAddress('brent@spatie.be', 'Brent'),
-            new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
+            new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined()),
+            new CalendarAddress('john@spatie.be', 'John', ParticipationStatus::needs_action(), true)
         );
     }
 
