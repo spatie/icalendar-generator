@@ -22,7 +22,7 @@ class CalendarAddressProperty extends Property
             $this->addParameter(Parameter::create('CN', $this->calendarAddress->name));
         }
 
-        if($this->calendarAddress->requiresResponse) {
+        if ($this->calendarAddress->requiresResponse) {
             $this->addParameter(Parameter::create('RSVP', 'TRUE'));
         }
 

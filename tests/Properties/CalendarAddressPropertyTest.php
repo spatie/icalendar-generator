@@ -40,8 +40,8 @@ class CalendarAddressPropertyTest extends TestCase
             ->expectParameterValue('PARTSTAT', ParticipationStatus::accepted()->value);
     }
 
-     /** @test */
-     public function it_can_set_rsvp_to_true()
+    /** @test */
+    public function it_can_set_rsvp_to_true()
     {
         $property = new CalendarAddressProperty(
             'ATTENDEE',
