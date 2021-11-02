@@ -177,7 +177,7 @@ You can indicate that an attendee is required to RSVP to an event:
 
 ``` php
 Event::create()
-    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::needs_action(), true) //true as the fourth parameter
+    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::needs_action(), requiresResponse: true)
     ...
 ```
 

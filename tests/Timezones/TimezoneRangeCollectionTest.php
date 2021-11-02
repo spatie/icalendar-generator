@@ -121,4 +121,5 @@ class TimezoneRangeCollectionTest extends TestCase
             ],
         ], $ranges->get());
     }
+
 }

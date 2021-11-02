@@ -195,14 +195,17 @@ class CalendarTest extends TestCase
         Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
 
         $utcEvent = Event::create('An event with UTC timezone')
+            ->createdAt(new CarbonImmutable('1 january 2019'))
             ->startsAt(new CarbonImmutable('1 january 2019'))
             ->endsAt(new CarbonImmutable('1 january 2021'));
 
         $alternativeTimezoneEvent = Event::create('An event with alternative timezone')
+            ->createdAt(new CarbonImmutable('1 january 2020', 'Europe/Brussels'))
             ->startsAt(new CarbonImmutable('1 january 2020', 'Europe/Brussels'))
             ->endsAt(new CarbonImmutable('1 january 2021', 'Europe/Brussels'));
 
         $negativeOffsetTimezoneEvent = Event::create('An event with a negative timezone offset')
+            ->createdAt(new CarbonImmutable('1 january 2020', 'America/New_York'))
             ->startsAt(new CarbonImmutable('1 january 2020', 'America/New_York'))
             ->endsAt(new CarbonImmutable('1 january 2021', 'America/New_York'));
 
@@ -254,11 +257,6 @@ DTSTART:20210328T020000Z\r
 TZOFFSETFROM:+0100\r
 TZOFFSETTO:+0200\r
 END:DAYLIGHT\r
-BEGIN:STANDARD\r
-DTSTART:20211031T030000Z\r
-TZOFFSETFROM:+0200\r
-TZOFFSETTO:+0100\r
-END:STANDARD\r
 END:VTIMEZONE
 EOT, $alternativeTimezoneComponent->toString());
 
@@ -289,11 +287,6 @@ DTSTART:20210314T020000Z\r
 TZOFFSETFROM:-0500\r
 TZOFFSETTO:-0400\r
 END:DAYLIGHT\r
-BEGIN:STANDARD\r
-DTSTART:20211107T020000Z\r
-TZOFFSETFROM:-0400\r
-TZOFFSETTO:-0500\r
-END:STANDARD\r
 END:VTIMEZONE
 EOT, $negativeOffsetTimezoneComponent->toString());
     }

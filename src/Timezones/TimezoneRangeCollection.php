@@ -104,8 +104,8 @@ class TimezoneRangeCollection
 
         if (! array_key_exists($timezone, $this->ranges)) {
             $this->ranges[$timezone] = [
-                'min' => new CarbonImmutable(),
-                'max' => new CarbonImmutable(),
+                'min' => CarbonImmutable::maxValue(),
+                'max' => CarbonImmutable::minValue(),
             ];
         }
 

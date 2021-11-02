@@ -2,6 +2,11 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.3.1 - 2020-11-02
+
+- add support for requires RSVP on attendees (#67)
+- fix an issue in the timezone time range calculation where the max value would always be today
+
 ## 2.3.0 - 2020-08-20
 
 - add support for attachments on events
