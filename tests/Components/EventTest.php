@@ -7,6 +7,7 @@ use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\Display;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
@@ -505,6 +506,7 @@ class EventTest extends TestCase
         $payload = Event::create()
             ->image('http://spatie.be/logo.svg')
             ->image('http://spatie.be/logo.jpg', 'image/jpeg')
+            ->image('http://spatie.be/logo.png', 'image/png', Display::badge())
             ->resolvePayload();
 
         PayloadExpectation::create($payload)->expectProperty(
@@ -518,6 +520,12 @@ class EventTest extends TestCase
                 ->expectParameterValue('VALUE', 'URI')
                 ->expectParameterValue('FMTTYPE', 'image/jpeg')
                 ->expectValue('http://spatie.be/logo.jpg'),
+            fn (PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(3)
+                ->expectParameterValue('VALUE', 'URI')
+                ->expectParameterValue('FMTTYPE', 'image/png')
+                ->expectParameterValue('DISPLAY', 'BADGE')
+                ->expectValue('http://spatie.be/logo.png'),
         );
     }
 }

@@ -8,6 +8,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\Display;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Properties\AppleLocationCoordinatesProperty;
@@ -329,15 +330,18 @@ class Event extends Component implements HasTimezones
     /**
      * Adds an image to an Event from a URI.
      * 
-     * `$mediaType` can be any valid MIME type.
+     * @param string $url URI to the image
+     * @param ?string $mediaType Any valid MIME type.
+     * @param ?Display $display Display type of the image
      * 
      * @see RFC7986 https://datatracker.ietf.org/doc/html/rfc7986#section-5.10
      */
-    public function image(string $url, ?string $mediaType = null): Event
+    public function image(string $url, ?string $mediaType = null, ?Display $display = null): Event
     {
         $this->images[] = [
             'url' => $url,
             'type' => $mediaType,
+            'display' => $display,
         ];
 
         return $this;
@@ -433,9 +437,19 @@ class Event extends Component implements HasTimezones
             )
             ->multiple(
                 $this->images,
-                fn (array $image) => $image['type'] !== null
-                    ? UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'))->addParameter(Parameter::create('FMTTYPE', $image['type']))
-                    : UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'))
+                function (array $image) {
+                    $property = UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'));
+
+                    if ($image['type'] !== null) {
+                        $property->addParameter(Parameter::create('FMTTYPE', $image['type']));
+                    }
+
+                    if ($image['display'] !== null) {
+                        $property->addParameter(Parameter::create('DISPLAY', $image['display']));
+                    }
+
+                    return $property;
+                }
             );
 
         return $this;
