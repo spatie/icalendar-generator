@@ -76,6 +76,9 @@ class Event extends Component implements HasTimezones
     /** @var array[] */
     private array $attachments = [];
 
+    /** @var array[] */
+    private array $images = [];
+
     public static function create(string $name = null): Event
     {
         return new self($name);
@@ -323,6 +326,23 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    /**
+     * Adds an image to an Event from a URI.
+     * 
+     * `$mediaType` can be any valid MIME type.
+     * 
+     * @see RFC7986 https://datatracker.ietf.org/doc/html/rfc7986#section-5.10
+     */
+    public function image(string $url, ?string $mediaType = null): Event
+    {
+        $this->images[] = [
+            'url' => $url,
+            'type' => $mediaType,
+        ];
+
+        return $this;
+    }
+
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
         if ($this->withoutTimezone) {
@@ -410,6 +430,12 @@ class Event extends Component implements HasTimezones
                 fn (array $attachment) => $attachment['type'] !== null
                     ? UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type']))
                     : UriProperty::create('ATTACH', $attachment['url'])
+            )
+            ->multiple(
+                $this->images,
+                fn (array $image) => $image['type'] !== null
+                    ? UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'))->addParameter(Parameter::create('FMTTYPE', $image['type']))
+                    : UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'))
             );
 
         return $this;
@@ -434,7 +460,7 @@ class Event extends Component implements HasTimezones
         }
 
         $payload->property(
-            DateTimeProperty::fromDateTime($name, $value->getDateTime(), ! $this->isFullDay, $this->withoutTimezone)
+            DateTimeProperty::fromDateTime($name, $value->getDateTime(), !$this->isFullDay, $this->withoutTimezone)
         );
 
         return $this;

@@ -498,4 +498,26 @@ class EventTest extends TestCase
                 ->expectValue('http://spatie.be/logo.jpg'),
         );
     }
+
+    /** @test */
+    public function it_can_add_an_image_to_an_event()
+    {
+        $payload = Event::create()
+            ->image('http://spatie.be/logo.svg')
+            ->image('http://spatie.be/logo.jpg', 'image/jpeg')
+            ->resolvePayload();
+
+        PayloadExpectation::create($payload)->expectProperty(
+            'IMAGE',
+            fn (PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(1)
+                ->expectParameterValue('VALUE', 'URI')
+                ->expectValue('http://spatie.be/logo.svg'),
+            fn (PropertyExpectation $expectation) => $expectation
+                ->expectParameterCount(2)
+                ->expectParameterValue('VALUE', 'URI')
+                ->expectParameterValue('FMTTYPE', 'image/jpeg')
+                ->expectValue('http://spatie.be/logo.jpg'),
+        );
+    }
 }
