@@ -327,11 +327,11 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    public function image(string $url, ?string $mediaType = null, ?Display $display = null): Event
+    public function image(string $url, ?string $mime = null, ?Display $display = null): Event
     {
         $this->images[] = [
             'url' => $url,
-            'type' => $mediaType,
+            'type' => $mime,
             'display' => $display,
         ];
 
