@@ -8,6 +8,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Enums\Classification;
+use Spatie\IcalendarGenerator\Enums\Display;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Properties\AppleLocationCoordinatesProperty;
@@ -75,6 +76,9 @@ class Event extends Component implements HasTimezones
 
     /** @var array[] */
     private array $attachments = [];
+
+    /** @var array[] */
+    private array $images = [];
 
     public static function create(string $name = null): Event
     {
@@ -323,6 +327,17 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    public function image(string $url, ?string $mime = null, ?Display $display = null): Event
+    {
+        $this->images[] = [
+            'url' => $url,
+            'type' => $mime,
+            'display' => $display,
+        ];
+
+        return $this;
+    }
+
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
         if ($this->withoutTimezone) {
@@ -410,6 +425,22 @@ class Event extends Component implements HasTimezones
                 fn (array $attachment) => $attachment['type'] !== null
                     ? UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type']))
                     : UriProperty::create('ATTACH', $attachment['url'])
+            )
+            ->multiple(
+                $this->images,
+                function (array $image) {
+                    $property = UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'));
+
+                    if ($image['type'] !== null) {
+                        $property->addParameter(Parameter::create('FMTTYPE', $image['type']));
+                    }
+
+                    if ($image['display'] !== null) {
+                        $property->addParameter(Parameter::create('DISPLAY', $image['display']));
+                    }
+
+                    return $property;
+                }
             );
 
         return $this;

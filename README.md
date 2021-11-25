@@ -228,6 +228,23 @@ Event::create()
     ...
 ```
 
+You can add an image as such:
+
+``` php
+Event::create()
+    ->image('https://spatie.be/logo.svg')
+    ->image('https://spatie.be/logo.svg', 'text/svg+xml')
+    ->image('https://spatie.be/logo.svg', 'text/svg+xml', Display::badge())
+    ...
+```
+
+There are four different image display types:
+
+- `Display::badge()`
+- `Display::graphic()`
+- `Display::fullsize()`
+- `Display::thumbnail()`
+
 After creating your event, it should be added to a calendar. There are multiple options to do this:
 
 ``` php
