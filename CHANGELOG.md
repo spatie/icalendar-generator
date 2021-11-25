@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.3.2 - 2020-11-25
+
+- add support for adding images to an event (#71)
+
 ## 2.3.1 - 2020-11-02
 
 - add support for requires RSVP on attendees (#67)
