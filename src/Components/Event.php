@@ -327,15 +327,6 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    /**
-     * Adds an image to an Event from a URI.
-     * 
-     * @param string $url URI to the image
-     * @param ?string $mediaType Any valid MIME type.
-     * @param ?Display $display Display type of the image
-     * 
-     * @see RFC7986 https://datatracker.ietf.org/doc/html/rfc7986#section-5.10
-     */
     public function image(string $url, ?string $mediaType = null, ?Display $display = null): Event
     {
         $this->images[] = [
