@@ -1,53 +1,52 @@
 {
-    "name" : "spatie/icalendar-generator",
-    "description" : "Build calendars in the iCalendar format",
-    "keywords" : [
+    "name": "spatie/icalendar-generator",
+    "description": "Build calendars in the iCalendar format",
+    "keywords": [
         "spatie",
         "calendar",
         "ics",
         "ical",
         "icalendar"
     ],
-    "homepage" : "https://github.com/spatie/icalendar-generator",
-    "license" : "MIT",
-    "authors" : [
+    "homepage": "https://github.com/spatie/icalendar-generator",
+    "license": "MIT",
+    "authors": [
         {
-            "name" : "Ruben Van Assche",
-            "email" : "ruben@spatie.be",
-            "homepage" : "https://spatie.be",
-            "role" : "Developer"
+            "name": "Ruben Van Assche",
+            "email": "ruben@spatie.be",
+            "homepage": "https://spatie.be",
+            "role": "Developer"
         }
     ],
-
     "require": {
         "php": "^7.4|^8.0",
         "ext-mbstring": "*",
-        "nesbot/carbon": "^2.41",
-        "spatie/enum": "^3.0"
+        "nesbot/carbon": "^2.54",
+        "spatie/enum": "^3.11"
     },
-    "require-dev" : {
-        "larapack/dd" : "^1.0",
-        "phpunit/phpunit" : "^8.2",
-        "spatie/phpunit-snapshot-assertions" : "^4.2",
-        "vimeo/psalm" : "^4.3",
-        "ext-json" : "*"
+    "require-dev": {
+        "larapack/dd": "^1.1",
+        "phpunit/phpunit": "^9.5",
+        "spatie/phpunit-snapshot-assertions": "^4.2",
+        "vimeo/psalm": "^4.13",
+        "ext-json": "*"
     },
-    "autoload" : {
-        "psr-4" : {
-            "Spatie\\IcalendarGenerator\\" : "src"
+    "autoload": {
+        "psr-4": {
+            "Spatie\\IcalendarGenerator\\": "src"
         }
     },
-    "autoload-dev" : {
-        "psr-4" : {
-            "Spatie\\IcalendarGenerator\\Tests\\" : "tests"
+    "autoload-dev": {
+        "psr-4": {
+            "Spatie\\IcalendarGenerator\\Tests\\": "tests"
         }
     },
-    "scripts" : {
-        "test" : "vendor/bin/phpunit",
-        "psalm" : "vendor/bin/psalm",
-        "test-coverage" : "vendor/bin/phpunit --coverage-html coverage"
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "psalm": "vendor/bin/psalm",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
-    "config" : {
-        "sort-packages" : true
+    "config": {
+        "sort-packages": true
     }
 }
