@@ -523,8 +523,7 @@ You can use Laravel Responses to stream to calendar applications:
 $calendar = Calendar::create('Laracon Online');
 
 return response($calendar->get())
-    ->header('Content-Type', 'text/calendar')
-    ->header('charset', 'utf-8');
+    ->header('Content-Type', 'text/calendar; charset=utf-8');
 ```
 
 If you want to add the possibility for users to download a calendar and import it into a calendar application:
@@ -533,9 +532,8 @@ If you want to add the possibility for users to download a calendar and import i
 $calendar = Calendar::create('Laracon Online');
 
 return response($calendar->get(), 200, [
-   'Content-Type' => 'text/calendar',
+   'Content-Type' => 'text/calendar; charset=utf-8',
    'Content-Disposition' => 'attachment; filename="my-awesome-calendar.ics"',
-   'charset' => 'utf-8',
 ]);
 ```
 
