@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.3.3 - 2022-02-10
+
+- Use UTC timezone for default DTSTAMP value (#78)
+
 ## 2.3.2 - 2020-11-25
 
 - add support for adding images to an event (#71)
