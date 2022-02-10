@@ -89,7 +89,8 @@ class Event extends Component implements HasTimezones
     {
         $this->name = $name;
         $this->uuid = uniqid();
-        $this->created = DateTimeValue::create(new DateTimeImmutable());
+        $this->created = DateTimeValue::create(new DateTimeImmutable())
+            ->convertToTimezone(new \DateTimeZone('UTC'));
     }
 
     public function getComponentType(): string

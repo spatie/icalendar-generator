@@ -344,6 +344,19 @@ class EventTest extends TestCase
     }
 
     /** @test */
+    public function it_will_use_utc_for_default_created_date_stamp()
+    {
+        ini_set('date.timezone', 'Europe/Brussels');
+
+        $payload = Event::create()
+            ->resolvePayload();
+
+        ini_set('date.timezone', 'UTC');
+
+        $this->assertStringEndsWith('Z', $payload->getProperty('DTSTAMP')->getValue());
+    }
+
+    /** @test */
     public function it_will_always_use_utc_for_a_created_date_stamp()
     {
         $created = new DateTime('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
