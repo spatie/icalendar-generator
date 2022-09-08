@@ -2,6 +2,15 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.4.0 - 2022-09-08
+
+### What's Changed
+
+- `then` -> `than` by @edalzell in https://github.com/spatie/icalendar-generator/pull/85
+- Add calendar source parameter by @cweiske in https://github.com/spatie/icalendar-generator/pull/95
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.3.3...2.4.0
+
 ## 2.3.3 - 2022-02-10
 
 - Use UTC timezone for default DTSTAMP value (#78)
