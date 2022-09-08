@@ -155,6 +155,18 @@ class CalendarTest extends TestCase
     }
 
     /** @test */
+    public function a_source_can_be_set()
+    {
+        $payload = Calendar::create()
+            ->source('https://example.org/cal.ics')
+            ->resolvePayload();
+
+        PropertyExpectation::create($payload, 'SOURCE')
+            ->expectValue('https://example.org/cal.ics')
+            ->expectParameterValue('VALUE', 'URI');
+    }
+
+    /** @test */
     public function it_will_automatically_add_multiple_timezone_components()
     {
         Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
