@@ -34,6 +34,8 @@ class Calendar extends Component implements HasTimezones
 
     private ?string $productIdentifier = null;
 
+    private ?string $source = null;
+
     public static function create(string $name = null): Calendar
     {
         return new self($name);
@@ -146,6 +148,18 @@ class Calendar extends Component implements HasTimezones
         return $this;
     }
 
+    /**
+     * Identifies a location where a client can retrieve updated data for the calendar.
+     *
+     * @link https://datatracker.ietf.org/doc/html/rfc7986#section-5.7
+     */
+    public function source(string $source): self
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
     public function get(): string
     {
         return $this->toString();
@@ -172,6 +186,10 @@ class Calendar extends Component implements HasTimezones
             ->optional(
                 $this->description,
                 fn () => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
+            )
+            ->optional(
+                $this->source,
+                fn () => TextProperty::create('SOURCE', $this->source)->addParameter(new Parameter('VALUE', 'URI'))
             )
             ->optional(
                 $this->refreshInterval,
