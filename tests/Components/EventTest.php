@@ -48,10 +48,13 @@ class EventTest extends TestCase
             ->endsAt($dateEnds)
             ->address('Antwerp')
             ->addressName('Spatie')
+            ->googleConference('Spatie')
+            ->googleConference('https://meet.google.com/aaa-aaa-aaa')
+            ->microsoftTeams('https://teams.microsoft.com/l/meetup-join/aaa-aaa-aaa')
             ->resolvePayload();
 
         PayloadExpectation::create($payload)
-            ->expectPropertyCount(8)
+            ->expectPropertyCount(10)
             ->expectPropertyValue('SUMMARY', 'An introduction into event sourcing')
             ->expectPropertyValue('DESCRIPTION', 'By Freek Murze')
             ->expectPropertyValue('DTSTAMP', $dateCreated)
@@ -59,6 +62,8 @@ class EventTest extends TestCase
             ->expectPropertyValue('DTEND', $dateEnds)
             ->expectPropertyValue('LOCATION', 'Antwerp')
             ->expectPropertyValue('UID', 'Identifier here')
+            ->expectPropertyValue('X-GOOGLE-CONFERENCE', 'https://meet.google.com/aaa-aaa-aaa')
+            ->expectPropertyValue('X-MICROSOFT-SKYPETEAMSMEETINGURL', 'https://teams.microsoft.com/l/meetup-join/aaa-aaa-aaa')
             ->expectPropertyValue('URL', 'http://example.com/pub/calendars/jsmith/mytime.ics');
     }
 

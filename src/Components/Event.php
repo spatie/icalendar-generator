@@ -44,6 +44,10 @@ class Event extends Component implements HasTimezones
 
     private ?string $addressName = null;
 
+    private ?string $googleConference = null;
+
+    private ?string $microsoftTeams = null;
+
     private ?float $lat = null;
 
     private ?float $lng = null;
@@ -160,6 +164,20 @@ class Event extends Component implements HasTimezones
     public function addressName(string $name): Event
     {
         $this->addressName = $name;
+
+        return $this;
+    }
+
+    public function googleConference(string $googleConference): Event
+    {
+        $this->googleConference = $googleConference;
+
+        return $this;
+    }
+
+    public function microsoftTeams(string $microsoftTeams): Event
+    {
+        $this->microsoftTeams = $microsoftTeams;
 
         return $this;
     }
@@ -392,6 +410,14 @@ class Event extends Component implements HasTimezones
             ->optional(
                 $this->status,
                 fn () => TextProperty::createFromEnum('STATUS', $this->status)
+            )
+            ->optional(
+                $this->googleConference,
+                fn () => TextProperty::create('X-GOOGLE-CONFERENCE', $this->googleConference)
+            )
+            ->optional(
+                $this->microsoftTeams,
+                fn () => TextProperty::create('X-MICROSOFT-SKYPETEAMSMEETINGURL', $this->microsoftTeams)
             )
             ->optional(
                 $this->transparent,
