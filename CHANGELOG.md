@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.5.0 - 2022-10-10
+
+### What's Changed
+
+- Add google meet and microsoft teams to event by @MammutAlex in https://github.com/spatie/icalendar-generator/pull/98
+
+### New Contributors
+
+- @MammutAlex made their first contribution in https://github.com/spatie/icalendar-generator/pull/98
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.4.0...2.5.0
+
 ## 2.4.0 - 2022-09-08
 
 ### What's Changed
