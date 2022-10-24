@@ -22,7 +22,7 @@ class CoordinatesProperty extends Property
 
     public function getValue(): string
     {
-        return "{$this->lat};{$this->lng}";
+        return json_encode($this->lat) . ';' . json_encode($this->lng);
     }
 
     public function getOriginalValue(): array
