@@ -25,11 +25,12 @@
         "spatie/enum": "^3.11"
     },
     "require-dev": {
+        "ext-json": "*",
         "larapack/dd": "^1.1",
+        "pestphp/pest": "^1.22",
         "phpunit/phpunit": "^9.5",
         "spatie/phpunit-snapshot-assertions": "^4.2",
-        "vimeo/psalm": "^4.13",
-        "ext-json": "*"
+        "vimeo/psalm": "^4.13"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +48,9 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
