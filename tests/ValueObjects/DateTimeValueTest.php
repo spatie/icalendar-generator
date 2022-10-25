@@ -1,42 +1,31 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\ValueObjects;
-
-use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
-class DateTimeValueTest extends TestCase
-{
-    /** @test */
-    public function it_can_update_the_timezone_of_a_datetime()
-    {
-        $datetime = new DateTime('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
+use function PHPUnit\Framework\assertEquals;
 
-        $value = DateTimeValue::create($datetime)->convertToTimezone(
-            new DateTimeZone('UTC')
-        );
+test('it can update the timezone of a DateTime', function () {
+    $datetime = new DateTime('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
 
-        $this->assertEquals(
-            '20200516T100000',
-            $value->format()
-        );
-    }
+    $value = DateTimeValue::create($datetime)->convertToTimezone(
+        new DateTimeZone('UTC')
+    );
 
-    /** @test */
-    public function it_can_update_the_timezone_of_a_datetime_immutable()
-    {
-        $datetime = new DateTimeImmutable('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
+    assertEquals(
+        '20200516T100000',
+        $value->format()
+    );
+});
 
-        $value = DateTimeValue::create($datetime)->convertToTimezone(
-            new DateTimeZone('UTC')
-        );
+test('it can update the timezone of a DateTime immutable', function () {
+    $datetime = new DateTimeImmutable('16 may 2020 12:00:00', new DateTimeZone('Europe/Brussels'));
 
-        $this->assertEquals(
-            '20200516T100000',
-            $value->format()
-        );
-    }
-}
+    $value = DateTimeValue::create($datetime)->convertToTimezone(
+        new DateTimeZone('UTC')
+    );
+
+    assertEquals(
+        '20200516T100000',
+        $value->format()
+    );
+});

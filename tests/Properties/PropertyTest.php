@@ -1,35 +1,22 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Properties;
-
-use Exception;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class PropertyTest extends TestCase
-{
-    /** @test */
-    public function a_property_can_give_a_specified_parameter()
-    {
-        $property = new TextProperty('NAME', 'Ruben');
+use function PHPUnit\Framework\assertEquals;
 
-        $property->addParameter(new Parameter('LASTNAME', 'Van Assche'));
+beforeEach(function () {
+    $this->property = new TextProperty('NAME', 'Ruben');
 
-        $parameter = $property->getParameter('LASTNAME');
+    $this->property->addParameter(new Parameter('LASTNAME', 'Van Assche'));
+});
 
-        $this->assertEquals('Van Assche', $parameter->getValue());
-    }
+test('a property can give a specific parameter', function () {
+    $parameter = $this->property->getParameter('LASTNAME');
 
-    /** @test */
-    public function an_exception_will_be_thrown_when_an_parameter_does_not_exist()
-    {
-        $this->expectException(Exception::class);
+    assertEquals('Van Assche', $parameter->getValue());
+});
 
-        $property = new TextProperty('NAME', 'Ruben');
-
-        $property->addParameter(new Parameter('LASTNAME', 'Van Assche'));
-
-        $property->getParameter('LASTNAM');
-    }
-}
+test('an exception will be thrown when a parameter does not exist', function () {
+    $this->property->getParameter('LASTNAM');
+})->throws(Exception::class);

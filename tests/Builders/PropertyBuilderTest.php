@@ -1,75 +1,61 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Builders;
-
 use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
-class PropertyBuilderTest extends TestCase
-{
-    /** @test */
-    public function it_will_build_the_property_correctly()
-    {
-        $property = new DummyProperty('location', 'Antwerp');
+use function PHPUnit\Framework\assertEquals;
 
-        $this->assertEquals(
-            ['location:Antwerp'],
-            (new PropertyBuilder($property))->build()
-        );
-    }
+test('it will build the property correctly', function () {
+    $property = new DummyProperty('location', 'Antwerp');
 
-    /** @test */
-    public function it_will_build_the_parameters_correctly()
-    {
-        $property = new DummyProperty('location', 'Antwerp');
+    assertEquals(
+        ['location:Antwerp'],
+        (new PropertyBuilder($property))->build()
+    );
+});
 
-        $property->addParameter(
-            new Parameter('street', 'Samberstraat')
-        );
+test('it will build the parameters correctly', function () {
+    $property = new DummyProperty('location', 'Antwerp');
 
-        $this->assertEquals(
-            ['location;street=Samberstraat:Antwerp'],
-            (new PropertyBuilder($property))->build()
-        );
-    }
+    $property->addParameter(
+        new Parameter('street', 'Samberstraat')
+    );
 
-    /** @test */
-    public function it_will_build_the_property_according_to_specific_rules()
-    {
-        $property = new TextProperty('location', 'Antwerp, Belgium');
+    assertEquals(
+        ['location;street=Samberstraat:Antwerp'],
+        (new PropertyBuilder($property))->build()
+    );
+});
 
-        $this->assertEquals(
-            ['location:Antwerp\, Belgium'],
-            (new PropertyBuilder($property))->build()
-        );
-    }
+test('it will build the property according to specific rules', function () {
+    $property = new TextProperty('location', 'Antwerp, Belgium');
 
-    /** @test */
-    public function it_will_use_the_alias_of_a_property_when_given()
-    {
-        $property = TextProperty::create('location', 'Antwerp, Belgium')->addAlias('geo');
+    assertEquals(
+        ['location:Antwerp\, Belgium'],
+        (new PropertyBuilder($property))->build()
+    );
+});
 
-        $this->assertEquals(
-            [
-                'location:Antwerp\, Belgium',
-                'geo:Antwerp\, Belgium',
-            ],
-            (new PropertyBuilder($property))->build()
-        );
-    }
+test('it will use the alias of a property when given', function () {
+    $property = TextProperty::create('location', 'Antwerp, Belgium')->addAlias('geo');
 
-    /** @test */
-    public function it_can_build_properties_without_value()
-    {
-        $property = new EmptyProperty('contact', [Parameter::create('NON-SMOKER', true)]);
+    assertEquals(
+        [
+            'location:Antwerp\, Belgium',
+            'geo:Antwerp\, Belgium',
+        ],
+        (new PropertyBuilder($property))->build()
+    );
+});
 
-        $this->assertEquals(
-            ['contact;NON-SMOKER=BOOLEAN:TRUE'],
-            (new PropertyBuilder($property))->build()
-        );
-    }
-}
+test('it can build properties without value', function () {
+    $property = new EmptyProperty('contact', [Parameter::create('NON-SMOKER', true)]);
+
+    assertEquals(
+        ['contact;NON-SMOKER=BOOLEAN:TRUE'],
+        (new PropertyBuilder($property))->build()
+    );
+});

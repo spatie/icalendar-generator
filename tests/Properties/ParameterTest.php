@@ -1,109 +1,94 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Properties;
-
-use DateTime;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Properties\Parameter;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
-class ParameterTest extends TestCase
-{
-    /** @test */
-    public function it_replaces_all_illegal_characters()
-    {
-        $this->assertEquals(
-            'a backslash \\\\ ',
-            (new Parameter('', 'a backslash \ '))->getValue()
-        );
+use function PHPUnit\Framework\assertEquals;
 
-        $this->assertEquals(
-            'a quote \\" ',
-            (new Parameter('', 'a quote " '))->getValue()
-        );
+test('it replaces all illegal characters', function () {
+    assertEquals(
+        'a backslash \\\\ ',
+        (new Parameter('', 'a backslash \ '))->getValue()
+    );
 
-        $this->assertEquals(
-            'a comma \\, ',
-            (new Parameter('', 'a comma , '))->getValue()
-        );
+    assertEquals(
+        'a quote \\" ',
+        (new Parameter('', 'a quote " '))->getValue()
+    );
 
-        $this->assertEquals(
-            'a point-comma \\; ',
-            (new Parameter('', 'a point-comma ; '))->getValue()
-        );
+    assertEquals(
+        'a comma \\, ',
+        (new Parameter('', 'a comma , '))->getValue()
+    );
 
-        $this->assertEquals(
-            'a return \\\n ',
-            (new Parameter('', 'a return \n '))->getValue()
-        );
-    }
+    assertEquals(
+        'a point-comma \\; ',
+        (new Parameter('', 'a point-comma ; '))->getValue()
+    );
 
-    /** @test */
-    public function it_can_disable_escaping()
-    {
-        $this->assertEquals(
-            'a backslash \ ',
-            (new Parameter('', 'a backslash \ ', true))->getValue()
-        );
+    assertEquals(
+        'a return \\\n ',
+        (new Parameter('', 'a return \n '))->getValue()
+    );
+});
 
-        $this->assertEquals(
-            'a quote " ',
-            (new Parameter('', 'a quote " ', true))->getValue()
-        );
+test('it can disable escaping', function () {
+    assertEquals(
+        'a backslash \ ',
+        (new Parameter('', 'a backslash \ ', true))->getValue()
+    );
 
-        $this->assertEquals(
-            'a comma , ',
-            (new Parameter('', 'a comma , ', true))->getValue()
-        );
+    assertEquals(
+        'a quote " ',
+        (new Parameter('', 'a quote " ', true))->getValue()
+    );
 
-        $this->assertEquals(
-            'a point-comma ; ',
-            (new Parameter('', 'a point-comma ; ', true))->getValue()
-        );
+    assertEquals(
+        'a comma , ',
+        (new Parameter('', 'a comma , ', true))->getValue()
+    );
 
-        $this->assertEquals(
-            'a return \n ',
-            (new Parameter('', 'a return \n ', true))->getValue()
-        );
-    }
+    assertEquals(
+        'a point-comma ; ',
+        (new Parameter('', 'a point-comma ; ', true))->getValue()
+    );
 
-    /** @test */
-    public function it_can_format_a_boolean()
-    {
-        $this->assertEquals(
-            'BOOLEAN:TRUE',
-            (new Parameter('', true))->getValue()
-        );
+    assertEquals(
+        'a return \n ',
+        (new Parameter('', 'a return \n ', true))->getValue()
+    );
+});
 
-        $this->assertEquals(
-            'BOOLEAN:FALSE',
-            (new Parameter('', false))->getValue()
-        );
-    }
+test('it can format a boolean', function () {
+    assertEquals(
+        'BOOLEAN:TRUE',
+        (new Parameter('', true))->getValue()
+    );
 
-    /** @test */
-    public function it_can_format_an_enum()
-    {
-        $this->assertEquals(
-            'CANCELLED',
-            (new Parameter('', EventStatus::cancelled()))->getValue()
-        );
-    }
+    assertEquals(
+        'BOOLEAN:FALSE',
+        (new Parameter('', false))->getValue()
+    );
+});
 
-    /** @test */
-    public function it_can_format_a_date_time_value()
-    {
-        $dateTime = new DateTime('16 may 1994');
+test('it can format an enum', function () {
+    assertEquals(
+        'CANCELLED',
+        (new Parameter('', EventStatus::cancelled()))->getValue()
+    );
+});
 
-        $this->assertEquals(
-            'DATE-TIME:19940516T000000',
-            (new Parameter('', DateTimeValue::create($dateTime)))->getValue()
-        );
+test('it can format a DateTime value', function () {
+    $dateTime = new DateTime('16 may 1994');
 
-        $this->assertEquals(
-            'DATE:19940516',
-            (new Parameter('', DateTimeValue::create($dateTime, false)))->getValue()
-        );
-    }
-}
+    assertEquals(
+        'DATE-TIME:19940516T000000',
+        (new Parameter('', DateTimeValue::create($dateTime)))->getValue()
+    );
+
+    assertEquals(
+        'DATE:19940516',
+        (new Parameter('', DateTimeValue::create($dateTime, false)))->getValue()
+    );
+});

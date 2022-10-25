@@ -1,25 +1,19 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Properties;
-
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class EmptyPropertyTest extends TestCase
-{
-    /** @test */
-    public function it_can_create_an_empty_property_type()
-    {
-        $propertyType = new EmptyProperty('CONTACT', []);
+use function PHPUnit\Framework\assertEquals;
 
-        $this->assertEquals('CONTACT', $propertyType->getName());
-        $this->assertEquals(null, $propertyType->getValue());
-        $this->assertEquals(null, $propertyType->getOriginalValue());
+test('it can create an empty property type', function () {
+    $propertyType = new EmptyProperty('CONTACT', []);
 
-        PropertyExpectation::create($propertyType)
-            ->expectName('CONTACT')
-            ->expectValue(null)
-            ->expectOutput(null);
-    }
-}
+    assertEquals('CONTACT', $propertyType->getName());
+    assertEquals(null, $propertyType->getValue());
+    assertEquals(null, $propertyType->getOriginalValue());
+
+    PropertyExpectation::create($propertyType)
+        ->expectName('CONTACT')
+        ->expectValue(null)
+        ->expectOutput(null);
+});

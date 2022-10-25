@@ -1,42 +1,29 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\ValueObjects;
-
-use DateInterval;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 
-class DurationValueTest extends TestCase
-{
-    /** @test */
-    public function it_can_create_a_duration_property_type()
-    {
-        $value = DurationValue::create(new DateInterval('PT5M'));
+use function PHPUnit\Framework\assertEquals;
 
-        $this->assertEquals('PT5M', $value->format());
-    }
+test('it can create a duration property type', function () {
+    $value = DurationValue::create(new DateInterval('PT5M'));
 
-    /** @test */
-    public function it_can_invert_a_duration_property_type()
-    {
-        $value = DurationValue::create(new DateInterval('PT5M'))->invert();
+    assertEquals('PT5M', $value->format());
+});
 
-        $this->assertEquals('-PT5M', $value->format());
-    }
+test('it can invert a duration property type', function () {
+    $value = DurationValue::create(new DateInterval('PT5M'))->invert();
 
-    /** @test */
-    public function it_can_create_a_duration_property_with_all_properties()
-    {
-        $value = DurationValue::create(new DateInterval('P4DT3H2M1S'));
+    assertEquals('-PT5M', $value->format());
+});
 
-        $this->assertEquals('P4DT3H2M1S', $value->format());
-    }
+test('it can create a duration property with all properties', function () {
+    $value = DurationValue::create(new DateInterval('P4DT3H2M1S'));
 
-    /** @test */
-    public function it_can_use_a_regular_string_as_duration()
-    {
-        $value = DurationValue::create('PT5M');
+    assertEquals('P4DT3H2M1S', $value->format());
+});
 
-        $this->assertEquals('PT5M', $value->format());
-    }
-}
+test('it can use a regular string as duration', function () {
+    $value = DurationValue::create('PT5M');
+
+    assertEquals('PT5M', $value->format());
+});

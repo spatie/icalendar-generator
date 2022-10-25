@@ -1,79 +1,69 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Properties;
-
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 
-class TextPropertyTest extends TestCase
-{
-    /** @test */
-    public function it_replaces_all_illegal_characters()
-    {
-        $this->assertEquals(
-            'a backslash \\\\ ',
-            (new TextProperty('', 'a backslash \ '))->getValue()
-        );
+use function PHPUnit\Framework\assertEquals;
 
-        $this->assertEquals(
-            'a quote \\" ',
-            (new TextProperty('', 'a quote " '))->getValue()
-        );
+test('it replaces all illegal characters', function () {
+    assertEquals(
+        'a backslash \\\\ ',
+        (new TextProperty('', 'a backslash \ '))->getValue()
+    );
 
-        $this->assertEquals(
-            'a comma \\, ',
-            (new TextProperty('', 'a comma , '))->getValue()
-        );
+    assertEquals(
+        'a quote \\" ',
+        (new TextProperty('', 'a quote " '))->getValue()
+    );
 
-        $this->assertEquals(
-            'a point-comma \\; ',
-            (new TextProperty('', 'a point-comma ; '))->getValue()
-        );
+    assertEquals(
+        'a comma \\, ',
+        (new TextProperty('', 'a comma , '))->getValue()
+    );
 
-        $this->assertEquals(
-            'a return \\\n ',
-            (new TextProperty('', 'a return \n '))->getValue()
-        );
-    }
+    assertEquals(
+        'a point-comma \\; ',
+        (new TextProperty('', 'a point-comma ; '))->getValue()
+    );
 
-    /** @test */
-    public function it_can_disable_escaping()
-    {
-        $this->assertEquals(
-            'a backslash \ ',
-            (new TextProperty('', 'a backslash \ '))->withoutEscaping()->getValue()
-        );
+    assertEquals(
+        'a return \\\n ',
+        (new TextProperty('', 'a return \n '))->getValue()
+    );
+});
 
-        $this->assertEquals(
-            'a quote " ',
-            (new TextProperty('', 'a quote " '))->withoutEscaping()->getValue()
-        );
+test('it can disable escaping', function () {
+    assertEquals(
+        'a backslash \ ',
+        (new TextProperty('', 'a backslash \ '))->withoutEscaping()->getValue()
+    );
 
-        $this->assertEquals(
-            'a comma , ',
-            (new TextProperty('', 'a comma , '))->withoutEscaping()->getValue()
-        );
+    assertEquals(
+        'a quote " ',
+        (new TextProperty('', 'a quote " '))->withoutEscaping()->getValue()
+    );
 
-        $this->assertEquals(
-            'a point-comma ; ',
-            (new TextProperty('', 'a point-comma ; '))->withoutEscaping()->getValue()
-        );
+    assertEquals(
+        'a comma , ',
+        (new TextProperty('', 'a comma , '))->withoutEscaping()->getValue()
+    );
 
-        $this->assertEquals(
-            'a return \n ',
-            (new TextProperty('', 'a return \n '))->withoutEscaping()->getValue()
-        );
-    }
+    assertEquals(
+        'a point-comma ; ',
+        (new TextProperty('', 'a point-comma ; '))->withoutEscaping()->getValue()
+    );
 
-    /** @test */
-    public function it_can_be_created_from_an_enum()
-    {
-        $property = TextProperty::createFromEnum('', Classification::private());
+    assertEquals(
+        'a return \n ',
+        (new TextProperty('', 'a return \n '))->withoutEscaping()->getValue()
+    );
+});
 
-        PropertyExpectation::create($property)
-            ->expectOutput('PRIVATE')
-            ->expectValue('PRIVATE');
-    }
-}
+test('it can be created from an enum', function () {
+    $property = TextProperty::createFromEnum('', Classification::private());
+
+    PropertyExpectation::create($property)
+        ->expectOutput('PRIVATE')
+        ->expectValue('PRIVATE');
+});
