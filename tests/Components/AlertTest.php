@@ -7,7 +7,6 @@ use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 
 test('it can create an alert at a date', function () {
     $trigger = new DateTime('16 may 2019');
