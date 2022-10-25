@@ -1,11 +1,11 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
-use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
 test('it can build a component payload with properties', function () {
     $payload = ComponentPayload::create('VTEST');

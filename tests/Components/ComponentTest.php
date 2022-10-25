@@ -1,12 +1,12 @@
 <?php
 
+use function PHPUnit\Framework\assertNotNull;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
-use function PHPUnit\Framework\assertNotNull;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
 test('it will check if al required properties are set', function () {
     $dummy = new DummyComponent('Dummy');

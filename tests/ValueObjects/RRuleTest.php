@@ -1,10 +1,10 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
-use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
-use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 test('it can create a rrule', function () {
     $rrule = RRule::frequency(RecurrenceFrequency::daily())->compose();

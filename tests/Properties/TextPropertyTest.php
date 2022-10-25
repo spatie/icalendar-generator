@@ -1,10 +1,10 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
-use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 
-use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 
 test('it replaces all illegal characters', function () {
     assertEquals(

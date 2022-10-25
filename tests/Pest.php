@@ -1,8 +1,8 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
-use PHPUnit\Framework\TestCase;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,10 +1,10 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Properties\Parameter;
-use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
-use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 test('it replaces all illegal characters', function () {
     assertEquals(

@@ -1,9 +1,9 @@
 <?php
 
-use Spatie\IcalendarGenerator\Properties\Parameter;
-use Spatie\IcalendarGenerator\Properties\TextProperty;
-
 use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Properties\Parameter;
+
+use Spatie\IcalendarGenerator\Properties\TextProperty;
 
 beforeEach(function () {
     $this->property = new TextProperty('NAME', 'Ruben');

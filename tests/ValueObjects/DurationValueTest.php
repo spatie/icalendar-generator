@@ -1,8 +1,8 @@
 <?php
 
-use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
-
 use function PHPUnit\Framework\assertEquals;
+
+use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 
 test('it can create a duration property type', function () {
     $value = DurationValue::create(new DateInterval('PT5M'));

@@ -1,9 +1,9 @@
 <?php
 
-use Spatie\IcalendarGenerator\Properties\EmptyProperty;
-use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
-
 use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Properties\EmptyProperty;
+
+use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 
 test('it can create an empty property type', function () {
     $propertyType = new EmptyProperty('CONTACT', []);

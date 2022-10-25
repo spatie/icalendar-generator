@@ -1,12 +1,12 @@
 <?php
 
+use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
-use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
 test('it will build the property correctly', function () {
     $property = new DummyProperty('location', 'Antwerp');

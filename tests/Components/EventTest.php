@@ -1,5 +1,6 @@
 <?php
 
+use function PHPUnit\Framework\assertStringEndsWith;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
@@ -11,9 +12,8 @@ use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
-use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
-use function PHPUnit\Framework\assertStringEndsWith;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 test('it can create an event', function () {
     $payload = Event::create()->resolvePayload();

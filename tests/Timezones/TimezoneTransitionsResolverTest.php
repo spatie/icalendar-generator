@@ -1,9 +1,9 @@
 <?php
 
-use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
-use Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver;
-
 use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
+
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver;
 
 test('it gets the correct timezone transitions', function () {
     $resolver = new TimezoneTransitionsResolver(

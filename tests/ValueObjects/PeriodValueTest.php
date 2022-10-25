@@ -1,9 +1,9 @@
 <?php
 
-use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
-use Spatie\IcalendarGenerator\ValueObjects\PeriodValue;
-
 use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
+
+use Spatie\IcalendarGenerator\ValueObjects\PeriodValue;
 
 test('it can create a period with times', function () {
     $period = PeriodValue::create(

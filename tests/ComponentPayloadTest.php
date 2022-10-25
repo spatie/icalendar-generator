@@ -4,14 +4,14 @@ namespace Spatie\IcalendarGenerator\Tests;
 
 use DateTime;
 use Exception;
+use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
-use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
-use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
 test('a payload has a type', function () {
     $payload = (new ComponentPayload('TESTCOMPONENT'));

@@ -2,10 +2,10 @@
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
-use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
-
 use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
+
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 beforeEach(function () {
     CarbonImmutable::setTestNow('1 august 2020');
