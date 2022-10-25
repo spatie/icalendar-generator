@@ -1,33 +1,24 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\ValueObjects;
-
-use DateTime;
-use PHPUnit\Framework\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 use Spatie\IcalendarGenerator\ValueObjects\PeriodValue;
 
-class PeriodValueTest extends TestCase
-{
-    /** @test */
-    public function it_can_create_a_period_with_times()
-    {
-        $period = PeriodValue::create(
-            new DateTime('16 may 2020 12:00:00'),
-            new DateTime('18 may 2020 16:00:00')
-        );
+use function PHPUnit\Framework\assertEquals;
 
-        $this->assertEquals('20200516T120000/20200518T160000', $period->format());
-    }
+test('it can create a period with times', function () {
+    $period = PeriodValue::create(
+        new DateTime('16 may 2020 12:00:00'),
+        new DateTime('18 may 2020 16:00:00')
+    );
 
-    /** @test */
-    public function it_can_create_a_period_with_time_and_duration()
-    {
-        $period = PeriodValue::create(
-            new DateTime('16 may 2020 12:00:00'),
-            DurationValue::create('PT5M')
-        );
+    assertEquals('20200516T120000/20200518T160000', $period->format());
+});
 
-        $this->assertEquals('20200516T120000/PT5M', $period->format());
-    }
-}
+test('it can create a period with time and duration', function () {
+    $period = PeriodValue::create(
+        new DateTime('16 may 2020 12:00:00'),
+        DurationValue::create('PT5M')
+    );
+
+    assertEquals('20200516T120000/PT5M', $period->format());
+});
