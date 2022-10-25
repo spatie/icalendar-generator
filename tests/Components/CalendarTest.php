@@ -1,18 +1,12 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Components;
-
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use DateInterval;
-use DateTime;
-use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Components\Timezone;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;

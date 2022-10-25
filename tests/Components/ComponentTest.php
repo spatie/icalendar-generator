@@ -1,12 +1,9 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Components;
-
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Exceptions\InvalidComponent;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
 test('it will check if al required properties are set', function () {

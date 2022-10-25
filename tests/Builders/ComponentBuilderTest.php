@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Builders;
-
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;

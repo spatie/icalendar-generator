@@ -1,9 +1,5 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Components;
-
-use DateInterval;
-use DateTime;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;

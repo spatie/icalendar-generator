@@ -1,9 +1,5 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Components;
-
-use DateTime;
-use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Enums\Classification;
@@ -14,7 +10,6 @@ use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 

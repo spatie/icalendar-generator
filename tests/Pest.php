@@ -9,7 +9,7 @@
 use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 
-uses(\Spatie\IcalendarGenerator\Tests\TestCase::class)->in('.');
+uses(\PHPUnit\Framework\TestCase::class)->in('.');
 
 /*
 |--------------------------------------------------------------------------

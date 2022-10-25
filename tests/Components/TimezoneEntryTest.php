@@ -1,14 +1,10 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Components;
-
-use DateTime;
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 use function Spatie\Snapshots\assertMatchesSnapshot;

@@ -1,8 +1,5 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Properties;
-
-use Exception;
 use Spatie\IcalendarGenerator\Properties\Parameter;
 use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\TestCase;

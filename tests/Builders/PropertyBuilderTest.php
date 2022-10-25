@@ -1,7 +1,5 @@
 <?php
 
-namespace Spatie\IcalendarGenerator\Tests\Builders;
-
 use Spatie\IcalendarGenerator\Builders\PropertyBuilder;
 use Spatie\IcalendarGenerator\Properties\EmptyProperty;
 use Spatie\IcalendarGenerator\Properties\Parameter;
