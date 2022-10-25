@@ -9,67 +9,50 @@ use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
-class ComponentTest extends TestCase
-{
-    /** @test */
-    public function it_will_check_if_all_required_properties_are_set()
-    {
-        $dummy = new DummyComponent('Dummy');
+test('it will check if al required properties are set', function () {
+    $dummy = new DummyComponent('Dummy');
 
-        $payloadString = $dummy->toString();
+    $payloadString = $dummy->toString();
 
-        $this->assertNotNull($payloadString);
-    }
+    $this->assertNotNull($payloadString);
+});
 
-    /** @test */
-    public function it_will_throw_an_exception_when_a_required_property_is_not_set()
-    {
-        $this->expectException(InvalidComponent::class);
+test('it will throw an exception when a required property is not set', function () {
+    $dummy = new DummyComponent('Dummy');
 
-        $dummy = new DummyComponent('Dummy');
+    $dummy->name = null;
 
-        $dummy->name = null;
+    $dummy->toString();
+})->throws(InvalidComponent::class);
 
-        $dummy->toString();
-    }
+test('it will throw an exception when a required property is not set but another is', function () {
+    $dummy = new DummyComponent('Dummy');
 
-    /** @test */
-    public function it_will_throw_an_exception_when_a_required_property_is_not_set_but_another_is()
-    {
-        $this->expectException(InvalidComponent::class);
+    $dummy->name = null;
+    $dummy->description = 'Hello there';
 
-        $dummy = new DummyComponent('Dummy');
+    $dummy->toString();
+})->throws(InvalidComponent::class);
 
-        $dummy->name = null;
-        $dummy->description = 'Hello there';
+test('it can add an extra property', function () {
+    $dummy = new DummyComponent('Dummy');
 
-        $dummy->toString();
-    }
+    $dummy->appendProperty(
+        TextProperty::create('organizer', 'ruben@spatie.be')
+    );
 
-    /** @test */
-    public function it_can_add_an_extra_property()
-    {
-        $dummy = new DummyComponent('Dummy');
+    PayloadExpectation::create($dummy->resolvePayload())
+        ->expectPropertyValue('organizer', 'ruben@spatie.be');
+});
 
-        $dummy->appendProperty(
-            TextProperty::create('organizer', 'ruben@spatie.be')
-        );
+test('it can add an extra sub-component', function () {
+    $dummy = new DummyComponent('Dummy');
 
-        PayloadExpectation::create($dummy->resolvePayload())
-            ->expectPropertyValue('organizer', 'ruben@spatie.be');
-    }
+    $component = Alert::minutesBeforeEnd(10);
 
-    /** @test */
-    public function it_can_add_an_extra_sub_component()
-    {
-        $dummy = new DummyComponent('Dummy');
+    $dummy->appendSubComponent($component);
 
-        $component = Alert::minutesBeforeEnd(10);
-
-        $dummy->appendSubComponent($component);
-
-        PayloadExpectation::create($dummy->resolvePayload())
-            ->expectSubComponentCount(1)
-            ->expectSubComponents($component);
-    }
-}
+    PayloadExpectation::create($dummy->resolvePayload())
+        ->expectSubComponentCount(1)
+        ->expectSubComponents($component);
+});
