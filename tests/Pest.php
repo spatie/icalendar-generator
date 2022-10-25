@@ -6,7 +6,7 @@
 |--------------------------------------------------------------------------
 */
 
-uses(Spatie\IcalendarGenerator\Tests::class)->in('Feature');
+uses(\Spatie\IcalendarGenerator\Tests\TestCase::class)->in('.');
 
 /*
 |--------------------------------------------------------------------------
