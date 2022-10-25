@@ -8,8 +8,9 @@
 
 use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
+use PHPUnit\Framework\TestCase;
 
-uses(\PHPUnit\Framework\TestCase::class)->in('.');
+uses(TestCase::class)->in('.');
 
 /*
 |--------------------------------------------------------------------------
