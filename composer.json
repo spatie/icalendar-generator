@@ -44,9 +44,9 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": "vendor/bin/pest",
         "psalm": "vendor/bin/psalm",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test-coverage": "vendor/bin/pest --coverage-html coverage"
     },
     "config": {
         "sort-packages": true,
