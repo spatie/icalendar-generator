@@ -1,14 +1,14 @@
 <?php
 
+use Spatie\IcalendarGenerator\Components\TimezoneEntry;
+use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
+use PHPUnit\Framework\TestCase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
 |--------------------------------------------------------------------------
 */
-
-use Spatie\IcalendarGenerator\Components\TimezoneEntry;
-use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
-use PHPUnit\Framework\TestCase;
 
 uses(TestCase::class)->in('.');
 
