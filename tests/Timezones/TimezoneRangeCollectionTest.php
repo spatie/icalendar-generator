@@ -24,7 +24,7 @@ test('it can add dates to a range', function () {
     $ranges->add($c);
     $ranges->add($d);
 
-    $this->assertEquals([
+    assertEquals([
         'UTC' => [
             'min' => new CarbonImmutable('16 may 2020'),
             'max' => new CarbonImmutable('21 october 2020'),
@@ -74,7 +74,7 @@ test('it can add different types of date times', function () {
     $ranges->add($c);
     $ranges->add($d);
 
-    $this->assertEquals([
+    assertEquals([
         'UTC' => [
             'min' => new DateTimeImmutable('16 may 2020'),
             'max' => new DateTimeImmutable('21 october 2020'),
@@ -97,7 +97,7 @@ test('it can add different types of entries', function () {
         $hasTimezones
     );
 
-    $this->assertEquals([
+    assertEquals([
         'UTC' => [
             'min' => new DateTimeImmutable('16 may 2020'),
             'max' => new DateTimeImmutable('21 october 2020'),

@@ -79,7 +79,7 @@ test('a multiple will be added via closure', function () {
 
     $payload->multiple(['a', 'b', 'c'], fn (string $letter) => TextProperty::create('text', $letter));
 
-    $this->assertEquals([
+    assertEquals([
         TextProperty::create('text', 'a'),
         TextProperty::create('text', 'b'),
         TextProperty::create('text', 'c'),

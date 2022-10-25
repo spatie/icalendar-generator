@@ -41,7 +41,7 @@ test('it can set count', function () {
         ->times(10)
         ->compose();
 
-    $this->assertEquals([
+    assertEquals([
         "FREQ" => "DAILY",
         'COUNT' => '10',
     ], $rrule);
@@ -88,7 +88,7 @@ test('it can add week days', function (array $days, string $expected) {
         $rrule->onWeekDay($day['day'], $day['index']);
     }
 
-    $this->assertEquals([
+    assertEquals([
         "FREQ" => "DAILY",
         'BYDAY' => $expected,
     ], $rrule->compose());
@@ -110,7 +110,7 @@ test('it can add month days', function ($monthDays, string $expected) {
         ->onMonthDay($monthDays)
         ->compose();
 
-    $this->assertEquals([
+    assertEquals([
         "FREQ" => "DAILY",
         'BYMONTHDAY' => $expected,
     ], $rrule);

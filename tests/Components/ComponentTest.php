@@ -6,12 +6,14 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 
+use function PHPUnit\Framework\assertNotNull;
+
 test('it will check if al required properties are set', function () {
     $dummy = new DummyComponent('Dummy');
 
     $payloadString = $dummy->toString();
 
-    $this->assertNotNull($payloadString);
+    assertNotNull($payloadString);
 });
 
 test('it will throw an exception when a required property is not set', function () {
