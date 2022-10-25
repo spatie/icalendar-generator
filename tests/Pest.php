@@ -32,3 +32,15 @@ function createTimezoneEntry(): TimezoneEntry
         '+02:00'
     );
 }
+
+function createOffset(
+    int $hours,
+    int $minutes = 0,
+    bool $inverted = false
+): DateInterval {
+    $interval = new DateInterval('PT' . abs($hours) . 'H' . abs($minutes) . 'M');
+
+    $interval->invert = $inverted;
+
+    return $interval;
+}
