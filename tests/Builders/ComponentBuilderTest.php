@@ -4,96 +4,82 @@ namespace Spatie\IcalendarGenerator\Tests\Builders;
 
 use Spatie\IcalendarGenerator\Builders\ComponentBuilder;
 use Spatie\IcalendarGenerator\ComponentPayload;
-use Spatie\IcalendarGenerator\Tests\TestCase;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyComponent;
 use Spatie\IcalendarGenerator\Tests\TestClasses\DummyProperty;
 
-class ComponentBuilderTest extends TestCase
-{
-    /** @test */
-    public function it_can_build_a_component_payload_with_properties()
-    {
-        $payload = ComponentPayload::create('VTEST');
+use function PHPUnit\Framework\assertEquals;
 
-        $payload->property(new DummyProperty('location', 'Antwerp'));
+test('it can build a component payload with properties', function () {
+    $payload = ComponentPayload::create('VTEST');
 
-        $builder = new ComponentBuilder($payload);
+    $payload->property(new DummyProperty('location', 'Antwerp'));
 
-        $this->assertEquals(
-            <<<EOT
+    $builder = new ComponentBuilder($payload);
+
+    assertEquals(
+        <<<EOT
 BEGIN:VTEST\r
 location:Antwerp\r
 END:VTEST
-EOT
-            ,
-            $builder->build()
-        );
-    }
+EOT,
+        $builder->build()
+    );
+});
 
-    /** @test */
-    public function it_can_build_a_component_payload_with_property_alias()
-    {
-        $payload = ComponentPayload::create('VTEST');
+test('it can build a component payload with property alias', function () {
+    $payload = ComponentPayload::create('VTEST');
 
-        $payload->property(
-            (new DummyProperty('location', 'Antwerp'))->addAlias('geo')
-        );
+    $payload->property(
+        (new DummyProperty('location', 'Antwerp'))->addAlias('geo')
+    );
 
-        $builder = new ComponentBuilder($payload);
+    $builder = new ComponentBuilder($payload);
 
-        $this->assertEquals(
-            <<<EOT
+    assertEquals(
+        <<<EOT
 BEGIN:VTEST\r
 location:Antwerp\r
 geo:Antwerp\r
 END:VTEST
-EOT
-            ,
-            $builder->build()
-        );
-    }
+EOT,
+        $builder->build()
+    );
+});
 
-    /** @test */
-    public function it_can_build_a_component_payload_with_subcomponents()
-    {
-        $payload = ComponentPayload::create('VTEST');
+test('it can build a component payload with sub-components', function () {
+    $payload = ComponentPayload::create('VTEST');
 
-        $payload->subComponent(new DummyComponent('SUBCOMPONENT'));
+    $payload->subComponent(new DummyComponent('SUBCOMPONENT'));
 
-        $builder = new ComponentBuilder($payload);
+    $builder = new ComponentBuilder($payload);
 
-        $this->assertEquals(
-            <<<EOT
+    assertEquals(
+        <<<EOT
 BEGIN:VTEST\r
 BEGIN:VDUMMY\r
 name:SUBCOMPONENT\r
 END:VDUMMY\r
 END:VTEST
-EOT
-            ,
-            $builder->build()
-        );
-    }
+EOT,
+        $builder->build()
+    );
+});
 
-    /** @test */
-    public function it_will_chip_a_line_when_it_becomes_too_long()
-    {
-        $payload = ComponentPayload::create('VTEST');
+test('it will chip a line when it becomes too long', function () {
+    $payload = ComponentPayload::create('VTEST');
 
-        $payload->property(new DummyProperty('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
+    $payload->property(new DummyProperty('location', 'This is a really long text. Possibly you will never write a text like this in a property. But hey we support the RFC so let us chip it! You can maybe write some HTML in here that will make it longer than usual.'));
 
-        $builder = new ComponentBuilder($payload);
+    $builder = new ComponentBuilder($payload);
 
-        $this->assertEquals(
-            <<<EOT
+    assertEquals(
+        <<<EOT
 BEGIN:VTEST\r
 location:This is a really long text. Possibly you will never write a text l\r
  ike this in a property. But hey we support the RFC so let us chip it! You \r
  can maybe write some HTML in here that will make it longer than usual.\r
 END:VTEST
-EOT
-            ,
-            $builder->build()
-        );
-    }
-}
+EOT,
+        $builder->build()
+    );
+});
