@@ -2,6 +2,19 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.5.1 - 2022-10-26
+
+### What's Changed
+
+- Refactor all tests to PEST by @alexmanase in https://github.com/spatie/icalendar-generator/pull/100
+- Fix GEO coordinates on locale with comma as decimal separator by @cweiske in https://github.com/spatie/icalendar-generator/pull/99
+
+### New Contributors
+
+- @alexmanase made their first contribution in https://github.com/spatie/icalendar-generator/pull/100
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.5.0...2.5.1
+
 ## 2.5.0 - 2022-10-10
 
 ### What's Changed
