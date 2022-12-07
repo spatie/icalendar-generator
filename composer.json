@@ -21,7 +21,7 @@
     "require": {
         "php": "^7.4|^8.0",
         "ext-mbstring": "*",
-        "nesbot/carbon": "^2.54",
+        "nesbot/carbon": "^2.63",
         "spatie/enum": "^3.11"
     },
     "require-dev": {
