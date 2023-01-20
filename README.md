@@ -222,12 +222,22 @@ Event::create()
     ...
 ```
 
-You can add an attachment as such:
+You can add a url attachment as such:
 
 ```php
 Event::create()
     ->attachment('https://spatie.be/logo.svg')
     ->attachment('https://spatie.be/feed.xml', 'application/json')
+    ...
+```
+
+You can add an embedded attachment (base64) as such:
+
+```php
+Event::create()
+    ->embeddedAttachment($file->toString())
+    ->embeddedAttachment($fileString, 'application/json')
+    ->embeddedAttachment($base64String, 'application/json', needsEncoding: false)
     ...
 ```
 

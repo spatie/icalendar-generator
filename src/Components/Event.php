@@ -12,6 +12,7 @@ use Spatie\IcalendarGenerator\Enums\Display;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Properties\AppleLocationCoordinatesProperty;
+use Spatie\IcalendarGenerator\Properties\BinaryProperty;
 use Spatie\IcalendarGenerator\Properties\CalendarAddressProperty;
 use Spatie\IcalendarGenerator\Properties\CoordinatesProperty;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
@@ -21,6 +22,7 @@ use Spatie\IcalendarGenerator\Properties\TextProperty;
 use Spatie\IcalendarGenerator\Properties\UriProperty;
 use Spatie\IcalendarGenerator\Timezones\HasTimezones;
 use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
+use Spatie\IcalendarGenerator\ValueObjects\BinaryValue;
 use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
@@ -346,6 +348,16 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    public function embeddedAttachment(
+        string $data,
+        ?string $mediaType = null,
+        bool $needsEncoding = true,
+    ): Event {
+        $this->attachments[] = new BinaryValue($data, $mediaType, $needsEncoding);
+
+        return $this;
+    }
+
     public function image(string $url, ?string $mime = null, ?Display $display = null): Event
     {
         $this->images[] = [
@@ -449,9 +461,15 @@ class Event extends Component implements HasTimezones
             )
             ->multiple(
                 $this->attachments,
-                fn (array $attachment) => $attachment['type'] !== null
-                    ? UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type']))
-                    : UriProperty::create('ATTACH', $attachment['url'])
+                function (array|BinaryValue $attachment) {
+                    if ($attachment instanceof BinaryValue) {
+                        return BinaryProperty::create('ATTACH', $attachment);
+                    }
+
+                    return $attachment['type'] !== null
+                        ? UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type']))
+                        : UriProperty::create('ATTACH', $attachment['url']);
+                }
             )
             ->multiple(
                 $this->images,
