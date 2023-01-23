@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.5.2 - 2023-01-23
+
+- Add embedded attachments to Events (#104)
+
 ## 2.5.1 - 2022-10-26
 
 ### What's Changed
