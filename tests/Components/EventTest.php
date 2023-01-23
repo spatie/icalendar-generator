@@ -457,6 +457,32 @@ test('it can add an attachment to an event', function () {
     );
 });
 
+test('it can add an embedded attachment to an event', function () {
+    $file = file_get_contents('.gitignore');
+    $base64File = base64_encode(file_get_contents('.gitattributes'));
+
+    $payload = Event::create()
+        ->embeddedAttachment($file, 'text/plain')
+        ->embeddedAttachment($base64File, 'text/plain', false)
+        ->resolvePayload();
+
+    PayloadExpectation::create($payload)->expectProperty(
+        'ATTACH',
+        fn (PropertyExpectation $expectation) => $expectation
+            ->expectParameterCount(3)
+            ->expectParameterValue('FMTTYPE', 'text/plain')
+            ->expectParameterValue('ENCODING', 'BASE64')
+            ->expectParameterValue('VALUE', 'BINARY')
+            ->expectOutput(base64_encode($file)),
+        fn (PropertyExpectation $expectation) => $expectation
+            ->expectParameterCount(3)
+            ->expectParameterValue('FMTTYPE', 'text/plain')
+            ->expectParameterValue('ENCODING', 'BASE64')
+            ->expectParameterValue('VALUE', 'BINARY')
+            ->expectOutput($base64File),
+    );
+});
+
 test('it can add an image to an event', function () {
     $payload = Event::create()
         ->image('http://spatie.be/logo.svg')
