@@ -2,6 +2,12 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.5.3 - 2023-01-24
+
+- fix syntax error
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.5.2...2.5.3
+
 ## 2.5.2 - 2023-01-23
 
 - Add embedded attachments to Events (#104)
