@@ -11,7 +11,7 @@ class BinaryValue
     public function __construct(
         string $data,
         ?string $fmttype = null,
-        bool $needsEncoding = true,
+        bool $needsEncoding = true
     ) {
         $this->data = $needsEncoding
             ? base64_encode($data)
