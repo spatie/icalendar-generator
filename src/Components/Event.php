@@ -351,7 +351,7 @@ class Event extends Component implements HasTimezones
     public function embeddedAttachment(
         string $data,
         ?string $mediaType = null,
-        bool $needsEncoding = true,
+        bool $needsEncoding = true
     ): Event {
         $this->attachments[] = new BinaryValue($data, $mediaType, $needsEncoding);
 
@@ -461,7 +461,7 @@ class Event extends Component implements HasTimezones
             )
             ->multiple(
                 $this->attachments,
-                function (array|BinaryValue $attachment) {
+                function ($attachment) {
                     if ($attachment instanceof BinaryValue) {
                         return BinaryProperty::create('ATTACH', $attachment);
                     }
