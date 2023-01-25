@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.5.4 - 2023-01-25
+
+### What's Changed
+
+- Fix PHP 7.4 and test issues by @htto in https://github.com/spatie/icalendar-generator/pull/106
+
+### New Contributors
+
+- @htto made their first contribution in https://github.com/spatie/icalendar-generator/pull/106
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.5.3...2.5.4
+
 ## 2.5.3 - 2023-01-24
 
 - fix syntax error
