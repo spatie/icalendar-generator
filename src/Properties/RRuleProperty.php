@@ -32,6 +32,6 @@ class RRuleProperty extends Property
 
     public function getOriginalValue(): RRule
     {
-        return$this->recurrenceRule;
+        return $this->recurrenceRule;
     }
 }

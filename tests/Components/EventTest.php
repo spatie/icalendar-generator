@@ -258,6 +258,15 @@ test('it an set a recurrence rule', function () {
         ->expectValue($rrule);
 });
 
+test('it an set a recurrence rule as a string', function () {
+    $payload = Event::create('An introduction into event sourcing')
+        ->rruleAsString($rrule = 'FREQ=DAILY;INTERVAL=2;UNTIL=20240301T230000Z')
+        ->resolvePayload();
+
+    PropertyExpectation::create($payload, 'RRULE')
+        ->expectValue($rrule);
+});
+
 test('it can create an event without timezones', function () {
     $dateAlert = new DateTime('17 may 2019 11:00:00');
     $dateStarts = new DateTime('17 may 2019 12:00:00');
