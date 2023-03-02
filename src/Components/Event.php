@@ -80,7 +80,7 @@ class Event extends Component implements HasTimezones
 
     private ?string $url = null;
 
-    /** @var array[] */
+    /** @var array<array|BinaryValue> */
     private array $attachments = [];
 
     /** @var array[] */
