@@ -4,9 +4,9 @@
 # Generate calendars in the iCalendar format
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
-[![Build Status](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Test?label=Tests)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3ATest)
-[![Style](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Check%20&%20fix%20styling?label=Style)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3A%22Check+%26+fix+styling%22)
-[![Psalm](https://img.shields.io/github/workflow/status/spatie/icalendar-generator/Psalm?label=Psalm)](https://github.com/spatie/icalendar-generator/actions?query=workflow%3APsalm)
+[![Tests](https://github.com/spatie/icalendar-generator/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/run-tests.yml)
+[![Check & fix styling](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml)
+[![Psalm](https://github.com/spatie/icalendar-generator/actions/workflows/psalm.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/psalm.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
 Want to create online calendars so that you can display them on an iPhone's calendar app or in Google Calendar?
