@@ -393,7 +393,8 @@ class Event extends Component implements HasTimezones
             ->add($this->starts)
             ->add($this->ends)
             ->add($this->created)
-            ->add(is_string($this->rrule)
+            ->add(
+                is_string($this->rrule)
                 ? [$this->rruleStarting, $this->rruleUntil]
                 : $this->rrule
             )
