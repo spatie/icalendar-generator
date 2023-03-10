@@ -70,7 +70,12 @@ class Event extends Component implements HasTimezones
 
     private ?EventStatus $status = null;
 
-    private ?RRule $rrule = null;
+    /** @var RRule|string|null */
+    private $rrule = null;
+
+    private ?DateTime $rruleStarting = null;
+
+    private ?DateTime $rruleUntil = null;
 
     /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
     private array $recurrence_dates = [];
@@ -295,6 +300,15 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    public function rruleAsString(string $rrule, ?DateTimeInterface $starting = null, DateTimeInterface $until = null): Event
+    {
+        $this->rrule = $rrule;
+        $this->rruleStarting = $starting;
+        $this->rruleUntil = $until;
+
+        return $this;
+    }
+
     /**
      * @param DateTimeInterface[]|DateTimeInterface $dates
      * @param bool $withTime
@@ -379,7 +393,10 @@ class Event extends Component implements HasTimezones
             ->add($this->starts)
             ->add($this->ends)
             ->add($this->created)
-            ->add($this->rrule)
+            ->add(is_string($this->rrule)
+                ? [$this->rruleStarting, $this->rruleUntil]
+                : $this->rrule
+            )
             ->add($this->recurrence_dates)
             ->add($this->excluded_recurrence_dates);
     }
@@ -441,7 +458,9 @@ class Event extends Component implements HasTimezones
             )
             ->optional(
                 $this->rrule,
-                fn () => RRuleProperty::create('RRULE', $this->rrule)
+                fn () => is_string($this->rrule)
+                    ? TextProperty::create('RRULE', $this->rrule)
+                    : RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
                 $this->attendees,

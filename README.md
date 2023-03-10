@@ -527,6 +527,24 @@ Event::create('Laracon Online')
     ->doNotRepeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
 ```
 
+Alternatively you can add RRules as a string:
+
+```php
+Event::create('SymfonyCon')
+    ->rruleAsString('FREQ=DAILY;INTERVAL=1');
+```
+
+If you add RRules as a string the timezones included in DTSTART and UNTIL are unknown to the package as the string is never parsed and evaluated. If they are known you can add DTSTART and UNTIL separately to help the package discover the timezones:
+
+```php
+Event::create('SymfonyCon')
+    ->rruleAsString(
+        'DTSTART=20231207T090000Z;FREQ=DAILY;INTERVAL=1;UNTIL=20231208T090000Z',
+        new DateTime('7 december 2023 09:00:00', new DateTimeZone('UTC')),
+        new DateTime('8 december 2023 09:00:00', new DateTimeZone('UTC'))
+    );
+```
+
 
 ### Use with Laravel
 
