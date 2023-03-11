@@ -73,9 +73,9 @@ class Event extends Component implements HasTimezones
     /** @var RRule|string|null */
     private $rrule = null;
 
-    private ?DateTime $rruleStarting = null;
+    private ?DateTimeInterface $rruleStarting = null;
 
-    private ?DateTime $rruleUntil = null;
+    private ?DateTimeInterface $rruleUntil = null;
 
     /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
     private array $recurrence_dates = [];
@@ -460,7 +460,7 @@ class Event extends Component implements HasTimezones
             ->optional(
                 $this->rrule,
                 fn () => is_string($this->rrule)
-                    ? TextProperty::create('RRULE', $this->rrule)
+                    ? TextProperty::create('RRULE', $this->rrule)->withoutEscaping()
                     : RRuleProperty::create('RRULE', $this->rrule)
             )
             ->multiple(
