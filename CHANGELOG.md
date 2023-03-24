@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.5.6 - 2023-03-24
+
+- Fix bugs introduced with previous pr
+
 ## 2.5.5 - 2023-03-10
 
 - Allow adding rrules as string (#110)
