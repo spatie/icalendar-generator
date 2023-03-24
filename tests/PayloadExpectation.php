@@ -77,7 +77,7 @@ class PayloadExpectation
 
         Assert::assertEmpty(array_filter(
             $properties,
-            fn(Property $property) => ! empty($property->getValue())
+            fn (Property $property) => ! empty($property->getValue())
         ));
 
         return $this;
