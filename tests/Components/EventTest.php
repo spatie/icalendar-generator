@@ -249,7 +249,7 @@ test('it can set an address without name', function () {
         ->expectValue('Antwerp');
 });
 
-test('it an set a recurrence rule', function () {
+test('it can set a recurrence rule', function () {
     $payload = Event::create('An introduction into event sourcing')
         ->rrule($rrule = RRule::frequency(RecurrenceFrequency::daily()))
         ->resolvePayload();
@@ -258,13 +258,14 @@ test('it an set a recurrence rule', function () {
         ->expectValue($rrule);
 });
 
-test('it an set a recurrence rule as a string', function () {
-    $payload = Event::create('An introduction into event sourcing')
+test('it can set a recurrence rule as a string', function () {
+    $payload = Event::create('A recurring event')
         ->rruleAsString($rrule = 'FREQ=DAILY;INTERVAL=2;UNTIL=20240301T230000Z')
         ->resolvePayload();
 
     PropertyExpectation::create($payload, 'RRULE')
-        ->expectValue($rrule);
+        ->expectValue($rrule)
+        ->expectOutput($rrule);
 });
 
 test('it can create an event without timezones', function () {
