@@ -28,9 +28,7 @@
         "ext-json": "*",
         "larapack/dd": "^1.1",
         "pestphp/pest": "^1.22",
-        "phpunit/phpunit": "^9.5",
         "spatie/pest-plugin-snapshots": "^1.1",
-        "spatie/phpunit-snapshot-assertions": "^4.2",
         "vimeo/psalm": "^4.13"
     },
     "autoload": {

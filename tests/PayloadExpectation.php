@@ -73,7 +73,9 @@ class PayloadExpectation
 
     public function expectPropertyMissing(string $name): self
     {
-        Assert::assertObjectNotHasAttribute($name, $this->payload);
+        $properties = $this->getProperties($name);
+
+        Assert::assertEmpty($properties);
 
         return $this;
     }
