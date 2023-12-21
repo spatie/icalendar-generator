@@ -2,7 +2,9 @@
 
 namespace Spatie\IcalendarGenerator\Timezones;
 
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 
 class TimezoneRangeCollection
@@ -96,10 +98,10 @@ class TimezoneRangeCollection
 
     private function addEntry(string $timezone, DateTimeInterface $date)
     {
-        $date = \DateTimeImmutable::createFromFormat(
+        $date = DateTimeImmutable::createFromFormat(
             DATE_ATOM,
             $date->format(DATE_ATOM)
-        )->setTimezone(new \DateTimeZone('UTC'));
+        )->setTimezone(new DateTimeZone('UTC'));
 
         if (!array_key_exists($timezone, $this->ranges)) {
             $this->ranges[$timezone] = [
@@ -108,14 +110,14 @@ class TimezoneRangeCollection
             ];
         }
 
-        /** @var \DateTimeInterface $minimum */
+        /** @var DateTimeInterface $minimum */
         $minimum = $this->ranges[$timezone]['min'];
 
         if ($date < $minimum) {
             $this->ranges[$timezone]['min'] = $date;
         }
 
-        /** @var \DateTimeInterface $maximum */
+        /** @var DateTimeInterface $maximum */
         $maximum = $this->ranges[$timezone]['max'];
 
         if ($date > $maximum) {
@@ -123,18 +125,18 @@ class TimezoneRangeCollection
         }
     }
 
-    private function getMinimumDateTimeImmutable(): \DateTimeImmutable
+    protected function getMinimumDateTimeImmutable(): DateTimeImmutable
     {
         return PHP_INT_SIZE === 4 ?
-            (new \DateTimeImmutable())->setTimestamp(~PHP_INT_MAX) :
-            (new \DateTimeImmutable('0001-01-01 0:0:0'));
+            (new DateTimeImmutable())->setTimestamp(~PHP_INT_MAX) :
+            (new DateTimeImmutable('0001-01-01 0:0:0'));
     }
 
-    private function getMaximumDateTimeImmutable(): \DateTimeImmutable
+    protected function getMaximumDateTimeImmutable(): DateTimeImmutable
     {
         return PHP_INT_SIZE === 4 ?
-            (new \DateTimeImmutable())->setTimestamp(PHP_INT_MAX) :
-            (new \DateTimeImmutable('9999-12-31 23:59:59'));
+            (new DateTimeImmutable())->setTimestamp(PHP_INT_MAX) :
+            (new DateTimeImmutable('9999-12-31 23:59:59'));
     }
 
 }
