@@ -1,10 +1,10 @@
 <?php
 
 use Carbon\CarbonImmutable;
-use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
-use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
-
 use function PHPUnit\Framework\assertEquals;
+use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
+
+use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 test('it can add dates to a range (through Carbon)', function () {
     $d = new DateTimeImmutable('1 july 2020');

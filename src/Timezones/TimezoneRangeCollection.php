@@ -103,7 +103,7 @@ class TimezoneRangeCollection
             $date->format(DATE_ATOM)
         )->setTimezone(new DateTimeZone('UTC'));
 
-        if (!array_key_exists($timezone, $this->ranges)) {
+        if (! array_key_exists($timezone, $this->ranges)) {
             $this->ranges[$timezone] = [
                 'min' => $this->getMaximumDateTimeImmutable(),
                 'max' => $this->getMinimumDateTimeImmutable(),
@@ -138,5 +138,4 @@ class TimezoneRangeCollection
             (new DateTimeImmutable())->setTimestamp(PHP_INT_MAX) :
             (new DateTimeImmutable('9999-12-31 23:59:59'));
     }
-
 }
