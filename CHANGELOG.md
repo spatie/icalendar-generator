@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.6.0 - 2024-02-14
+
+- Carbon is not mandatory, we can use php DateTime objects (#115)
+
 ## 2.5.6 - 2023-03-24
 
 - Fix bugs introduced with previous pr
