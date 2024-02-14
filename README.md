@@ -286,7 +286,7 @@ Calendar::create('Laracon Online')
 
 #### Using Carbon
 
-Since this package expects a DateTimeInterface for properties related to date and time, it is possible to use the popular [Carbon library](https://carbon.nesbot.com/):
+You can use the popular [Carbon library](https://carbon.nesbot.com/):
 
 ``` php
 use Carbon\Carbon;
@@ -381,7 +381,7 @@ Or trigger an alert on a specific date:
 ``` php
 Event::create('Laracon Online')
     ->alertAt(
-       new DateTime('05/16/2020 12:00:00'), 
+       new DateTime('05/16/2020 12:00:00'),
        'Laracon online has ended, see you next year!'
     );
 ```
@@ -596,7 +596,7 @@ A timezone consists of multiple entries where the time of the timezone changed r
 
 ```php
 $entry = TimezoneEntry::create(
-    TimezoneEntryType::standard(), 
+    TimezoneEntryType::standard(),
     new DateTime('16 may 2020 12:00:00'),
     '+00:00',
     '+02:00'

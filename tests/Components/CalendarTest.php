@@ -2,14 +2,14 @@
 
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 use Spatie\IcalendarGenerator\Components\Timezone;
-
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
+
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertInstanceOf;
 
 test('it can create a calendar', function () {
     $payload = Calendar::create()->resolvePayload();
@@ -143,7 +143,7 @@ test('a source can be set', function () {
         ->expectParameterValue('VALUE', 'URI');
 });
 
-test('it will automatically add multiple timezone components', function () {
+test('it will automatically add multiple timezone components (through Carbon)', function () {
     Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
 
     $utcEvent = Event::create('An event with UTC timezone')
@@ -176,23 +176,52 @@ test('it will automatically add multiple timezone components', function () {
         ->expectSubComponentNotInstanceOf(4, Timezone::class);
 });
 
-test('it will automatically add timezone component', function () {
-    Carbon::setTestNow(new CarbonImmutable('1 august 2020'));
-
+test('it will automatically add multiple timezone components', function () {
     $utcEvent = Event::create('An event with UTC timezone')
-        ->createdAt(new CarbonImmutable('1 january 2019'))
-        ->startsAt(new CarbonImmutable('1 january 2019'))
-        ->endsAt(new CarbonImmutable('1 january 2021'));
+        ->startsAt(new DateTimeImmutable('1 january 2019'))
+        ->endsAt(new DateTimeImmutable('1 january 2021'));
 
     $alternativeTimezoneEvent = Event::create('An event with alternative timezone')
-        ->createdAt(new CarbonImmutable('1 january 2020', 'Europe/Brussels'))
-        ->startsAt(new CarbonImmutable('1 january 2020', 'Europe/Brussels'))
-        ->endsAt(new CarbonImmutable('1 january 2021', 'Europe/Brussels'));
+        ->startsAt(new DateTimeImmutable('1 january 2020', new \DateTimeZone('Europe/Brussels')))
+        ->endsAt(new DateTimeImmutable('1 january 2021', new \DateTimeZone('Europe/Brussels')));
+
+    $withoutTimezoneEvent = Event::create('An event without timezone')
+        ->withoutTimezone()
+        ->startsAt(new DateTimeImmutable('1 january 1995', new \DateTimeZone('America/New_York')))
+        ->endsAt(new DateTimeImmutable('1 january 2021', new \DateTimeZone('America/New_York')));
+
+    $payload = Calendar::create()->event(
+        [$utcEvent, $alternativeTimezoneEvent, $withoutTimezoneEvent]
+    )->resolvePayload();
+
+    PayloadExpectation::create($payload)
+        ->expectSubComponentCount(5)
+        ->expectSubComponent(0, function (PayloadExpectation $expectation) {
+            $expectation->expectType('VTIMEZONE')->expectPropertyValue('TZID', 'UTC');
+        })
+        ->expectSubComponent(1, function (PayloadExpectation $expectation) {
+            $expectation->expectType('VTIMEZONE')->expectPropertyValue('TZID', 'Europe/Brussels');
+        })
+        ->expectSubComponentNotInstanceOf(2, Timezone::class)
+        ->expectSubComponentNotInstanceOf(3, Timezone::class)
+        ->expectSubComponentNotInstanceOf(4, Timezone::class);
+});
+
+test('it will automatically add timezone component', function () {
+    $utcEvent = Event::create('An event with UTC timezone')
+        ->createdAt(new DateTimeImmutable('1 january 2019'))
+        ->startsAt(new DateTimeImmutable('1 january 2019'))
+        ->endsAt(new DateTimeImmutable('1 january 2021'));
+
+    $alternativeTimezoneEvent = Event::create('An event with alternative timezone')
+        ->createdAt(new DateTimeImmutable('1 january 2020', new \DateTimeZone('Europe/Brussels')))
+        ->startsAt(new DateTimeImmutable('1 january 2020', new \DateTimeZone('Europe/Brussels')))
+        ->endsAt(new DateTimeImmutable('1 january 2021', new \DateTimeZone('Europe/Brussels')));
 
     $negativeOffsetTimezoneEvent = Event::create('An event with a negative timezone offset')
-        ->createdAt(new CarbonImmutable('1 january 2020', 'America/New_York'))
-        ->startsAt(new CarbonImmutable('1 january 2020', 'America/New_York'))
-        ->endsAt(new CarbonImmutable('1 january 2021', 'America/New_York'));
+        ->createdAt(new DateTimeImmutable('1 january 2020', new \DateTimeZone('America/New_York')))
+        ->startsAt(new DateTimeImmutable('1 january 2020', new \DateTimeZone('America/New_York')))
+        ->endsAt(new DateTimeImmutable('1 january 2021', new \DateTimeZone('America/New_York')));
 
     $payload = Calendar::create()->event(
         [$utcEvent, $alternativeTimezoneEvent, $negativeOffsetTimezoneEvent]

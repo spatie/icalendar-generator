@@ -2,8 +2,9 @@
 
 namespace Spatie\IcalendarGenerator\Timezones;
 
-use Carbon\CarbonImmutable;
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 
 class TimezoneRangeCollection
@@ -97,30 +98,45 @@ class TimezoneRangeCollection
 
     private function addEntry(string $timezone, DateTimeInterface $date)
     {
-        $date = CarbonImmutable::createFromFormat(
+        $date = DateTimeImmutable::createFromFormat(
             DATE_ATOM,
             $date->format(DATE_ATOM)
-        )->setTimezone('UTC');
+        )->setTimezone(new DateTimeZone('UTC'));
 
-        if (! array_key_exists($timezone, $this->ranges)) {
+        if (!array_key_exists($timezone, $this->ranges)) {
             $this->ranges[$timezone] = [
-                'min' => CarbonImmutable::maxValue(),
-                'max' => CarbonImmutable::minValue(),
+                'min' => $this->getMaximumDateTimeImmutable(),
+                'max' => $this->getMinimumDateTimeImmutable(),
             ];
         }
 
-        /** @var \Carbon\CarbonImmutable $minimum */
+        /** @var DateTimeInterface $minimum */
         $minimum = $this->ranges[$timezone]['min'];
 
-        if ($date->lt($minimum)) {
+        if ($date < $minimum) {
             $this->ranges[$timezone]['min'] = $date;
         }
 
-        /** @var \Carbon\CarbonImmutable $maximum */
+        /** @var DateTimeInterface $maximum */
         $maximum = $this->ranges[$timezone]['max'];
 
-        if ($date->gt($maximum)) {
+        if ($date > $maximum) {
             $this->ranges[$timezone]['max'] = $date;
         }
     }
+
+    protected function getMinimumDateTimeImmutable(): DateTimeImmutable
+    {
+        return PHP_INT_SIZE === 4 ?
+            (new DateTimeImmutable())->setTimestamp(~PHP_INT_MAX) :
+            (new DateTimeImmutable('0001-01-01 0:0:0'));
+    }
+
+    protected function getMaximumDateTimeImmutable(): DateTimeImmutable
+    {
+        return PHP_INT_SIZE === 4 ?
+            (new DateTimeImmutable())->setTimestamp(PHP_INT_MAX) :
+            (new DateTimeImmutable('9999-12-31 23:59:59'));
+    }
+
 }

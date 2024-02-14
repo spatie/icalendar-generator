@@ -1,17 +1,12 @@
 <?php
 
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
-
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
-beforeEach(function () {
-    CarbonImmutable::setTestNow('1 august 2020');
-});
+use function PHPUnit\Framework\assertEquals;
 
-test('it can add dates to a range', function () {
+test('it can add dates to a range (through Carbon)', function () {
     $d = new DateTimeImmutable('1 july 2020');
     $b = new DateTimeImmutable('13 august 2020');
     $c = new DateTimeImmutable('21 october 2020');
@@ -32,6 +27,28 @@ test('it can add dates to a range', function () {
     ], $ranges->get());
 });
 
+test('it can add dates to a range', function () {
+    $d = new DateTimeImmutable('1 july 2020');
+    $b = new DateTimeImmutable('13 august 2020');
+    $c = new DateTimeImmutable('21 october 2020');
+    $a = new DateTimeImmutable('16 may 2020');
+
+    $ranges = TimezoneRangeCollection::create();
+
+    $ranges->add($a);
+    $ranges->add($b);
+    $ranges->add($c);
+    $ranges->add($d);
+
+    assertEquals([
+        'UTC' => [
+            'min' => new \DateTimeImmutable('16 may 2020'),
+            'max' => new \DateTimeImmutable('21 october 2020'),
+        ],
+    ], $ranges->get());
+});
+
+
 test('it can have multiple timezones', function () {
     $alternativeTimeZone = new DateTimeZone('Europe/Brussels');
 
@@ -51,12 +68,12 @@ test('it can have multiple timezones', function () {
 
     assertEquals([
         'Europe/Brussels' => [
-            'min' => new CarbonImmutable('15 may 2020 22:00:00'), // UTC transformation
-            'max' => new CarbonImmutable('20 october 2020 22:00:00'), // UTC transformation
+            'min' => new \DateTimeImmutable('15 may 2020 22:00:00'), // UTC transformation
+            'max' => new \DateTimeImmutable('20 october 2020 22:00:00'), // UTC transformation
         ],
         'UTC' => [
-            'min' => new CarbonImmutable('16 may 2020'),
-            'max' => new CarbonImmutable('21 october 2020'),
+            'min' => new \DateTimeImmutable('16 may 2020'),
+            'max' => new \DateTimeImmutable('21 october 2020'),
         ],
     ], $ranges->get());
 });
@@ -64,8 +81,8 @@ test('it can have multiple timezones', function () {
 test('it can add different types of date times', function () {
     $d = new DateTime('1 july 2020');
     $b = new DateTimeImmutable('13 august 2020');
-    $c = new CarbonImmutable('21 october 2020');
-    $a = new Carbon('16 may 2020');
+    $c = new \DateTimeImmutable('21 october 2020');
+    $a = new \DateTime('16 may 2020');
 
     $ranges = TimezoneRangeCollection::create();
 
