@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Ask a question
+      url: https://github.com/spatie/icalendar-generator/discussions/new?category=q-a
+      about: Ask the community for help
+    - name: Request a feature
+      url: https://github.com/spatie/icalendar-generator/discussions/new?category=ideas
+      about: Share ideas for new features
