@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "ext-json": "*",
-        "nesbot/carbon": "^2.63",
+        "nesbot/carbon": "^2.6|^3.0",
         "larapack/dd": "^1.1",
         "pestphp/pest": "^1.22",
         "spatie/pest-plugin-snapshots": "^1.1",
