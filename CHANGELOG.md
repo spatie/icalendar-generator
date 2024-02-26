@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.6.1 - 2024-02-26
+
+### What's Changed
+
+* upgrade nesbot/carbon to allow sf7 by @nikow13 in https://github.com/spatie/icalendar-generator/pull/121
+
+### New Contributors
+
+* @nikow13 made their first contribution in https://github.com/spatie/icalendar-generator/pull/121
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.6.0...2.6.1
+
 ## 2.6.0 - 2024-02-14
 
 - Carbon is not mandatory, we can use php DateTime objects (#115)
