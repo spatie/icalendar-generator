@@ -151,7 +151,7 @@ class Calendar extends Component implements HasTimezones
     /**
      * Identifies a location where a client can retrieve updated data for the calendar.
      *
-     * @link https://datatracker.ietf.org/doc/html/rfc7986#section-5.7
+     * @link https://datatracker.ietf.org/doc/html/rfc7986#section-5.8
      */
     public function source(string $source): self
     {
