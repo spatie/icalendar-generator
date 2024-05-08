@@ -2,6 +2,14 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.6.2 - 2024-05-08
+
+### What's Changed
+
+* fix: dtend for full day events should be on the next day at midnight by @joostdebruijn in https://github.com/spatie/icalendar-generator/pull/128
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.6.1...2.6.2
+
 ## 2.6.1 - 2024-02-26
 
 ### What's Changed
