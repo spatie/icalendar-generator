@@ -127,7 +127,14 @@ class Event extends Component implements HasTimezones
 
     public function endsAt(DateTimeInterface $ends, bool $withTime = true): Event
     {
-        $this->ends = DateTimeValue::create($ends, $withTime);
+        if ($this->isFullDay) {
+            // The DTEND is the non-inclusive end of the event.
+            $ends = $ends->modify('+1 day');
+            $this->ends = DateTimeValue::create($ends, false);
+        } else {
+            $this->ends = DateTimeValue::create($ends, $withTime);
+        }
+
 
         return $this;
     }
