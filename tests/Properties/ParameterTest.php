@@ -13,7 +13,7 @@ test('it replaces all illegal characters', function () {
     );
 
     assertEquals(
-        'a quote \\" ',
+        'a quote ^\' ',
         (new Parameter('', 'a quote " '))->getValue()
     );
 
@@ -28,8 +28,13 @@ test('it replaces all illegal characters', function () {
     );
 
     assertEquals(
-        'a return \\\n ',
-        (new Parameter('', 'a return \n '))->getValue()
+        'a return ^n ',
+        (new Parameter('', 'a return '.PHP_EOL.' '))->getValue()
+    );
+
+    assertEquals(
+        'a circumflex accent ^^ ',
+        (new Parameter('', 'a circumflex accent ^ '))->getValue()
     );
 });
 
@@ -57,6 +62,11 @@ test('it can disable escaping', function () {
     assertEquals(
         'a return \n ',
         (new Parameter('', 'a return \n ', true))->getValue()
+    );
+
+    assertEquals(
+        'a return ^ ',
+        (new Parameter('', 'a return ^ ', true))->getValue()
     );
 });
 
