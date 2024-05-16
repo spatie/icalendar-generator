@@ -461,6 +461,10 @@ class Event extends Component implements HasTimezones
                 fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
             )
             ->optional(
+                $this->isFullDay,
+                fn () => TextProperty::create('X-MICROSOFT-CDO-ALLDAYEVENT', 'TRUE')
+            )
+            ->optional(
                 $this->organizer,
                 fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
             )
