@@ -63,6 +63,11 @@ test('it can disable escaping', function () {
         'a return \n ',
         (new Parameter('', 'a return \n ', true))->getValue()
     );
+
+    assertEquals(
+        'a return ^ ',
+        (new Parameter('', 'a return ^ ', true))->getValue()
+    );
 });
 
 test('it can format a boolean', function () {
