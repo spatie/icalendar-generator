@@ -2,6 +2,14 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.7.0 - 2024-05-16
+
+### What's Changed
+
+* feat: improved compatibility all day events for Microsoft products by @joostdebruijn in https://github.com/spatie/icalendar-generator/pull/132
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.6.2...2.7.0
+
 ## 2.6.2 - 2024-05-08
 
 ### What's Changed
