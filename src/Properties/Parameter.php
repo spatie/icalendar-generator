@@ -40,11 +40,14 @@ class Parameter
         }
 
         $replacements = [
-            '\\' => '\\\\',
-            '"' => '\\"',
+            // RFC 5545
+            '\\' => '\\\\', 
             ',' => '\\,',
             ';' => '\\;',
-            "\n" => '\\n',
+            // RFC 6868
+            '^' => '^^',
+            '"' => '^\'', 
+            PHP_EOL => '^n',
         ];
 
         return str_replace(array_keys($replacements), $replacements, $value);
