@@ -2,6 +2,14 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.8.0 - 2024-05-16
+
+### What's Changed
+
+* feat: use rfc 6868 escaping by @joostdebruijn in https://github.com/spatie/icalendar-generator/pull/131
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.7.0...2.8.0
+
 ## 2.7.0 - 2024-05-16
 
 ### What's Changed
