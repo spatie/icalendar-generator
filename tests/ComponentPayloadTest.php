@@ -3,11 +3,7 @@
 namespace Spatie\IcalendarGenerator\Tests;
 
 use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
 use Exception;
-use Spatie\IcalendarGenerator\Components\Calendar;
-use Spatie\IcalendarGenerator\Components\Event;
 use function PHPUnit\Framework\assertEquals;
 use Spatie\IcalendarGenerator\ComponentPayload;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
