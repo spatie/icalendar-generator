@@ -12,6 +12,8 @@ class DateTimeProperty extends Property
 
     private DateTimeZone $dateTimeZone;
 
+    private bool $withoutTimeZone;
+
     public static function fromDateTime(
         string $name,
         DateTimeInterface $dateTime,
@@ -37,6 +39,7 @@ class DateTimeProperty extends Property
         $this->name = $name;
         $this->dateTimeValue = $dateTimeValue;
         $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
+        $this->withoutTimeZone = $withoutTimeZone;
 
         if (! $withoutTimeZone && ! $this->isUTC()) {
             $this->addParameter(new Parameter('TZID', $this->dateTimeZone->getName()));
@@ -49,7 +52,7 @@ class DateTimeProperty extends Property
 
     public function getValue(): string
     {
-        return $this->isUTC() && $this->dateTimeValue->hasTime()
+        return $this->isUTC() && $this->dateTimeValue->hasTime() && $this->withoutTimeZone === false
             ? "{$this->dateTimeValue->format()}Z"
             : $this->dateTimeValue->format();
     }

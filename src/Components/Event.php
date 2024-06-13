@@ -427,7 +427,7 @@ class Event extends Component implements HasTimezones
     {
         $payload
             ->property(TextProperty::create('UID', $this->uuid))
-            ->property(DateTimeProperty::create('DTSTAMP', $this->created, $this->withoutTimezone))
+            ->property(DateTimeProperty::create('DTSTAMP', $this->created))
             ->optional(
                 $this->name,
                 fn () => TextProperty::create('SUMMARY', $this->name)
