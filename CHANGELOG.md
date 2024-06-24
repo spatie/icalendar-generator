@@ -2,6 +2,16 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.8.1 - 2024-06-24
+
+### What's Changed
+
+* feat: drop support for PHP < 8.1 by @Chris53897 in https://github.com/spatie/icalendar-generator/pull/136
+* ci: improve ci by @Chris53897 in https://github.com/spatie/icalendar-generator/pull/135
+* Fix timezone issue
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.8.0...2.8.1
+
 ## 2.8.0 - 2024-05-16
 
 ### What's Changed
