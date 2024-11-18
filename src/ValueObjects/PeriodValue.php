@@ -9,37 +9,37 @@ use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
 class PeriodValue implements HasTimezones
 {
-    private DateTimeInterface $staring;
+    private DateTimeInterface $starting;
 
     private ?DateTimeInterface $ending = null;
 
     private ?DurationValue $duration = null;
 
     private function __construct(
-        DateTimeInterface $staring,
+        DateTimeInterface $starting,
         ?DateTimeInterface $ending,
         ?DurationValue $duration
     ) {
-        $this->staring = $staring;
+        $this->starting = $starting;
         $this->ending = $ending;
         $this->duration = $duration;
     }
 
     /**
-     * @param \DateTimeInterface $staring
+     * @param \DateTimeInterface $starting
      * @param DateTimeInterface|\Spatie\IcalendarGenerator\ValueObjects\DurationValue $ending
      *
      * @return static
      */
-    public static function create(DateTimeInterface $staring, $ending): self
+    public static function create(DateTimeInterface $starting, $ending): self
     {
         if ($ending instanceof DateTimeInterface) {
             /** @psalm-suppress InvalidArgument */
-            return new self($staring, $ending, null);
+            return new self($starting, $ending, null);
         }
 
         if ($ending instanceof DurationValue) {
-            return new self($staring, null, $ending);
+            return new self($starting, null, $ending);
         }
 
         throw new Exception('The end of a period can only be a DateTime or Duration');
@@ -48,16 +48,16 @@ class PeriodValue implements HasTimezones
     public function format(): string
     {
         if ($this->duration !== null) {
-            return DateTimeValue::create($this->staring, true)->format() . '/' . $this->duration->format();
+            return DateTimeValue::create($this->starting, true)->format() . '/' . $this->duration->format();
         }
 
-        return DateTimeValue::create($this->staring, true)->format() . '/' . DateTimeValue::create($this->ending, true)->format();
+        return DateTimeValue::create($this->starting, true)->format() . '/' . DateTimeValue::create($this->ending, true)->format();
     }
 
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
         return TimezoneRangeCollection::create()
-            ->add($this->staring)
+            ->add($this->starting)
             ->add($this->ending);
     }
 }
