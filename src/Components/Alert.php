@@ -27,12 +27,12 @@ class Alert extends Component
 
     private bool $withoutTimezone = false;
 
-    public static function date(DateTimeInterface $date, string $description = null): Alert
+    public static function date(DateTimeInterface $date, ?string $description = null): Alert
     {
         return static::create($description)->triggerDate($date);
     }
 
-    public static function minutesBeforeStart(int $minutes, string $description = null): Alert
+    public static function minutesBeforeStart(int $minutes, ?string $description = null): Alert
     {
         $interval = new DateInterval("PT{$minutes}M");
         $interval->invert = 1;
@@ -40,12 +40,12 @@ class Alert extends Component
         return static::create($description)->triggerAtStart($interval);
     }
 
-    public static function minutesAfterStart(int $minutes, string $description = null): Alert
+    public static function minutesAfterStart(int $minutes, ?string $description = null): Alert
     {
         return static::create($description)->triggerAtStart(new DateInterval("PT{$minutes}M"));
     }
 
-    public static function minutesBeforeEnd(int $minutes, string $description = null): Alert
+    public static function minutesBeforeEnd(int $minutes, ?string $description = null): Alert
     {
         $interval = new DateInterval("PT{$minutes}M");
         $interval->invert = 1;
@@ -53,17 +53,17 @@ class Alert extends Component
         return static::create($description)->triggerAtEnd($interval);
     }
 
-    public static function minutesAfterEnd(int $minutes, string $description = null): Alert
+    public static function minutesAfterEnd(int $minutes, ?string $description = null): Alert
     {
         return static::create($description)->triggerAtEnd(new DateInterval("PT{$minutes}M"));
     }
 
-    private static function create(string $description = null): Alert
+    private static function create(?string $description = null): Alert
     {
         return new self($description);
     }
 
-    public function __construct(string $description = null)
+    public function __construct(?string $description = null)
     {
         $this->message = $description;
     }

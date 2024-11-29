@@ -234,75 +234,75 @@ test('it will automatically add timezone component', function () {
 
     assertInstanceOf(Timezone::class, $utcComponent);
     assertEquals(<<<EOT
-BEGIN:VTIMEZONE\r
-TZID:UTC\r
-BEGIN:STANDARD\r
-DTSTART:20180406T000000\r
-TZOFFSETFROM:+0000\r
-TZOFFSETTO:+0000\r
-END:STANDARD\r
-END:VTIMEZONE
-EOT, $utcComponent->toString());
+        BEGIN:VTIMEZONE\r
+        TZID:UTC\r
+        BEGIN:STANDARD\r
+        DTSTART:20180406T000000\r
+        TZOFFSETFROM:+0000\r
+        TZOFFSETTO:+0000\r
+        END:STANDARD\r
+        END:VTIMEZONE
+        EOT, $utcComponent->toString());
 
     /** @var \Spatie\IcalendarGenerator\Components\Timezone $alternativeTimezoneComponent */
     $alternativeTimezoneComponent = $subComponents[1];
 
     assertInstanceOf(Timezone::class, $alternativeTimezoneComponent);
     assertEquals(<<<EOT
-BEGIN:VTIMEZONE\r
-TZID:Europe/Brussels\r
-BEGIN:STANDARD\r
-DTSTART:20191027T030000\r
-TZOFFSETFROM:+0200\r
-TZOFFSETTO:+0100\r
-END:STANDARD\r
-BEGIN:DAYLIGHT\r
-DTSTART:20200329T020000\r
-TZOFFSETFROM:+0100\r
-TZOFFSETTO:+0200\r
-END:DAYLIGHT\r
-BEGIN:STANDARD\r
-DTSTART:20201025T030000\r
-TZOFFSETFROM:+0200\r
-TZOFFSETTO:+0100\r
-END:STANDARD\r
-BEGIN:DAYLIGHT\r
-DTSTART:20210328T020000\r
-TZOFFSETFROM:+0100\r
-TZOFFSETTO:+0200\r
-END:DAYLIGHT\r
-END:VTIMEZONE
-EOT, $alternativeTimezoneComponent->toString());
+        BEGIN:VTIMEZONE\r
+        TZID:Europe/Brussels\r
+        BEGIN:STANDARD\r
+        DTSTART:20191027T030000\r
+        TZOFFSETFROM:+0200\r
+        TZOFFSETTO:+0100\r
+        END:STANDARD\r
+        BEGIN:DAYLIGHT\r
+        DTSTART:20200329T020000\r
+        TZOFFSETFROM:+0100\r
+        TZOFFSETTO:+0200\r
+        END:DAYLIGHT\r
+        BEGIN:STANDARD\r
+        DTSTART:20201025T030000\r
+        TZOFFSETFROM:+0200\r
+        TZOFFSETTO:+0100\r
+        END:STANDARD\r
+        BEGIN:DAYLIGHT\r
+        DTSTART:20210328T020000\r
+        TZOFFSETFROM:+0100\r
+        TZOFFSETTO:+0200\r
+        END:DAYLIGHT\r
+        END:VTIMEZONE
+        EOT, $alternativeTimezoneComponent->toString());
 
     /** @var \Spatie\IcalendarGenerator\Components\Timezone $negativeOffsetTimezoneComponent */
     $negativeOffsetTimezoneComponent = $subComponents[2];
 
     assertInstanceOf(Timezone::class, $negativeOffsetTimezoneComponent);
     assertEquals(<<<EOT
-BEGIN:VTIMEZONE\r
-TZID:America/New_York\r
-BEGIN:STANDARD\r
-DTSTART:20191103T020000\r
-TZOFFSETFROM:-0400\r
-TZOFFSETTO:-0500\r
-END:STANDARD\r
-BEGIN:DAYLIGHT\r
-DTSTART:20200308T020000\r
-TZOFFSETFROM:-0500\r
-TZOFFSETTO:-0400\r
-END:DAYLIGHT\r
-BEGIN:STANDARD\r
-DTSTART:20201101T020000\r
-TZOFFSETFROM:-0400\r
-TZOFFSETTO:-0500\r
-END:STANDARD\r
-BEGIN:DAYLIGHT\r
-DTSTART:20210314T020000\r
-TZOFFSETFROM:-0500\r
-TZOFFSETTO:-0400\r
-END:DAYLIGHT\r
-END:VTIMEZONE
-EOT, $negativeOffsetTimezoneComponent->toString());
+        BEGIN:VTIMEZONE\r
+        TZID:America/New_York\r
+        BEGIN:STANDARD\r
+        DTSTART:20191103T020000\r
+        TZOFFSETFROM:-0400\r
+        TZOFFSETTO:-0500\r
+        END:STANDARD\r
+        BEGIN:DAYLIGHT\r
+        DTSTART:20200308T020000\r
+        TZOFFSETFROM:-0500\r
+        TZOFFSETTO:-0400\r
+        END:DAYLIGHT\r
+        BEGIN:STANDARD\r
+        DTSTART:20201101T020000\r
+        TZOFFSETFROM:-0400\r
+        TZOFFSETTO:-0500\r
+        END:STANDARD\r
+        BEGIN:DAYLIGHT\r
+        DTSTART:20210314T020000\r
+        TZOFFSETFROM:-0500\r
+        TZOFFSETTO:-0400\r
+        END:DAYLIGHT\r
+        END:VTIMEZONE
+        EOT, $negativeOffsetTimezoneComponent->toString());
 });
 
 test('it can add timezone components manually', function () {

@@ -91,12 +91,12 @@ class Event extends Component implements HasTimezones
     /** @var array[] */
     private array $images = [];
 
-    public static function create(string $name = null): Event
+    public static function create(?string $name = null): Event
     {
         return new self($name);
     }
 
-    public function __construct(string $name = null)
+    public function __construct(?string $name = null)
     {
         $this->name = $name;
         $this->uuid = uniqid();
@@ -128,8 +128,12 @@ class Event extends Component implements HasTimezones
     public function endsAt(DateTimeInterface $ends, bool $withTime = true): Event
     {
         if ($this->isFullDay) {
-            // The DTEND is the non-inclusive end of the event.
-            $ends = $ends->modify('+1 day');
+            if (method_exists($ends, 'modify')) {
+                $ends = $ends->modify('+1 day');
+            } else {
+                throw new \LogicException('The provided DateTimeInterface instance does not support the modify method.');
+            }
+
             $this->ends = DateTimeValue::create($ends, false);
         } else {
             $this->ends = DateTimeValue::create($ends, $withTime);
@@ -164,7 +168,7 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    public function address(string $address, string $name = null): Event
+    public function address(string $address, ?string $name = null): Event
     {
         $this->address = $address;
 
@@ -240,21 +244,21 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    public function alertAt(DateTimeInterface $alert, string $message = null)
+    public function alertAt(DateTimeInterface $alert, ?string $message = null)
     {
         $this->alerts[] = Alert::date($alert, $message);
 
         return $this;
     }
 
-    public function alertMinutesBefore(int $minutes, string $message = null): Event
+    public function alertMinutesBefore(int $minutes, ?string $message = null): Event
     {
         $this->alerts[] = Alert::minutesBeforeStart($minutes, $message);
 
         return $this;
     }
 
-    public function alertMinutesAfter(int $minutes, string $message = null): Event
+    public function alertMinutesAfter(int $minutes, ?string $message = null): Event
     {
         $this->alerts[] = Alert::minutesAfterEnd($minutes, $message);
 
@@ -277,8 +281,8 @@ class Event extends Component implements HasTimezones
 
     public function attendee(
         string $email,
-        string $name = null,
-        ParticipationStatus $participationStatus = null,
+        ?string $name = null,
+        ?ParticipationStatus $participationStatus = null,
         bool $requiresResponse = false
     ): Event {
         $this->attendees[] = new CalendarAddress($email, $name, $participationStatus, $requiresResponse);
@@ -286,7 +290,7 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    public function organizer(string $email, string $name = null): Event
+    public function organizer(string $email, ?string $name = null): Event
     {
         $this->organizer = new CalendarAddress($email, $name);
 
@@ -307,7 +311,7 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    public function rruleAsString(string $rrule, ?DateTimeInterface $starting = null, DateTimeInterface $until = null): Event
+    public function rruleAsString(string $rrule, ?DateTimeInterface $starting = null, ?DateTimeInterface $until = null): Event
     {
         $this->rrule = $rrule;
         $this->rruleStarting = $starting;

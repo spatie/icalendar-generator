@@ -36,12 +36,12 @@ class Calendar extends Component implements HasTimezones
 
     private ?string $source = null;
 
-    public static function create(string $name = null): Calendar
+    public static function create(?string $name = null): Calendar
     {
         return new self($name);
     }
 
-    public function __construct(string $name = null)
+    public function __construct(?string $name = null)
     {
         $this->name = $name;
     }
