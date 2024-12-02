@@ -2,6 +2,19 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.9.0 - 2024-12-02
+
+### What's Changed
+
+* fix: typo in property name for PeriodValue ($staring to $starting) by @Ayomided in https://github.com/spatie/icalendar-generator/pull/145
+* Fix PHP 8.4 deprecations by @nikow13 in https://github.com/spatie/icalendar-generator/pull/146
+
+### New Contributors
+
+* @Ayomided made their first contribution in https://github.com/spatie/icalendar-generator/pull/145
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.8.1...2.9.0
+
 ## 2.8.1 - 2024-06-24
 
 ### What's Changed
