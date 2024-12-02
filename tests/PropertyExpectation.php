@@ -15,7 +15,7 @@ class PropertyExpectation
      *
      * @return static
      */
-    public static function create($instance, string $name = null): self
+    public static function create($instance, ?string $name = null): self
     {
         if ($instance instanceof Property) {
             return new self($instance);

@@ -17,8 +17,8 @@ class CalendarAddress
 
     public function __construct(
         string $email,
-        string $name = null,
-        ParticipationStatus $participationStatus = null,
+        ?string $name = null,
+        ?ParticipationStatus $participationStatus = null,
         bool $requiresResponse = false
     ) {
         $this->email = $email;

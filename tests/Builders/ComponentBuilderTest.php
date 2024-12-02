@@ -16,10 +16,10 @@ test('it can build a component payload with properties', function () {
 
     assertEquals(
         <<<EOT
-BEGIN:VTEST\r
-location:Antwerp\r
-END:VTEST
-EOT,
+            BEGIN:VTEST\r
+            location:Antwerp\r
+            END:VTEST
+            EOT,
         $builder->build()
     );
 });
@@ -35,11 +35,11 @@ test('it can build a component payload with property alias', function () {
 
     assertEquals(
         <<<EOT
-BEGIN:VTEST\r
-location:Antwerp\r
-geo:Antwerp\r
-END:VTEST
-EOT,
+            BEGIN:VTEST\r
+            location:Antwerp\r
+            geo:Antwerp\r
+            END:VTEST
+            EOT,
         $builder->build()
     );
 });
@@ -53,12 +53,12 @@ test('it can build a component payload with sub-components', function () {
 
     assertEquals(
         <<<EOT
-BEGIN:VTEST\r
-BEGIN:VDUMMY\r
-name:SUBCOMPONENT\r
-END:VDUMMY\r
-END:VTEST
-EOT,
+            BEGIN:VTEST\r
+            BEGIN:VDUMMY\r
+            name:SUBCOMPONENT\r
+            END:VDUMMY\r
+            END:VTEST
+            EOT,
         $builder->build()
     );
 });
@@ -72,12 +72,12 @@ test('it will chip a line when it becomes too long', function () {
 
     assertEquals(
         <<<EOT
-BEGIN:VTEST\r
-location:This is a really long text. Possibly you will never write a text l\r
- ike this in a property. But hey we support the RFC so let us chip it! You \r
- can maybe write some HTML in here that will make it longer than usual.\r
-END:VTEST
-EOT,
+            BEGIN:VTEST\r
+            location:This is a really long text. Possibly you will never write a text l\r
+             ike this in a property. But hey we support the RFC so let us chip it! You \r
+             can maybe write some HTML in here that will make it longer than usual.\r
+            END:VTEST
+            EOT,
         $builder->build()
     );
 });

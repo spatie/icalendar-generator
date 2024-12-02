@@ -25,7 +25,7 @@ class ComponentPayload
         $this->type = $type;
     }
 
-    public function property(Property $property, array $parameters = null): ComponentPayload
+    public function property(Property $property, ?array $parameters = null): ComponentPayload
     {
         $property->addParameters($parameters ?? []);
 
