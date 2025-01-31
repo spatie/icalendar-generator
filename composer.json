@@ -28,8 +28,7 @@
         "nesbot/carbon": "^3.5",
         "larapack/dd": "^1.1",
         "pestphp/pest": "^2.34",
-        "spatie/pest-plugin-snapshots": "^2.1",
-        "vimeo/psalm": "^5.24"
+        "spatie/pest-plugin-snapshots": "^2.1"
     },
     "autoload": {
         "psr-4": {
