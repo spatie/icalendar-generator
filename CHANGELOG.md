@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.9.1 - 2025-01-31
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.9.0...2.9.1
+
 ## 2.9.0 - 2024-12-02
 
 ### What's Changed
