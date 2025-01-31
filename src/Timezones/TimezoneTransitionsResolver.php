@@ -93,7 +93,7 @@ class TimezoneTransitionsResolver
     private function resolveOffset(int $offset): DateInterval
     {
         $hours = (int) floor($offset / 3600);
-        $minutes = abs(($offset / 60) % 60);
+        $minutes = abs(intdiv($offset, 60) % 60);
 
         return $this->resolveInterval($hours, $minutes);
     }
