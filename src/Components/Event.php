@@ -91,6 +91,8 @@ class Event extends Component implements HasTimezones
     /** @var array[] */
     private array $images = [];
 
+    private ?int $sequence = null;
+
     public static function create(?string $name = null): Event
     {
         return new self($name);
@@ -394,6 +396,13 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    public function sequence(int $sequence): Event
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
         if ($this->withoutTimezone) {
@@ -485,6 +494,10 @@ class Event extends Component implements HasTimezones
             ->optional(
                 $this->url,
                 fn () => UriProperty::create('URL', $this->url)
+            )
+            ->optional(
+                $this->sequence !== null,
+                fn () => TextProperty::create('SEQUENCE', $this->sequence)
             )
             ->multiple(
                 $this->recurrence_dates,
