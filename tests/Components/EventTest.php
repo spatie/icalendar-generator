@@ -520,7 +520,7 @@ test('it can add an image to an event', function () {
     );
 });
 
-test('it can add a sequence to an event', function() {
+test('it can add a sequence to an event', function () {
     $payload = Event::create('An introduction into event sourcing')
         ->sequence(1)
         ->resolvePayload();
