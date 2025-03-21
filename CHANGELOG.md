@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 2.9.2 - 2025-03-21
+
+### What's Changed
+
+* feat: Add sequence to event by @andrewbroberg in https://github.com/spatie/icalendar-generator/pull/151
+
+### New Contributors
+
+* @andrewbroberg made their first contribution in https://github.com/spatie/icalendar-generator/pull/151
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.9.1...2.9.2
+
 ## 2.9.1 - 2025-01-31
 
 **Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.9.0...2.9.1
