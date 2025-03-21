@@ -58,6 +58,10 @@ class DurationValue
             $value .= "{$this->interval->s}S";
         }
 
+        if ($value == "P" || $value == "-P") {
+            return "PT0S";
+        }
+
         return $value;
     }
 }

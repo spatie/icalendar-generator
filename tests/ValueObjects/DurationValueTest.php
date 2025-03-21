@@ -22,6 +22,12 @@ test('it can create a duration property with all properties', function () {
     assertEquals('P4DT3H2M1S', $value->format());
 });
 
+test('it can create 0 seconds duration', function () {
+    $value = DurationValue::create('PT0S');
+
+    assertEquals('PT0S', $value->format());
+});
+
 test('it can use a regular string as duration', function () {
     $value = DurationValue::create('PT5M');
 
