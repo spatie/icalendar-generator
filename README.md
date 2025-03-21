@@ -255,6 +255,14 @@ There are four different image display types:
 - `Display::fullsize()`
 - `Display::thumbnail()`
 
+You can add a sequence to an event as such:
+
+``` php
+Event::create()
+    ->sequence(1)
+    ...
+```
+
 After creating your event, it should be added to a calendar. There are multiple options to do this:
 
 ``` php
