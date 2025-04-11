@@ -11,7 +11,7 @@ abstract class Property
     /** @var array<Parameter> */
     protected array $parameters = [];
 
-    /** @var array<string>  */
+    /** @var array<string> */
     protected array $aliases = [];
 
     abstract public function getValue(): ?string;

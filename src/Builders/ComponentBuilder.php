@@ -42,7 +42,6 @@ class ComponentBuilder
         return $lines;
     }
 
-
     /**  @return array<string> */
     protected function buildProperties(): array
     {

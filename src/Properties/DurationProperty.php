@@ -7,7 +7,6 @@ use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 
 class DurationProperty extends Property
 {
-
     public static function create(string $name, DateInterval $interval): DurationProperty
     {
         return new self($name, $interval);

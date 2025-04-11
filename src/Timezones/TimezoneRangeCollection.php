@@ -109,7 +109,7 @@ class TimezoneRangeCollection
             $date->format(DATE_ATOM)
         );
 
-        if($date === false) {
+        if ($date === false) {
             return;
         }
 

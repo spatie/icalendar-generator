@@ -3,7 +3,6 @@
 namespace Spatie\IcalendarGenerator\Properties;
 
 use BackedEnum;
-use Spatie\Enum\Enum;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class Parameter

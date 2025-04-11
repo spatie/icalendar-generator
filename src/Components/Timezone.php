@@ -27,7 +27,7 @@ class Timezone extends Component
         ?DateTimeInterface $lastModified = null,
         protected array $entries = [],
     ) {
-        if($lastModified) {
+        if ($lastModified) {
             $this->lastModified($lastModified);
         }
     }

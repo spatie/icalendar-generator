@@ -2,7 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
@@ -99,8 +98,7 @@ class Event extends Component implements HasTimezones
 
     public function __construct(
         protected ?string $name = null
-    )
-    {
+    ) {
         $this->uuid = uniqid();
         $this->created = DateTimeValue::create(new DateTimeImmutable())
             ->convertToTimezone(new \DateTimeZone('UTC'));
@@ -436,43 +434,43 @@ class Event extends Component implements HasTimezones
             ->property(TextProperty::create('UID', $this->uuid))
             ->property(DateTimeProperty::create('DTSTAMP', $this->created));
 
-        if($this->name){
+        if ($this->name) {
             $payload->property(TextProperty::create('SUMMARY', $this->name));
         }
 
-        if($this->description){
+        if ($this->description) {
             $payload->property(TextProperty::create('DESCRIPTION', $this->description));
         }
 
-        if($this->address){
+        if ($this->address) {
             $payload->property(TextProperty::create('LOCATION', $this->address));
         }
 
-        if($this->classification){
+        if ($this->classification) {
             $payload->property(TextProperty::createFromEnum('CLASS', $this->classification));
         }
 
-        if($this->status){
+        if ($this->status) {
             $payload->property(TextProperty::createFromEnum('STATUS', $this->status));
         }
 
-        if($this->googleConference){
+        if ($this->googleConference) {
             $payload->property(TextProperty::create('X-GOOGLE-CONFERENCE', $this->googleConference));
         }
 
-        if($this->microsoftTeams){
+        if ($this->microsoftTeams) {
             $payload->property(TextProperty::create('X-MICROSOFT-SKYPETEAMSMEETINGURL', $this->microsoftTeams));
         }
 
-        if($this->transparent){
+        if ($this->transparent) {
             $payload->property(TextProperty::create('TRANSP', 'TRANSPARENT'));
         }
 
-        if ($this->isFullDay){
+        if ($this->isFullDay) {
             $payload->property(TextProperty::create('X-MICROSOFT-CDO-ALLDAYEVENT', 'TRUE'));
         }
 
-        if($this->organizer){
+        if ($this->organizer) {
             $payload->property(CalendarAddressProperty::create('ORGANIZER', $this->organizer));
         }
 
@@ -484,11 +482,11 @@ class Event extends Component implements HasTimezones
             $payload->property($property);
         }
 
-        if($this->url){
+        if ($this->url) {
             $payload->property(UriProperty::create('URL', $this->url));
         }
 
-        if ($this->sequence){
+        if ($this->sequence) {
             $payload->property(TextProperty::create('SEQUENCE', (string) $this->sequence));
         }
 
@@ -497,15 +495,15 @@ class Event extends Component implements HasTimezones
         }
 
         foreach ($this->recurrenceDates as $recurrenceDate) {
-            $payload->property( self::dateTimePropertyWithSpecifiedType('RDATE', $recurrenceDate));
+            $payload->property(self::dateTimePropertyWithSpecifiedType('RDATE', $recurrenceDate));
         }
 
         foreach ($this->excludedRecurrenceDates as $excludedRecurrenceDate) {
-            $payload->property( self::dateTimePropertyWithSpecifiedType('EXDATE', $excludedRecurrenceDate));
+            $payload->property(self::dateTimePropertyWithSpecifiedType('EXDATE', $excludedRecurrenceDate));
         }
 
         foreach ($this->attachments as $attachment) {
-            $property = match (true){
+            $property = match (true) {
                 $attachment instanceof BinaryValue => BinaryProperty::create('ATTACH', $attachment),
                 $attachment['type'] !== null => UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type'])),
                 default => UriProperty::create('ATTACH', $attachment['url']),
