@@ -1,28 +1,10 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Cannot access an offset on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/Builders/ComponentBuilder.php
-
-		-
 			message: '#^Parameter \#1 \$dateTime of static method Spatie\\IcalendarGenerator\\ValueObjects\\DateTimeValue\:\:create\(\) expects DateTimeInterface, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Components/Event.php
-
-		-
-			message: '#^Cannot cast mixed to string\.$#'
-			identifier: cast.string
-			count: 1
-			path: src/Properties/Parameter.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: src/Timezones/TimezoneRangeCollection.php
 
 		-
 			message: '#^Strict comparison using \=\=\= between list\<array\{ts\: int, time\: string, offset\: int, isdst\: bool, abbr\: string\}\> and false will always evaluate to false\.$#'
@@ -30,26 +12,3 @@ parameters:
 			count: 1
 			path: src/Timezones/TimezoneTransitionsResolver.php
 
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: src/ValueObjects/DurationValue.php
-
-		-
-			message: '#^Unreachable statement \- code above always terminates\.$#'
-			identifier: deadCode.unreachable
-			count: 1
-			path: src/ValueObjects/PeriodValue.php
-
-		-
-			message: '#^Call to function is_int\(\) with int will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 1
-			path: src/ValueObjects/RRule.php
-
-		-
-			message: '#^Instanceof between Spatie\\IcalendarGenerator\\Enums\\RecurrenceMonth and Spatie\\IcalendarGenerator\\Enums\\RecurrenceMonth will always evaluate to true\.$#'
-			identifier: instanceof.alwaysTrue
-			count: 1
-			path: src/ValueObjects/RRule.php

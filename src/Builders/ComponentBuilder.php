@@ -29,7 +29,7 @@ class ComponentBuilder
     /**  @return array<string> */
     public function buildComponent(): array
     {
-        $lines[] = "BEGIN:{$this->componentPayload->getType()}";
+        $lines = ["BEGIN:{$this->componentPayload->getType()}"];
 
         $lines = array_merge(
             $lines,

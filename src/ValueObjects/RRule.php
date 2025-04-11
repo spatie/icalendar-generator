@@ -84,10 +84,6 @@ class RRule implements HasTimezones
     public function onMonthDay(array|int $monthDays): self
     {
         foreach (is_array($monthDays) ? $monthDays : [$monthDays] as $monthDay) {
-            if (! is_int($monthDay)) {
-                throw new Exception('Month days should be int(s)');
-            }
-
             if (! in_array($monthDay, $this->monthDays)) {
                 $this->monthDays[] = $monthDay;
             }
@@ -104,10 +100,6 @@ class RRule implements HasTimezones
         foreach (is_array($months) ? $months : [$months] as $month) {
             if (is_int($month)) {
                 $month = RecurrenceMonth::from($month);
-            }
-
-            if (! $month instanceof RecurrenceMonth) {
-                throw new Exception('Months should be int(s) or RecurrenceMonths');
             }
 
             if (! in_array($month, $this->months)) {

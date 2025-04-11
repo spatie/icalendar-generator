@@ -44,10 +44,6 @@ class TimezoneRangeCollection
                 continue;
             }
 
-            if ($entry === null) {
-                continue;
-            }
-
             if ($entry instanceof DateTimeInterface) {
                 $this->addDateTimeInterface($entry);
 
@@ -67,8 +63,6 @@ class TimezoneRangeCollection
 
                 continue;
             }
-
-            throw new Exception('Could not add entry to TimeZoneRangeCollection');
         }
 
         return $this;

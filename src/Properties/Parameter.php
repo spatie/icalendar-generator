@@ -4,17 +4,18 @@ namespace Spatie\IcalendarGenerator\Properties;
 
 use BackedEnum;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
+use Stringable;
 
 class Parameter
 {
-    public static function create(string $name, mixed $value, bool $disableEscaping = false): Parameter
+    public static function create(string $name, string|int|bool|BackedEnum|DateTimeValue|Stringable $value, bool $disableEscaping = false): Parameter
     {
         return new self($name, $value, $disableEscaping);
     }
 
     public function __construct(
         protected string $name,
-        protected mixed $value,
+        protected string|int|bool|BackedEnum|DateTimeValue|Stringable $value,
         protected bool $disableEscaping = false
     ) {
     }

@@ -23,11 +23,7 @@ class PeriodValue implements HasTimezones
             return new self($starting, $ending, null);
         }
 
-        if ($ending instanceof DurationValue) {
-            return new self($starting, null, $ending);
-        }
-
-        throw new Exception('The end of a period can only be a DateTime or Duration');
+        return new self($starting, null, $ending);
     }
 
     public function format(): string

@@ -3,7 +3,6 @@
 namespace Spatie\IcalendarGenerator\ValueObjects;
 
 use DateInterval;
-use Exception;
 
 class DurationValue
 {
@@ -13,11 +12,7 @@ class DurationValue
             return new self($interval);
         }
 
-        if (is_string($interval)) {
-            return new self(new DateInterval($interval));
-        }
-
-        throw new Exception("A duration can only be a DateInterval");
+        return new self(new DateInterval($interval));
     }
 
     protected function __construct(protected DateInterval $interval)
