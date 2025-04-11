@@ -14,28 +14,26 @@ class DateTimeProperty extends Property
         string $name,
         DateTimeInterface $dateTime,
         bool $withTime = false,
-        bool $withoutTimeZone = false
+        bool $withTimezone = true
     ): DateTimeProperty {
-        return new self($name, new DateTimeValue($dateTime, $withTime), $withoutTimeZone);
+        return new self($name, new DateTimeValue($dateTime, $withTime, $withTimezone));
     }
 
     public static function create(
         string $name,
         DateTimeValue $dateTimeValue,
-        bool $withoutTimeZone = false
     ): self {
-        return new self($name, $dateTimeValue, $withoutTimeZone);
+        return new self($name, $dateTimeValue);
     }
 
     protected function __construct(
         string $name,
         protected DateTimeValue $dateTimeValue,
-        protected bool $withoutTimeZone = false
     ) {
         $this->name = $name;
         $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
 
-        if (! $withoutTimeZone && ! $this->isUTC()) {
+        if ($this->dateTimeValue->withTimezone() && ! $this->isUTC()) {
             $this->addParameter(new Parameter('TZID', $this->dateTimeZone->getName()));
         }
 
@@ -46,7 +44,7 @@ class DateTimeProperty extends Property
 
     public function getValue(): string
     {
-        return $this->isUTC() && $this->dateTimeValue->hasTime() && $this->withoutTimeZone === false
+        return $this->isUTC() && $this->dateTimeValue->hasTime() && $this->dateTimeValue->withTimezone()
             ? "{$this->dateTimeValue->format()}Z"
             : $this->dateTimeValue->format();
     }

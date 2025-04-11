@@ -53,7 +53,7 @@ class Event extends Component implements HasTimezones
 
     protected string $uuid;
 
-    protected bool $withoutTimezone = false;
+    protected bool $withTimezone = true;
 
     protected bool $isFullDay = false;
 
@@ -225,7 +225,7 @@ class Event extends Component implements HasTimezones
 
     public function withoutTimezone(): Event
     {
-        $this->withoutTimezone = true;
+        $this->withTimezone = false;
 
         return $this;
     }
@@ -397,7 +397,7 @@ class Event extends Component implements HasTimezones
 
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
-        if ($this->withoutTimezone) {
+        if ($this->withTimezone === false) {
             return TimezoneRangeCollection::create();
         }
 
@@ -548,7 +548,7 @@ class Event extends Component implements HasTimezones
         }
 
         $payload->property(
-            DateTimeProperty::fromDateTime($name, $value->getDateTime(), ! $this->isFullDay, $this->withoutTimezone)
+            DateTimeProperty::fromDateTime($name, $value->getDateTime(), ! $this->isFullDay, $this->withTimezone)
         );
 
         return $this;
@@ -581,7 +581,7 @@ class Event extends Component implements HasTimezones
     protected function resolveAlerts(ComponentPayload $payload): self
     {
         $alerts = array_map(
-            fn (Alert $alert) => $this->withoutTimezone ? $alert->withoutTimezone() : $alert,
+            fn (Alert $alert) => $this->withTimezone ? $alert : $alert->withoutTimezone(),
             $this->alerts
         );
 

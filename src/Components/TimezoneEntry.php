@@ -86,7 +86,7 @@ class TimezoneEntry extends Component
     protected function payload(): ComponentPayload
     {
         $payload = ComponentPayload::create($this->getComponentType())
-            ->property(DateTimeProperty::create('DTSTART', $this->starts, true))
+            ->property(DateTimeProperty::create('DTSTART', (clone $this->starts)->disableTimezone()))
             ->property(TextProperty::create('TZOFFSETFROM', $this->offsetFrom))
             ->property(TextProperty::create('TZOFFSETTO', $this->offsetTo));
 

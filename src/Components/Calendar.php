@@ -24,9 +24,9 @@ class Calendar extends Component implements HasTimezones
 
     protected ?string $description = null;
 
-    protected bool $withoutTimezone = false;
+    protected bool $withTimezone = true;
 
-    protected bool $withoutAutoTimezoneComponents = false;
+    protected bool $withAutoTimezoneComponents = true;
 
     protected ?DateInterval $refreshInterval = null;
 
@@ -122,14 +122,14 @@ class Calendar extends Component implements HasTimezones
 
     public function withoutTimezone(): self
     {
-        $this->withoutTimezone = true;
+        $this->withTimezone = false;
 
         return $this;
     }
 
     public function withoutAutoTimezoneComponents(): self
     {
-        $this->withoutAutoTimezoneComponents = true;
+        $this->withAutoTimezoneComponents = false;
 
         return $this;
     }
@@ -195,7 +195,7 @@ class Calendar extends Component implements HasTimezones
      */
     protected function resolveEvents(): array
     {
-        if ($this->withoutTimezone === false) {
+        if ($this->withTimezone === true) {
             return $this->events;
         }
 
@@ -210,7 +210,7 @@ class Calendar extends Component implements HasTimezones
      */
     protected function resolveTimezones(): array
     {
-        if ($this->withoutAutoTimezoneComponents) {
+        if ($this->withAutoTimezoneComponents === false) {
             return $this->timezones;
         }
 

@@ -13,15 +13,24 @@ class DateTimeValue implements HasTimezones
 {
     public static function create(
         DateTimeInterface $dateTime,
-        bool $withTime = true
+        bool $withTime = true,
+        bool $withTimezone = true,
     ): self {
-        return new self($dateTime, $withTime);
+        return new self($dateTime, $withTime, $withTimezone);
     }
 
     public function __construct(
         protected DateTimeInterface $dateTime,
-        protected bool $withTime = true
+        protected bool $withTime = true,
+        protected bool $withTimezone = true,
     ) {
+    }
+
+    public function disableTimezone(): self
+    {
+        $this->withTimezone = false;
+
+        return $this;
     }
 
     public function format(): string
@@ -34,6 +43,11 @@ class DateTimeValue implements HasTimezones
     public function hasTime(): bool
     {
         return $this->withTime;
+    }
+
+    public function withTimezone(): bool
+    {
+        return $this->withTimezone;
     }
 
     public function getDateTime(): DateTimeInterface

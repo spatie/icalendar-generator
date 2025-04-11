@@ -23,7 +23,7 @@ class Alert extends Component
 
     protected string $triggerMode = self::TRIGGER_DATE;
 
-    protected bool $withoutTimezone = false;
+    protected bool $withTimezone = true;
 
     public static function date(DateTimeInterface $date, ?string $description = null): self
     {
@@ -112,7 +112,7 @@ class Alert extends Component
 
     public function withoutTimezone(): Alert
     {
-        $this->withoutTimezone = true;
+        $this->withTimezone = false;
 
         return $this;
     }
@@ -133,10 +133,13 @@ class Alert extends Component
     protected function resolveTriggerProperty(): DateTimeProperty|DurationProperty
     {
         if ($this->triggerMode === self::TRIGGER_DATE) {
+            $date = $this->withTimezone
+                ? $this->triggerDate
+                : (clone $this->triggerDate)->disableTimezone();
+
             return DateTimeProperty::create(
                 'TRIGGER',
-                $this->triggerDate,
-                $this->withoutTimezone
+                $date,
             )->addParameter(new Parameter('VALUE', 'DATE-TIME'));
         }
 
