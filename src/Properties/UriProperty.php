@@ -4,17 +4,14 @@ namespace Spatie\IcalendarGenerator\Properties;
 
 final class UriProperty extends Property
 {
-    private string $uri;
-
     public static function create(string $name, string $uri): UriProperty
     {
         return new self($name, $uri);
     }
 
-    public function __construct(string $name, string $uri)
+    public function __construct(string $name, protected string $uri)
     {
         $this->name = $name;
-        $this->uri = $uri;
     }
 
     public function getValue(): string

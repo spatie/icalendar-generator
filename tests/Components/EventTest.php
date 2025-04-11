@@ -183,12 +183,12 @@ test('it can generate an apple structured location', function () {
 
 test('it can add a classification', function () {
     $payload = Event::create()
-        ->classification(Classification::private())
+        ->classification(Classification::Private)
         ->resolvePayload();
 
     PropertyExpectation::create($payload, 'CLASS')
-        ->expectValue(Classification::private()->value)
-        ->expectOutput(Classification::private()->value);
+        ->expectValue(Classification::Private->value)
+        ->expectOutput(Classification::Private->value);
 });
 
 test('it can make an event transparent', function () {
@@ -213,26 +213,26 @@ test('it can add attendees', function () {
     $payload = Event::create()
         ->attendee('ruben@spatie.be')
         ->attendee('brent@spatie.be', 'Brent')
-        ->attendee('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined())
-        ->attendee('john@spatie.be', 'John', ParticipationStatus::needs_action(), true)
+        ->attendee('adriaan@spatie.be', 'Adriaan', ParticipationStatus::Declined)
+        ->attendee('john@spatie.be', 'John', ParticipationStatus::NeedsAction, true)
         ->resolvePayload();
 
     PayloadExpectation::create($payload)->expectPropertyValue(
         'ATTENDEE',
         new CalendarAddress('ruben@spatie.be'),
         new CalendarAddress('brent@spatie.be', 'Brent'),
-        new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::declined()),
-        new CalendarAddress('john@spatie.be', 'John', ParticipationStatus::needs_action(), true)
+        new CalendarAddress('adriaan@spatie.be', 'Adriaan', ParticipationStatus::Declined),
+        new CalendarAddress('john@spatie.be', 'John', ParticipationStatus::NeedsAction, true)
     );
 });
 
 test('it can set a status', function () {
     $payload = Event::create()
-        ->status(EventStatus::tentative())
+        ->status(EventStatus::Tentative)
         ->resolvePayload();
 
     PropertyExpectation::create($payload, 'STATUS')
-        ->expectValue(EventStatus::tentative()->value);
+        ->expectValue(EventStatus::Tentative->value);
 });
 
 test('it can set an address without name', function () {
@@ -251,7 +251,7 @@ test('it can set an address without name', function () {
 
 test('it can set a recurrence rule', function () {
     $payload = Event::create('An introduction into event sourcing')
-        ->rrule($rrule = RRule::frequency(RecurrenceFrequency::daily()))
+        ->rrule($rrule = RRule::frequency(RecurrenceFrequency::Daily))
         ->resolvePayload();
 
     PropertyExpectation::create($payload, 'RRULE')
@@ -497,7 +497,7 @@ test('it can add an image to an event', function () {
     $payload = Event::create()
         ->image('http://spatie.be/logo.svg')
         ->image('http://spatie.be/logo.jpg', 'image/jpeg')
-        ->image('http://spatie.be/logo.png', 'image/png', Display::badge())
+        ->image('http://spatie.be/logo.png', 'image/png', Display::Badge)
         ->resolvePayload();
 
     PayloadExpectation::create($payload)->expectProperty(

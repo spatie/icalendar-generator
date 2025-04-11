@@ -6,36 +6,36 @@ use Spatie\IcalendarGenerator\Enums\RecurrenceMonth;
 dataset('week-days', [
     [
         'days' => [
-            ['day' => RecurrenceDay::monday(), 'index' => null],
+            ['day' => RecurrenceDay::Monday, 'index' => null],
         ],
         'expected' => 'MO',
     ],
     [
         'days' => [
-            ['day' => RecurrenceDay::monday(), 'index' => 2],
+            ['day' => RecurrenceDay::Monday, 'index' => 2],
         ],
         'expected' => '2MO',
     ],
     [
         'days' => [
-            ['day' => RecurrenceDay::monday(), 'index' => -1],
+            ['day' => RecurrenceDay::Monday, 'index' => -1],
         ],
         'expected' => '-1MO',
     ],
     [
         'days' => [
-            ['day' => RecurrenceDay::monday(), 'index' => null],
-            ['day' => RecurrenceDay::monday(), 'index' => 2],
-            ['day' => RecurrenceDay::monday(), 'index' => -1],
+            ['day' => RecurrenceDay::Monday, 'index' => null],
+            ['day' => RecurrenceDay::Monday, 'index' => 2],
+            ['day' => RecurrenceDay::Monday, 'index' => -1],
         ],
         'expected' => 'MO,2MO,-1MO',
     ],
     [
         'days' => [
-            ['day' => RecurrenceDay::monday(), 'index' => null],
-            ['day' => RecurrenceDay::monday(), 'index' => null],
-            ['day' => RecurrenceDay::monday(), 'index' => -1],
-            ['day' => RecurrenceDay::monday(), 'index' => -1],
+            ['day' => RecurrenceDay::Monday, 'index' => null],
+            ['day' => RecurrenceDay::Monday, 'index' => null],
+            ['day' => RecurrenceDay::Monday, 'index' => -1],
+            ['day' => RecurrenceDay::Monday, 'index' => -1],
         ],
         'expected' => 'MO,-1MO',
     ],
@@ -43,7 +43,7 @@ dataset('week-days', [
 
 dataset('months', [
     [
-        'months' => RecurrenceMonth::may(),
+        'months' => RecurrenceMonth::May,
         'expected' => '5',
     ],
     [
@@ -51,7 +51,7 @@ dataset('months', [
         'expected' => '5',
     ],
     [
-        'months' => [RecurrenceMonth::april(), RecurrenceMonth::may()],
+        'months' => [RecurrenceMonth::April, RecurrenceMonth::May],
         'expected' => '4,5',
     ],
     [
@@ -59,7 +59,7 @@ dataset('months', [
         'expected' => '4,5',
     ],
     [
-        'months' => [RecurrenceMonth::may(), 5],
+        'months' => [RecurrenceMonth::May, 5],
         'expected' => '5',
     ],
 ]);

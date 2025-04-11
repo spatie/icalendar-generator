@@ -8,11 +8,7 @@ use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class DateTimeProperty extends Property
 {
-    private DateTimeValue $dateTimeValue;
-
-    private DateTimeZone $dateTimeZone;
-
-    private bool $withoutTimeZone;
+    protected DateTimeZone $dateTimeZone;
 
     public static function fromDateTime(
         string $name,
@@ -27,19 +23,17 @@ class DateTimeProperty extends Property
         string $name,
         DateTimeValue $dateTimeValue,
         bool $withoutTimeZone = false
-    ) {
+    ): self {
         return new self($name, $dateTimeValue, $withoutTimeZone);
     }
 
-    private function __construct(
+    protected function __construct(
         string $name,
-        DateTimeValue $dateTimeValue,
-        bool $withoutTimeZone = false
+        protected DateTimeValue $dateTimeValue,
+        protected bool $withoutTimeZone = false
     ) {
         $this->name = $name;
-        $this->dateTimeValue = $dateTimeValue;
         $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
-        $this->withoutTimeZone = $withoutTimeZone;
 
         if (! $withoutTimeZone && ! $this->isUTC()) {
             $this->addParameter(new Parameter('TZID', $this->dateTimeZone->getName()));
@@ -62,7 +56,7 @@ class DateTimeProperty extends Property
         return $this->dateTimeValue->getDateTime();
     }
 
-    private function isUTC(): bool
+    protected function isUTC(): bool
     {
         return $this->dateTimeZone->getName() === 'UTC';
     }

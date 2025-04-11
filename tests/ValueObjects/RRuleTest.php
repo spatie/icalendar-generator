@@ -7,7 +7,7 @@ use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 test('it can create a rrule', function () {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())->compose();
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)->compose();
 
     assertEquals([
         "FREQ" => "DAILY",
@@ -15,7 +15,7 @@ test('it can create a rrule', function () {
 });
 
 test('it can set the start date', function () {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
         ->starting(new DateTime('16 may 1994'))
         ->compose();
 
@@ -26,7 +26,7 @@ test('it can set the start date', function () {
 });
 
 test('it can set until', function () {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
         ->until(new DateTime('16 may 1994'))
         ->compose();
 
@@ -37,7 +37,7 @@ test('it can set until', function () {
 });
 
 test('it can set count', function () {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
         ->times(10)
         ->compose();
 
@@ -48,13 +48,13 @@ test('it can set count', function () {
 });
 
 test('it cannot set a negative count', function () {
-    RRule::frequency(RecurrenceFrequency::daily())
+    RRule::frequency(RecurrenceFrequency::Daily)
         ->times(-1)
         ->compose();
 })->throws(Exception::class);
 
 test('it can set interval', function () {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
         ->interval(10)
         ->compose();
 
@@ -65,14 +65,14 @@ test('it can set interval', function () {
 });
 
 test('it cannot set a negative interval', function () {
-    RRule::frequency(RecurrenceFrequency::daily())
+    RRule::frequency(RecurrenceFrequency::Daily)
         ->interval(-1)
         ->compose();
 })->throws(Exception::class);
 
 test('it can set the week starts on', function () {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
-        ->weekStartsOn(RecurrenceDay::monday())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
+        ->weekStartsOn(RecurrenceDay::Monday)
         ->compose();
 
     assertEquals([
@@ -82,7 +82,7 @@ test('it can set the week starts on', function () {
 });
 
 test('it can add week days', function (array $days, string $expected) {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily());
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily);
 
     foreach ($days as $day) {
         $rrule->onWeekDay($day['day'], $day['index']);
@@ -95,7 +95,7 @@ test('it can add week days', function (array $days, string $expected) {
 })->with('week-days');
 
 test('it can add months', function ($months, string $expected) {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
         ->onMonth($months)
         ->compose();
 
@@ -106,7 +106,7 @@ test('it can add months', function ($months, string $expected) {
 })->with('months');
 
 test('it can add month days', function ($monthDays, string $expected) {
-    $rrule = RRule::frequency(RecurrenceFrequency::daily())
+    $rrule = RRule::frequency(RecurrenceFrequency::Daily)
         ->onMonthDay($monthDays)
         ->compose();
 

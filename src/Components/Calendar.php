@@ -16,34 +16,31 @@ use Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver;
 
 class Calendar extends Component implements HasTimezones
 {
-    /** @var \Spatie\IcalendarGenerator\Components\Event[] */
-    private array $events = [];
+    /** @var Event[] */
+    protected array $events = [];
 
-    /** @var \Spatie\IcalendarGenerator\Components\Timezone[] */
-    private array $timezones = [];
+    /** @var Timezone[] */
+    protected array $timezones = [];
 
-    private ?string $name = null;
+    protected ?string $description = null;
 
-    private ?string $description = null;
+    protected bool $withoutTimezone = false;
 
-    private bool $withoutTimezone = false;
+    protected bool $withoutAutoTimezoneComponents = false;
 
-    private bool $withoutAutoTimezoneComponents = false;
+    protected ?DateInterval $refreshInterval = null;
 
-    private ?DateInterval $refreshInterval = null;
+    protected ?string $productIdentifier = null;
 
-    private ?string $productIdentifier = null;
+    protected ?string $source = null;
 
-    private ?string $source = null;
-
-    public static function create(?string $name = null): Calendar
+    public static function create(?string $name = null): self
     {
         return new self($name);
     }
 
-    public function __construct(?string $name = null)
+    public function __construct(protected ?string $name = null)
     {
-        $this->name = $name;
     }
 
     public function getComponentType(): string
@@ -59,21 +56,21 @@ class Calendar extends Component implements HasTimezones
         ];
     }
 
-    public function name(string $name): Calendar
+    public function name(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function description(string $description): Calendar
+    public function description(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function productIdentifier(string $identifier): Calendar
+    public function productIdentifier(string $identifier): self
     {
         $this->productIdentifier = $identifier;
 
@@ -81,11 +78,9 @@ class Calendar extends Component implements HasTimezones
     }
 
     /**
-     * @param $event \Spatie\IcalendarGenerator\Components\Event|array|Closure
-     *
-     * @return \Spatie\IcalendarGenerator\Components\Calendar
+     * @param Event|array<Event|Closure>|Closure $event
      */
-    public function event($event): Calendar
+    public function event(Event|array|Closure|null $event): self
     {
         if (is_null($event)) {
             return $this;
@@ -109,11 +104,9 @@ class Calendar extends Component implements HasTimezones
     }
 
     /**
-     * @param $timezone \Spatie\IcalendarGenerator\Components\Timezone|array
-     *
-     * @return \Spatie\IcalendarGenerator\Components\Calendar
+     * @param Timezone|array<Timezone>|null $timezone
      */
-    public function timezone($timezone)
+    public function timezone(Timezone|array|null $timezone): self
     {
         if (is_null($timezone)) {
             return $this;
@@ -127,7 +120,7 @@ class Calendar extends Component implements HasTimezones
         return $this;
     }
 
-    public function withoutTimezone(): Calendar
+    public function withoutTimezone(): self
     {
         $this->withoutTimezone = true;
 
@@ -141,18 +134,13 @@ class Calendar extends Component implements HasTimezones
         return $this;
     }
 
-    public function refreshInterval(int $minutes): Calendar
+    public function refreshInterval(int $minutes): self
     {
         $this->refreshInterval = new DateInterval("PT{$minutes}M");
 
         return $this;
     }
 
-    /**
-     * Identifies a location where a client can retrieve updated data for the calendar.
-     *
-     * @link https://datatracker.ietf.org/doc/html/rfc7986#section-5.8
-     */
     public function source(string $source): self
     {
         $this->source = $source;
@@ -176,34 +164,36 @@ class Calendar extends Component implements HasTimezones
 
     protected function payload(): ComponentPayload
     {
-        return ComponentPayload::create($this->getComponentType())
+        $payload = ComponentPayload::create($this->getComponentType())
             ->property(TextProperty::create('VERSION', '2.0'))
-            ->property(TextProperty::create('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator'))
-            ->optional(
-                $this->name,
-                fn () => TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME')
-            )
-            ->optional(
-                $this->description,
-                fn () => TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC')
-            )
-            ->optional(
-                $this->source,
-                fn () => TextProperty::create('SOURCE', $this->source)->addParameter(new Parameter('VALUE', 'URI'))
-            )
-            ->optional(
-                $this->refreshInterval,
-                fn () => DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION'))
-            )
-            ->optional(
-                $this->refreshInterval,
-                fn () => DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval)
-            )
+            ->property(TextProperty::create('PRODID', $this->productIdentifier ?? 'spatie/icalendar-generator'));
+
+        if ($this->name) {
+            $payload->property(TextProperty::create('NAME', $this->name)->addAlias('X-WR-CALNAME'));
+        }
+
+        if ($this->description) {
+            $payload->property(TextProperty::create('DESCRIPTION', $this->description)->addAlias('X-WR-CALDESC'));
+        }
+
+        if ($this->source) {
+            $payload->property(TextProperty::create('SOURCE', $this->source)->addParameter(new Parameter('VALUE', 'URI')));
+        }
+
+        if ($this->refreshInterval) {
+            $payload->property(DurationProperty::create('REFRESH-INTERVAL', $this->refreshInterval)->addParameter(new Parameter('VALUE', 'DURATION')));
+            $payload->property(DurationProperty::create('X-PUBLISHED-TTL', $this->refreshInterval));
+        }
+
+        return $payload
             ->subComponent(...$this->resolveTimezones())
             ->subComponent(...$this->resolveEvents());
     }
 
-    private function resolveEvents(): array
+    /**
+     * @return Event[]
+     */
+    protected function resolveEvents(): array
     {
         if ($this->withoutTimezone === false) {
             return $this->events;
@@ -215,7 +205,10 @@ class Calendar extends Component implements HasTimezones
         );
     }
 
-    private function resolveTimezones(): array
+    /**
+     * @return Timezone[]
+     */
+    protected function resolveTimezones(): array
     {
         if ($this->withoutAutoTimezoneComponents) {
             return $this->timezones;

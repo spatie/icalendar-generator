@@ -2,21 +2,9 @@
 
 namespace Spatie\IcalendarGenerator\Enums;
 
-use Spatie\Enum\Enum;
-
-/**
- * @method static self public()
- * @method static self private()
- * @method static self confidential()
- */
-class Classification extends Enum
+enum Classification: string
 {
-    protected static function values(): array
-    {
-        return [
-            'public' => 'PUBLIC',
-            'private' => 'PRIVATE',
-            'confidential' => 'CONFIDENTIAL',
-        ];
-    }
+    case Public = 'PUBLIC';
+    case Private = 'PRIVATE';
+    case Confidential = 'CONFIDENTIAL';
 }

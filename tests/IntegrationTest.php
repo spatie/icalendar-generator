@@ -30,12 +30,12 @@ test('it can create a calendar', function () {
                 ->alertMinutesBefore(5, 'Laracon online is going to start in five mintutes')
                 ->alertMinutesAfter(5, 'Laracon online has ended, see you next year!')
                 ->organizer('ruben@spatie.be', 'Ruben')
-                ->attendee('brent@spatie.be', 'Brent', ParticipationStatus::accepted())
-                ->attendee('alex@spatie.be', 'Alex', ParticipationStatus::declined())
-                ->attendee('freek@spatie.be', 'Freek', ParticipationStatus::tentative())
+                ->attendee('brent@spatie.be', 'Brent', ParticipationStatus::Accepted)
+                ->attendee('alex@spatie.be', 'Alex', ParticipationStatus::Declined)
+                ->attendee('freek@spatie.be', 'Freek', ParticipationStatus::Tentative)
                 ->transparent()
-                ->classification(Classification::public())
-                ->status(EventStatus::tentative())
+                ->classification(Classification::Public)
+                ->status(EventStatus::Tentative)
                 ->alert(
                     Alert::date(
                         new DateTime('05/16/2020 12:00:00'),

@@ -20,7 +20,7 @@ test('it can create a calendar property type', function () {
 test('it can set a name and participation status', function () {
     $property = new CalendarAddressProperty(
         'ORGANIZER',
-        new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::accepted())
+        new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::Accepted)
     );
 
     PropertyExpectation::create($property)
@@ -28,13 +28,13 @@ test('it can set a name and participation status', function () {
         ->expectOutput('MAILTO:ruben@spatie.be')
         ->expectParameterCount(2)
         ->expectParameterValue('CN', 'Ruben')
-        ->expectParameterValue('PARTSTAT', ParticipationStatus::accepted()->value);
+        ->expectParameterValue('PARTSTAT', ParticipationStatus::Accepted->value);
 });
 
 test('it can set RSVP to true', function () {
     $property = new CalendarAddressProperty(
         'ATTENDEE',
-        new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::needs_action(), true)
+        new CalendarAddress('ruben@spatie.be', 'Ruben', ParticipationStatus::NeedsAction, true)
     );
 
     PropertyExpectation::create($property)
@@ -43,5 +43,5 @@ test('it can set RSVP to true', function () {
         ->expectParameterCount(3)
         ->expectParameterValue('CN', 'Ruben')
         ->expectParameterValue('RSVP', 'TRUE')
-        ->expectParameterValue('PARTSTAT', ParticipationStatus::needs_action()->value);
+        ->expectParameterValue('PARTSTAT', ParticipationStatus::NeedsAction->value);
 });

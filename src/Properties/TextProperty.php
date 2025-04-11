@@ -2,28 +2,25 @@
 
 namespace Spatie\IcalendarGenerator\Properties;
 
-use Spatie\Enum\Enum;
+use BackedEnum;
 
 class TextProperty extends Property
 {
-    private string $text;
-
-    private bool $escaped = true;
-
     public static function create(string $name, string $text): TextProperty
     {
         return new self($name, $text);
     }
 
-    public static function createFromEnum(string $name, Enum $enum): TextProperty
+    public static function createFromEnum(string $name, BackedEnum $enum): TextProperty
     {
         return new self($name, (string) $enum->value);
     }
 
-    public function __construct(string $name, string $text)
-    {
-        $this->name = $name;
-        $this->text = $text;
+    public function __construct(
+        protected string $name,
+        protected string $text,
+        protected bool $escaped = true,
+    ) {
     }
 
     public function withoutEscaping(): self

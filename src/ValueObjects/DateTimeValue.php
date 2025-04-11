@@ -11,10 +11,6 @@ use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
 class DateTimeValue implements HasTimezones
 {
-    private DateTimeInterface $dateTime;
-
-    private bool $withTime;
-
     public static function create(
         DateTimeInterface $dateTime,
         bool $withTime = true
@@ -23,11 +19,9 @@ class DateTimeValue implements HasTimezones
     }
 
     public function __construct(
-        DateTimeInterface $dateTime,
-        bool $withTime = true
+        protected DateTimeInterface $dateTime,
+        protected bool $withTime = true
     ) {
-        $this->dateTime = $dateTime;
-        $this->withTime = $withTime;
     }
 
     public function format(): string

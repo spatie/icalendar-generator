@@ -7,9 +7,7 @@ use Exception;
 
 class DurationValue
 {
-    private DateInterval $interval;
-
-    public static function create($interval): DurationValue
+    public static function create(DateInterval|string $interval): DurationValue
     {
         if ($interval instanceof DateInterval) {
             return new self($interval);
@@ -22,9 +20,8 @@ class DurationValue
         throw new Exception("A duration can only be a DateInterval");
     }
 
-    private function __construct(DateInterval $interval)
+    protected function __construct(protected DateInterval $interval)
     {
-        $this->interval = $interval;
     }
 
     public function invert(): self

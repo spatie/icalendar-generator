@@ -4,11 +4,17 @@ namespace Spatie\IcalendarGenerator\Properties;
 
 class EmptyProperty extends Property
 {
+    /**
+     * @param array<Parameter> $parameters
+     */
     public static function create(string $name, array $parameters): EmptyProperty
     {
         return new self($name, $parameters);
     }
 
+    /**
+     * @param array<Parameter> $parameters
+     */
     public function __construct(string $name, array $parameters)
     {
         $this->name = $name;
@@ -20,7 +26,7 @@ class EmptyProperty extends Property
         return null;
     }
 
-    public function getOriginalValue()
+    public function getOriginalValue(): mixed
     {
         return null;
     }

@@ -2,7 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\ValueObjects;
 
-use Closure;
 use DateTimeInterface;
 use Exception;
 use Spatie\IcalendarGenerator\Enums\RecurrenceDay;
@@ -13,35 +12,27 @@ use Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection;
 
 class RRule implements HasTimezones
 {
-    public RecurrenceFrequency $frequency;
-
-    public ?int $count = null;
-
-    public ?int $interval = null;
-
-    public ?DateTimeInterface $until = null;
-
-    public ?DateTimeInterface $starting = null;
-
-    private ?RecurrenceDay $weekStartsOn = null;
-
-    /** @var array[] */
-    public array $weekdays = [];
-
-    /** @var \Spatie\IcalendarGenerator\Enums\RecurrenceMonth[] */
-    public array $months = [];
-
-    /** @var int[] */
-    public array $monthDays = [];
-
     public static function frequency(RecurrenceFrequency $frequency): self
     {
         return new self($frequency);
     }
 
-    public function __construct(RecurrenceFrequency $frequency)
-    {
-        $this->frequency = $frequency;
+    /**
+     * @param array<array{day: RecurrenceDay, index: ?int}> $weekdays
+     * @param RecurrenceMonth[] $months
+     * @param int[] $monthDays
+     */
+    public function __construct(
+        public RecurrenceFrequency $frequency,
+        public ?int $count = null,
+        public ?int $interval = null,
+        public ?DateTimeInterface $until = null,
+        public ?DateTimeInterface $starting = null,
+        public ?RecurrenceDay $weekStartsOn = null,
+        public array $weekdays = [],
+        public array $months = [],
+        public array $monthDays = []
+    ) {
     }
 
     public function interval(int $interval = 1): self
@@ -90,33 +81,39 @@ class RRule implements HasTimezones
     /**
      * @param int[]|int $monthDays
      */
-    public function onMonthDay($monthDays): self
+    public function onMonthDay(array|int $monthDays): self
     {
-        $this->addAsCollection($this->monthDays, $monthDays, function ($value) {
-            if (! is_int($value)) {
+        foreach (is_array($monthDays) ? $monthDays : [$monthDays] as $monthDay) {
+            if (! is_int($monthDay)) {
                 throw new Exception('Month days should be int(s)');
             }
-        });
+
+            if (! in_array($monthDay, $this->monthDays)) {
+                $this->monthDays[] = $monthDay;
+            }
+        }
 
         return $this;
     }
 
     /**
-     * @param \Spatie\IcalendarGenerator\Enums\RecurrenceMonth[]|\Spatie\IcalendarGenerator\Enums\RecurrenceMonth|int|int[] $months
+     * @param RecurrenceMonth[]|RecurrenceMonth|int|int[] $months
      */
-    public function onMonth($months): self
+    public function onMonth(RecurrenceMonth|int|array $months): self
     {
-        $this->addAsCollection($this->months, $months, function ($value) {
-            if (is_int($value)) {
-                $value = RecurrenceMonth::make($value);
+        foreach (is_array($months) ? $months : [$months] as $month) {
+            if (is_int($month)) {
+                $month = RecurrenceMonth::from($month);
             }
 
-            if (! $value instanceof RecurrenceMonth) {
+            if (! $month instanceof RecurrenceMonth) {
                 throw new Exception('Months should be int(s) or RecurrenceMonths');
             }
 
-            return $value;
-        });
+            if (! in_array($month, $this->months)) {
+                $this->months[] = $month;
+            }
+        }
 
         return $this;
     }
@@ -135,6 +132,7 @@ class RRule implements HasTimezones
         return $this;
     }
 
+    /** @return array<string, string|int> */
     public function compose(): array
     {
         $properties = ['FREQ' => $this->frequency->value];
@@ -185,20 +183,5 @@ class RRule implements HasTimezones
         return TimezoneRangeCollection::create()
             ->add($this->until)
             ->add($this->starting);
-    }
-
-    private function addAsCollection(array &$collection, $values, Closure $check)
-    {
-        $values = is_array($values) ? $values : [$values];
-
-        foreach ($values as $value) {
-            $value = $check($value) ?? $value;
-
-            if (in_array($value, $collection)) {
-                continue;
-            }
-
-            $collection[] = $value;
-        }
     }
 }

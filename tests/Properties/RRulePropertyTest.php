@@ -6,7 +6,7 @@ use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 test('it can create a recurrence rule property type', function () {
-    $recurrenceRule = RRule::frequency(RecurrenceFrequency::daily());
+    $recurrenceRule = RRule::frequency(RecurrenceFrequency::Daily);
 
     $propertyType = RRuleProperty::create('RRULE', $recurrenceRule);
 

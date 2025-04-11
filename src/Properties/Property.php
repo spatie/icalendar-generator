@@ -8,14 +8,17 @@ abstract class Property
 {
     protected string $name;
 
+    /** @var array<Parameter> */
     protected array $parameters = [];
 
+    /** @var array<string>  */
     protected array $aliases = [];
 
     abstract public function getValue(): ?string;
 
-    abstract public function getOriginalValue();
+    abstract public function getOriginalValue(): mixed;
 
+    /** @return array<string> */
     public function getNameAndAliases(): array
     {
         return array_merge(
@@ -29,11 +32,13 @@ abstract class Property
         return $this->name;
     }
 
+    /** @return array<string> */
     public function getAliases(): array
     {
         return $this->aliases;
     }
 
+    /** @return array<Parameter> */
     public function getParameters(): array
     {
         return $this->parameters;
@@ -55,7 +60,8 @@ abstract class Property
         return $parameters[0];
     }
 
-    public function addParameters(array $parameters): self
+    /** @param array<Parameter> $parameters */
+    public function addParameters(array $parameters): static
     {
         foreach ($parameters as $parameter) {
             $this->addParameter($parameter);
@@ -64,14 +70,14 @@ abstract class Property
         return $this;
     }
 
-    public function addParameter(Parameter $parameter): self
+    public function addParameter(Parameter $parameter): static
     {
         $this->parameters[] = $parameter;
 
         return $this;
     }
 
-    public function addAlias(string ...$aliases): self
+    public function addAlias(string ...$aliases): static
     {
         $this->aliases = $aliases;
 

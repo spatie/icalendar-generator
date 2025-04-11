@@ -36,10 +36,10 @@ CLASS:PUBLIC
 STATUS:TENTATIVE
 TRANSP:TRANSPARENT
 ORGANIZER;CN=Ruben:MAILTO:ruben@spatie.be
+URL:http://example.com/pub/calendars/jsmith/mytime.ics
 ATTENDEE;CN=Brent;PARTSTAT=ACCEPTED:MAILTO:brent@spatie.be
 ATTENDEE;CN=Alex;PARTSTAT=DECLINED:MAILTO:alex@spatie.be
 ATTENDEE;CN=Freek;PARTSTAT=TENTATIVE:MAILTO:freek@spatie.be
-URL:http://example.com/pub/calendars/jsmith/mytime.ics
 DTSTART:20190306T150000Z
 DTEND:20190306T160000Z
 GEO:51.2343;4.4287
@@ -47,18 +47,18 @@ X-APPLE-STRUCTURED-LOCATION;VALUE=URI;X-ADDRESS=Samberstraat 69D\, 2060 Ant
  werp\, Belgium;X-APPLE-RADIUS=72;X-TITLE=Spatie HQ:geo:51.2343,4.4287
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Laracon online is going to start in five mintutes
 TRIGGER:-PT5M
+DESCRIPTION:Laracon online is going to start in five mintutes
 END:VALARM
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Laracon online has ended\, see you next year!
 TRIGGER;RELATED=END:PT5M
+DESCRIPTION:Laracon online has ended\, see you next year!
 END:VALARM
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Laracon online has ended\, see you next year!
 TRIGGER;VALUE=DATE-TIME:20200516T120000Z
+DESCRIPTION:Laracon online has ended\, see you next year!
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT

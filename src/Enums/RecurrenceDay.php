@@ -2,29 +2,13 @@
 
 namespace Spatie\IcalendarGenerator\Enums;
 
-use Spatie\Enum\Enum;
-
-/**
- * @method static self monday()
- * @method static self tuesday()
- * @method static self wednesday()
- * @method static self thursday()
- * @method static self friday()
- * @method static self saturday()
- * @method static self sunday()
- */
-class RecurrenceDay extends Enum
+enum RecurrenceDay: string
 {
-    protected static function values(): array
-    {
-        return [
-            'monday' => 'MO',
-            'tuesday' => 'TU',
-            'wednesday' => 'WE',
-            'thursday' => 'TH',
-            'friday' => 'FR',
-            'saturday' => 'SA',
-            'sunday' => 'SU',
-        ];
-    }
+    case Monday = 'MO';
+    case Tuesday = 'TU';
+    case Wednesday = 'WE';
+    case Thursday = 'TH';
+    case Friday = 'FR';
+    case Saturday = 'SA';
+    case Sunday = 'SU';
 }
