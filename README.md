@@ -704,10 +704,6 @@ It is possible to create your subcomponents by extending the `Component` class.
 composer test
 ```
 
-### Alternatives
-
-We strive for a simple and easy to use API. Want something more? Then check out this [package](https://github.com/markuspoerschke/iCal) by Markus Poerschke.
-
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
