@@ -5,7 +5,6 @@ namespace Spatie\IcalendarGenerator\Timezones;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
-use Exception;
 
 class TimezoneRangeCollection
 {
