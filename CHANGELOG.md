@@ -2,6 +2,20 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.0.0 - 2025-04-17
+
+### What's Changed
+
+* Removed dependency on spatie/enum and use PHP native enums
+* Cleanup of the code base with PHPStan static analysis
+* Rework of payload construction
+* Use more modern PHP standards
+* allow for zero-second durations. by @peccator085 in https://github.com/spatie/icalendar-generator/pull/150
+
+You can find the upgrade notes in `UPGRADING.MD`, should be a smooth update since the only breaking change are another enum convention.
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/2.9.2...3.0.0
+
 ## 2.9.2 - 2025-03-21
 
 ### What's Changed
