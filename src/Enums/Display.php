@@ -2,23 +2,10 @@
 
 namespace Spatie\IcalendarGenerator\Enums;
 
-use Spatie\Enum\Enum;
-
-/**
- * @method static self badge()
- * @method static self graphic()
- * @method static self fullsize()
- * @method static self thumbnail()
- */
-class Display extends Enum
+enum Display: string
 {
-    protected static function values(): array
-    {
-        return [
-            'badge' => 'BADGE',
-            'graphic' => 'GRAPHIC',
-            'fullsize' => 'FULLSIZE',
-            'thumbnail' => 'THUMBNAIL',
-        ];
-    }
+    case Badge = 'BADGE';
+    case Graphic = 'GRAPHIC';
+    case Fullsize = 'FULLSIZE';
+    case Thumbnail = 'THUMBNAIL';
 }

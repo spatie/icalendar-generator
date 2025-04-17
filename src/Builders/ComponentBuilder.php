@@ -6,16 +6,13 @@ use Spatie\IcalendarGenerator\ComponentPayload;
 
 class ComponentBuilder
 {
-    private ComponentPayload $componentPayload;
-
     public static function create(ComponentPayload $componentPayload): self
     {
         return new self($componentPayload);
     }
 
-    public function __construct(ComponentPayload $componentPayload)
+    public function __construct(protected ComponentPayload $componentPayload)
     {
-        $this->componentPayload = $componentPayload;
     }
 
     public function build(): string
@@ -29,9 +26,10 @@ class ComponentBuilder
         return implode("\r\n", $lines);
     }
 
+    /**  @return array<string> */
     public function buildComponent(): array
     {
-        $lines[] = "BEGIN:{$this->componentPayload->getType()}";
+        $lines = ["BEGIN:{$this->componentPayload->getType()}"];
 
         $lines = array_merge(
             $lines,
@@ -44,7 +42,8 @@ class ComponentBuilder
         return $lines;
     }
 
-    private function buildProperties(): array
+    /**  @return array<string> */
+    protected function buildProperties(): array
     {
         $lines = [];
 
@@ -60,11 +59,11 @@ class ComponentBuilder
         return $lines;
     }
 
-    private function buildSubComponents(): array
+    /**  @return array<string> */
+    protected function buildSubComponents(): array
     {
         $lines = [];
 
-        /** @var \Spatie\IcalendarGenerator\Components\Component $component */
         foreach ($this->componentPayload->getSubComponents() as $component) {
             $builder = new ComponentBuilder($component->resolvePayload());
 
@@ -77,14 +76,15 @@ class ComponentBuilder
         return $lines;
     }
 
-    private function chipLine(string $line): array
+    /**  @return array<string> */
+    protected function chipLine(string $line): array
     {
         $chippedLines = [];
 
         while (strlen($line) > 0) {
             if (strlen($line) > 75) {
                 $chippedLines[] = mb_strcut($line, 0, 75, 'utf-8');
-                $line = ' ' . mb_strcut($line, 75, strlen($line), 'utf-8');
+                $line = ' '.mb_strcut($line, 75, strlen($line), 'utf-8');
             } else {
                 $chippedLines[] = $line;
 

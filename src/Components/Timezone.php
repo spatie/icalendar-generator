@@ -11,23 +11,25 @@ use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class Timezone extends Component
 {
-    private string $identifier;
-
-    private ?DateTimeValue $lastModified = null;
-
-    private ?string $url = null;
-
-    /** @var \Spatie\IcalendarGenerator\Components\TimezoneEntry[] */
-    private array $entries = [];
+    protected ?DateTimeValue $lastModified = null;
 
     public static function create(string $identifier): self
     {
         return new self($identifier);
     }
 
-    public function __construct(string $identifier)
-    {
-        $this->identifier = $identifier;
+    /**
+     * @param TimezoneEntry[] $entries
+     */
+    public function __construct(
+        protected string $identifier,
+        protected ?string $url = null,
+        ?DateTimeInterface $lastModified = null,
+        protected array $entries = [],
+    ) {
+        if ($lastModified) {
+            $this->lastModified($lastModified);
+        }
     }
 
     public function lastModified(DateTimeInterface $lastModified): self
@@ -46,11 +48,9 @@ class Timezone extends Component
     }
 
     /**
-     * @param $entry \Spatie\IcalendarGenerator\Components\TimezoneEntry|array
-     *
-     * @return \Spatie\IcalendarGenerator\Components\Timezone
+     * @param TimezoneEntry|array<TimezoneEntry>|null $entry
      */
-    public function entry($entry): Timezone
+    public function entry(TimezoneEntry|array|null $entry): Timezone
     {
         if (is_null($entry)) {
             return $this;
@@ -78,16 +78,17 @@ class Timezone extends Component
 
     protected function payload(): ComponentPayload
     {
-        return ComponentPayload::create($this->getComponentType())
-            ->property(TextProperty::create('TZID', $this->identifier))
-            ->optional(
-                $this->url,
-                fn () => TextProperty::create('TZURL', $this->url)->withoutEscaping()
-            )
-            ->optional(
-                $this->lastModified,
-                fn () => DateTimeProperty::create('LAST-MODIFIED', $this->lastModified)
-            )
-            ->subComponent(...$this->entries);
+        $payload = ComponentPayload::create($this->getComponentType())
+            ->property(TextProperty::create('TZID', $this->identifier));
+
+        if ($this->url) {
+            $payload->property(TextProperty::create('TZURL', $this->url));
+        }
+
+        if ($this->lastModified) {
+            $payload->property(DateTimeProperty::create('LAST-MODIFIED', $this->lastModified));
+        }
+
+        return $payload->subComponent(...$this->entries);
     }
 }

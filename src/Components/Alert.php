@@ -13,59 +13,56 @@ use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class Alert extends Component
 {
-    private const TRIGGER_START = 'trigger_start';
-    private const TRIGGER_END = 'trigger_end';
-    private const TRIGGER_DATE = 'trigger_date';
+    protected const TRIGGER_START = 'trigger_start';
+    protected const TRIGGER_END = 'trigger_end';
+    protected const TRIGGER_DATE = 'trigger_date';
 
-    private DateTimeValue $triggerDate;
+    protected DateTimeValue $triggerDate;
 
-    private DateInterval $triggerInterval;
+    protected DateInterval $triggerInterval;
 
-    private string $triggerMode = self::TRIGGER_DATE;
+    protected string $triggerMode = self::TRIGGER_DATE;
 
-    private ?string $message;
+    protected bool $withTimezone = true;
 
-    private bool $withoutTimezone = false;
-
-    public static function date(DateTimeInterface $date, ?string $description = null): Alert
+    public static function date(DateTimeInterface $date, ?string $description = null): self
     {
-        return static::create($description)->triggerDate($date);
+        return self::create($description)->triggerDate($date);
     }
 
-    public static function minutesBeforeStart(int $minutes, ?string $description = null): Alert
+    public static function minutesBeforeStart(int $minutes, ?string $description = null): self
     {
         $interval = new DateInterval("PT{$minutes}M");
         $interval->invert = 1;
 
-        return static::create($description)->triggerAtStart($interval);
+        return self::create($description)->triggerAtStart($interval);
     }
 
-    public static function minutesAfterStart(int $minutes, ?string $description = null): Alert
+    public static function minutesAfterStart(int $minutes, ?string $description = null): self
     {
-        return static::create($description)->triggerAtStart(new DateInterval("PT{$minutes}M"));
+        return self::create($description)->triggerAtStart(new DateInterval("PT{$minutes}M"));
     }
 
-    public static function minutesBeforeEnd(int $minutes, ?string $description = null): Alert
+    public static function minutesBeforeEnd(int $minutes, ?string $description = null): self
     {
         $interval = new DateInterval("PT{$minutes}M");
         $interval->invert = 1;
 
-        return static::create($description)->triggerAtEnd($interval);
+        return self::create($description)->triggerAtEnd($interval);
     }
 
-    public static function minutesAfterEnd(int $minutes, ?string $description = null): Alert
+    public static function minutesAfterEnd(int $minutes, ?string $description = null): self
     {
-        return static::create($description)->triggerAtEnd(new DateInterval("PT{$minutes}M"));
+        return self::create($description)->triggerAtEnd(new DateInterval("PT{$minutes}M"));
     }
 
-    private static function create(?string $description = null): Alert
+    protected static function create(?string $description = null): self
     {
         return new self($description);
     }
 
-    public function __construct(?string $description = null)
+    public function __construct(protected ?string $message = null)
     {
-        $this->message = $description;
     }
 
     public function getComponentType(): string
@@ -115,26 +112,34 @@ class Alert extends Component
 
     public function withoutTimezone(): Alert
     {
-        $this->withoutTimezone = true;
+        $this->withTimezone = false;
 
         return $this;
     }
 
     protected function payload(): ComponentPayload
     {
-        return ComponentPayload::create($this->getComponentType())
+        $payload = ComponentPayload::create($this->getComponentType())
             ->property(TextProperty::create('ACTION', 'DISPLAY'))
-            ->optional($this->message, fn () => TextProperty::create('DESCRIPTION', $this->message))
             ->property($this->resolveTriggerProperty());
+
+        if ($this->message) {
+            $payload->property(TextProperty::create('DESCRIPTION', $this->message));
+        }
+
+        return $payload;
     }
 
-    private function resolveTriggerProperty()
+    protected function resolveTriggerProperty(): DateTimeProperty|DurationProperty
     {
         if ($this->triggerMode === self::TRIGGER_DATE) {
+            $date = $this->withTimezone
+                ? $this->triggerDate
+                : (clone $this->triggerDate)->disableTimezone();
+
             return DateTimeProperty::create(
                 'TRIGGER',
-                $this->triggerDate,
-                $this->withoutTimezone
+                $date,
             )->addParameter(new Parameter('VALUE', 'DATE-TIME'));
         }
 

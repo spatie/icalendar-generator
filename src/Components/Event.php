@@ -2,7 +2,6 @@
 
 namespace Spatie\IcalendarGenerator\Components;
 
-use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
@@ -29,78 +28,77 @@ use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Event extends Component implements HasTimezones
 {
-    /** @var \Spatie\IcalendarGenerator\Components\Alert[] */
-    private array $alerts = [];
+    /** @var Alert[] */
+    protected array $alerts = [];
 
-    private ?DateTimeValue $starts = null;
+    protected ?DateTimeValue $starts = null;
 
-    private ?DateTimeValue $ends = null;
+    protected ?DateTimeValue $ends = null;
 
-    private DateTimeValue $created;
+    protected DateTimeValue $created;
 
-    private ?string $name = null;
+    protected ?string $description = null;
 
-    private ?string $description = null;
+    protected ?string $address = null;
 
-    private ?string $address = null;
+    protected ?string $addressName = null;
 
-    private ?string $addressName = null;
+    protected ?string $googleConference = null;
 
-    private ?string $googleConference = null;
+    protected ?string $microsoftTeams = null;
 
-    private ?string $microsoftTeams = null;
+    protected ?float $lat = null;
 
-    private ?float $lat = null;
+    protected ?float $lng = null;
 
-    private ?float $lng = null;
+    protected string $uuid;
 
-    private string $uuid;
+    protected bool $withTimezone = true;
 
-    private bool $withoutTimezone = false;
+    protected bool $isFullDay = false;
 
-    private bool $isFullDay = false;
+    protected ?Classification $classification = null;
 
-    private ?Classification $classification = null;
+    protected ?bool $transparent = null;
 
-    private ?bool $transparent = null;
+    /** @var CalendarAddress[] */
+    protected array $attendees = [];
 
-    private array $attendees = [];
+    protected ?CalendarAddress $organizer = null;
 
-    private ?CalendarAddress $organizer = null;
-
-    private ?EventStatus $status = null;
+    protected ?EventStatus $status = null;
 
     /** @var RRule|string|null */
-    private $rrule = null;
+    protected $rrule = null;
 
-    private ?DateTimeInterface $rruleStarting = null;
+    protected ?DateTimeInterface $rruleStarting = null;
 
-    private ?DateTimeInterface $rruleUntil = null;
+    protected ?DateTimeInterface $rruleUntil = null;
 
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
-    private array $recurrence_dates = [];
+    /** @var DateTimeValue[] */
+    protected array $recurrenceDates = [];
 
-    /** @var \Spatie\IcalendarGenerator\ValueObjects\DateTimeValue[] */
-    public array $excluded_recurrence_dates = [];
+    /** @var DateTimeValue[] */
+    public array $excludedRecurrenceDates = [];
 
-    private ?string $url = null;
+    protected ?string $url = null;
 
-    /** @var array<array|BinaryValue> */
-    private array $attachments = [];
+    /** @var array<array{url: string, type: string|null}|BinaryValue> */
+    protected array $attachments = [];
 
-    /** @var array[] */
-    private array $images = [];
+    /** @var array<array{url: string, type: string|null, display: Display|null}> */
+    protected array $images = [];
 
-    private ?int $sequence = null;
+    protected ?int $sequence = null;
 
     public static function create(?string $name = null): Event
     {
         return new self($name);
     }
 
-    public function __construct(?string $name = null)
-    {
-        $this->name = $name;
+    public function __construct(
+        protected ?string $name = null
+    ) {
         $this->uuid = uniqid();
         $this->created = DateTimeValue::create(new DateTimeImmutable())
             ->convertToTimezone(new \DateTimeZone('UTC'));
@@ -227,7 +225,7 @@ class Event extends Component implements HasTimezones
 
     public function withoutTimezone(): Event
     {
-        $this->withoutTimezone = true;
+        $this->withTimezone = false;
 
         return $this;
     }
@@ -246,7 +244,7 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    public function alertAt(DateTimeInterface $alert, ?string $message = null)
+    public function alertAt(DateTimeInterface $alert, ?string $message = null): self
     {
         $this->alerts[] = Alert::date($alert, $message);
 
@@ -324,36 +322,30 @@ class Event extends Component implements HasTimezones
 
     /**
      * @param DateTimeInterface[]|DateTimeInterface $dates
-     * @param bool $withTime
-     *
-     * @return \Spatie\IcalendarGenerator\Components\Event
      */
-    public function doNotRepeatOn($dates, bool $withTime = true): self
+    public function doNotRepeatOn(array|DateTimeInterface $dates, bool $withTime = true): self
     {
         $dates = array_map(
-            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            fn (DateTimeInterface $date) => DateTimeValue::create($date, $withTime),
             is_array($dates) ? $dates : [$dates]
         );
 
-        $this->excluded_recurrence_dates = array_merge($this->excluded_recurrence_dates, $dates);
+        $this->excludedRecurrenceDates = array_merge($this->excludedRecurrenceDates, $dates);
 
         return $this;
     }
 
     /**
      * @param DateTimeInterface[]|DateTimeInterface $dates
-     * @param bool $withTime
-     *
-     * @return \Spatie\IcalendarGenerator\Components\Event
      */
-    public function repeatOn($dates, bool $withTime = true): self
+    public function repeatOn(array|DateTimeInterface $dates, bool $withTime = true): self
     {
         $dates = array_map(
-            fn (DateTime $date) => DateTimeValue::create($date, $withTime),
+            fn (DateTimeInterface $date) => DateTimeValue::create($date, $withTime),
             is_array($dates) ? $dates : [$dates]
         );
 
-        $this->recurrence_dates = array_merge($this->recurrence_dates, $dates);
+        $this->recurrenceDates = array_merge($this->recurrenceDates, $dates);
 
         return $this;
     }
@@ -405,7 +397,7 @@ class Event extends Component implements HasTimezones
 
     public function getTimezoneRangeCollection(): TimezoneRangeCollection
     {
-        if ($this->withoutTimezone) {
+        if ($this->withTimezone === false) {
             return TimezoneRangeCollection::create();
         }
 
@@ -418,8 +410,8 @@ class Event extends Component implements HasTimezones
                 ? [$this->rruleStarting, $this->rruleUntil]
                 : $this->rrule
             )
-            ->add($this->recurrence_dates)
-            ->add($this->excluded_recurrence_dates);
+            ->add($this->recurrenceDates)
+            ->add($this->excludedRecurrenceDates);
     }
 
     protected function payload(): ComponentPayload
@@ -436,110 +428,108 @@ class Event extends Component implements HasTimezones
         return $payload;
     }
 
-    private function resolveProperties(ComponentPayload $payload): self
+    protected function resolveProperties(ComponentPayload $payload): self
     {
         $payload
             ->property(TextProperty::create('UID', $this->uuid))
-            ->property(DateTimeProperty::create('DTSTAMP', $this->created))
-            ->optional(
-                $this->name,
-                fn () => TextProperty::create('SUMMARY', $this->name)
-            )
-            ->optional(
-                $this->description,
-                fn () => TextProperty::create('DESCRIPTION', $this->description)
-            )
-            ->optional(
-                $this->address,
-                fn () => TextProperty::create('LOCATION', $this->address)
-            )
-            ->optional(
-                $this->classification,
-                fn () => TextProperty::createFromEnum('CLASS', $this->classification)
-            )
-            ->optional(
-                $this->status,
-                fn () => TextProperty::createFromEnum('STATUS', $this->status)
-            )
-            ->optional(
-                $this->googleConference,
-                fn () => TextProperty::create('X-GOOGLE-CONFERENCE', $this->googleConference)
-            )
-            ->optional(
-                $this->microsoftTeams,
-                fn () => TextProperty::create('X-MICROSOFT-SKYPETEAMSMEETINGURL', $this->microsoftTeams)
-            )
-            ->optional(
-                $this->transparent,
-                fn () => TextProperty::create('TRANSP', 'TRANSPARENT')
-            )
-            ->optional(
-                $this->isFullDay,
-                fn () => TextProperty::create('X-MICROSOFT-CDO-ALLDAYEVENT', 'TRUE')
-            )
-            ->optional(
-                $this->organizer,
-                fn () => CalendarAddressProperty::create('ORGANIZER', $this->organizer)
-            )
-            ->optional(
-                $this->rrule,
-                fn () => is_string($this->rrule)
-                    ? TextProperty::create('RRULE', $this->rrule)->withoutEscaping()
-                    : RRuleProperty::create('RRULE', $this->rrule)
-            )
-            ->multiple(
-                $this->attendees,
-                fn (CalendarAddress $attendee) => CalendarAddressProperty::create('ATTENDEE', $attendee)
-            )
-            ->optional(
-                $this->url,
-                fn () => UriProperty::create('URL', $this->url)
-            )
-            ->optional(
-                $this->sequence !== null,
-                fn () => TextProperty::create('SEQUENCE', $this->sequence)
-            )
-            ->multiple(
-                $this->recurrence_dates,
-                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('RDATE', $dateTime)
-            )
-            ->multiple(
-                $this->excluded_recurrence_dates,
-                fn (DateTimeValue $dateTime) => self::dateTimePropertyWithSpecifiedType('EXDATE', $dateTime)
-            )
-            ->multiple(
-                $this->attachments,
-                function ($attachment) {
-                    if ($attachment instanceof BinaryValue) {
-                        return BinaryProperty::create('ATTACH', $attachment);
-                    }
+            ->property(DateTimeProperty::create('DTSTAMP', $this->created));
 
-                    return $attachment['type'] !== null
-                        ? UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type']))
-                        : UriProperty::create('ATTACH', $attachment['url']);
-                }
-            )
-            ->multiple(
-                $this->images,
-                function (array $image) {
-                    $property = UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'));
+        if ($this->name) {
+            $payload->property(TextProperty::create('SUMMARY', $this->name));
+        }
 
-                    if ($image['type'] !== null) {
-                        $property->addParameter(Parameter::create('FMTTYPE', $image['type']));
-                    }
+        if ($this->description) {
+            $payload->property(TextProperty::create('DESCRIPTION', $this->description));
+        }
 
-                    if ($image['display'] !== null) {
-                        $property->addParameter(Parameter::create('DISPLAY', $image['display']));
-                    }
+        if ($this->address) {
+            $payload->property(TextProperty::create('LOCATION', $this->address));
+        }
 
-                    return $property;
-                }
-            );
+        if ($this->classification) {
+            $payload->property(TextProperty::createFromEnum('CLASS', $this->classification));
+        }
+
+        if ($this->status) {
+            $payload->property(TextProperty::createFromEnum('STATUS', $this->status));
+        }
+
+        if ($this->googleConference) {
+            $payload->property(TextProperty::create('X-GOOGLE-CONFERENCE', $this->googleConference));
+        }
+
+        if ($this->microsoftTeams) {
+            $payload->property(TextProperty::create('X-MICROSOFT-SKYPETEAMSMEETINGURL', $this->microsoftTeams));
+        }
+
+        if ($this->transparent) {
+            $payload->property(TextProperty::create('TRANSP', 'TRANSPARENT'));
+        }
+
+        if ($this->isFullDay) {
+            $payload->property(TextProperty::create('X-MICROSOFT-CDO-ALLDAYEVENT', 'TRUE'));
+        }
+
+        if ($this->organizer) {
+            $payload->property(CalendarAddressProperty::create('ORGANIZER', $this->organizer));
+        }
+
+        if ($this->rrule) {
+            $property = is_string($this->rrule)
+                ? TextProperty::create('RRULE', $this->rrule)->withoutEscaping()
+                : RRuleProperty::create('RRULE', $this->rrule);
+
+            $payload->property($property);
+        }
+
+        if ($this->url) {
+            $payload->property(UriProperty::create('URL', $this->url));
+        }
+
+        if ($this->sequence) {
+            $payload->property(TextProperty::create('SEQUENCE', (string) $this->sequence));
+        }
+
+        foreach ($this->attendees as $attendee) {
+            $payload->property(CalendarAddressProperty::create('ATTENDEE', $attendee));
+        }
+
+        foreach ($this->recurrenceDates as $recurrenceDate) {
+            $payload->property(self::dateTimePropertyWithSpecifiedType('RDATE', $recurrenceDate));
+        }
+
+        foreach ($this->excludedRecurrenceDates as $excludedRecurrenceDate) {
+            $payload->property(self::dateTimePropertyWithSpecifiedType('EXDATE', $excludedRecurrenceDate));
+        }
+
+        foreach ($this->attachments as $attachment) {
+            $property = match (true) {
+                $attachment instanceof BinaryValue => BinaryProperty::create('ATTACH', $attachment),
+                $attachment['type'] !== null => UriProperty::create('ATTACH', $attachment['url'])->addParameter(Parameter::create('FMTTYPE', $attachment['type'])),
+                default => UriProperty::create('ATTACH', $attachment['url']),
+            };
+
+            $payload->property($property);
+        }
+
+        foreach ($this->images as $image) {
+            $property = UriProperty::create('IMAGE', $image['url'])->addParameter(Parameter::create('VALUE', 'URI'));
+
+            if ($image['type'] !== null) {
+                $property->addParameter(Parameter::create('FMTTYPE', $image['type']));
+            }
+
+            if ($image['display'] !== null) {
+                $property->addParameter(Parameter::create('DISPLAY', $image['display']));
+            }
+
+            $payload->property($property);
+        }
 
         return $this;
     }
 
-    private static function dateTimePropertyWithSpecifiedType(
+    protected static function dateTimePropertyWithSpecifiedType(
         string $name,
         DateTimeValue $dateTimeValue
     ): DateTimeProperty {
@@ -551,22 +541,22 @@ class Event extends Component implements HasTimezones
         return $property;
     }
 
-    private function resolveDateProperty(ComponentPayload $payload, ?DateTimeValue $value, string $name): self
+    protected function resolveDateProperty(ComponentPayload $payload, ?DateTimeValue $value, string $name): self
     {
         if ($value === null) {
             return $this;
         }
 
         $payload->property(
-            DateTimeProperty::fromDateTime($name, $value->getDateTime(), ! $this->isFullDay, $this->withoutTimezone)
+            DateTimeProperty::fromDateTime($name, $value->getDateTime(), ! $this->isFullDay, $this->withTimezone)
         );
 
         return $this;
     }
 
-    private function resolveLocationProperties(ComponentPayload $payload): self
+    protected function resolveLocationProperties(ComponentPayload $payload): self
     {
-        if (is_null($this->lng) && is_null($this->lat)) {
+        if (is_null($this->lng) || is_null($this->lat)) {
             return $this;
         }
 
@@ -588,10 +578,10 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    private function resolveAlerts(ComponentPayload $payload): self
+    protected function resolveAlerts(ComponentPayload $payload): self
     {
         $alerts = array_map(
-            fn (Alert $alert) => $this->withoutTimezone ? $alert->withoutTimezone() : $alert,
+            fn (Alert $alert) => $this->withTimezone ? $alert : $alert->withoutTimezone(),
             $this->alerts
         );
 

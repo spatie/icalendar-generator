@@ -85,7 +85,7 @@ test('it can format a boolean', function () {
 test('it can format an enum', function () {
     assertEquals(
         'CANCELLED',
-        (new Parameter('', EventStatus::cancelled()))->getValue()
+        (new Parameter('', EventStatus::Cancelled))->getValue()
     );
 });
 

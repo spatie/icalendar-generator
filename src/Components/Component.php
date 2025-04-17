@@ -9,14 +9,17 @@ use Spatie\IcalendarGenerator\Properties\Property;
 
 abstract class Component
 {
-    /** @var \Spatie\IcalendarGenerator\Properties\Property[] */
-    private array $appendedProperties = [];
+    /** @var Property[] */
+    protected array $appendedProperties = [];
 
-    /** @var \Spatie\IcalendarGenerator\Components\Component[] */
-    private array $appendedSubComponents = [];
+    /** @var Component[] */
+    protected array $appendedSubComponents = [];
 
     abstract public function getComponentType(): string;
 
+    /**
+     * @return array<string>
+     */
     abstract public function getRequiredProperties(): array;
 
     abstract protected function payload(): ComponentPayload;
@@ -59,11 +62,10 @@ abstract class Component
         return $this;
     }
 
-    protected function ensureRequiredPropertiesAreSet(ComponentPayload $componentPayload)
+    protected function ensureRequiredPropertiesAreSet(ComponentPayload $componentPayload): void
     {
         $providedProperties = [];
 
-        /** @var \Spatie\IcalendarGenerator\Properties\Property $property */
         foreach ($componentPayload->getProperties() as $property) {
             $providedProperties = array_merge(
                 $providedProperties,

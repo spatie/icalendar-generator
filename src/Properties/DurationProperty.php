@@ -7,17 +7,14 @@ use Spatie\IcalendarGenerator\ValueObjects\DurationValue;
 
 class DurationProperty extends Property
 {
-    private DateInterval $interval;
-
     public static function create(string $name, DateInterval $interval): DurationProperty
     {
         return new self($name, $interval);
     }
 
-    public function __construct(string $name, DateInterval $interval)
+    public function __construct(string $name, protected DateInterval $interval)
     {
         $this->name = $name;
-        $this->interval = $interval;
     }
 
     public function getValue(): string

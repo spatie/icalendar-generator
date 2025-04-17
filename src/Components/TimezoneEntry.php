@@ -14,19 +14,7 @@ use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class TimezoneEntry extends Component
 {
-    private TimezoneEntryType $type;
-
-    private DateTimeValue $starts;
-
-    private string $offsetFrom;
-
-    private string $offsetTo;
-
-    private ?RRule $rrule = null;
-
-    private ?string $name = null;
-
-    private ?string $description = null;
+    protected DateTimeValue $starts;
 
     public static function create(
         TimezoneEntryType $type,
@@ -48,15 +36,15 @@ class TimezoneEntry extends Component
     }
 
     public function __construct(
-        TimezoneEntryType $type,
+        protected TimezoneEntryType $type,
         DateTimeInterface $starts,
-        string $offsetFrom,
-        string $offsetTo
+        protected string $offsetFrom,
+        protected string $offsetTo,
+        protected ?string $name = null,
+        protected ?string $description = null,
+        protected ?RRule $rrule = null,
     ) {
-        $this->type = $type;
         $this->starts = DateTimeValue::create($starts);
-        $this->offsetFrom = $offsetFrom;
-        $this->offsetTo = $offsetTo;
     }
 
     public function name(string $name): self
@@ -66,7 +54,7 @@ class TimezoneEntry extends Component
         return $this;
     }
 
-    public function description(string $description)
+    public function description(string $description): self
     {
         $this->description = $description;
 
@@ -85,6 +73,7 @@ class TimezoneEntry extends Component
         return (string) $this->type->value;
     }
 
+    /** @return array<string> */
     public function getRequiredProperties(): array
     {
         return [
@@ -96,21 +85,23 @@ class TimezoneEntry extends Component
 
     protected function payload(): ComponentPayload
     {
-        return ComponentPayload::create($this->getComponentType())
-            ->property(DateTimeProperty::create('DTSTART', $this->starts, true))
+        $payload = ComponentPayload::create($this->getComponentType())
+            ->property(DateTimeProperty::create('DTSTART', (clone $this->starts)->disableTimezone()))
             ->property(TextProperty::create('TZOFFSETFROM', $this->offsetFrom))
-            ->property(TextProperty::create('TZOFFSETTO', $this->offsetTo))
-            ->optional(
-                $this->name,
-                fn () => TextProperty::create('TZNAME', $this->name)
-            )
-            ->optional(
-                $this->description,
-                fn () => TextProperty::create('COMMENT', $this->description)
-            )
-            ->optional(
-                $this->rrule,
-                fn () => RRuleProperty::create('RRULE', $this->rrule)
-            );
+            ->property(TextProperty::create('TZOFFSETTO', $this->offsetTo));
+
+        if ($this->name) {
+            $payload->property(TextProperty::create('TZNAME', $this->name));
+        }
+
+        if ($this->description) {
+            $payload->property(TextProperty::create('COMMENT', $this->description));
+        }
+
+        if ($this->rrule) {
+            $payload->property(RRuleProperty::create('RRULE', $this->rrule));
+        }
+
+        return $payload;
     }
 }

@@ -3,28 +3,20 @@
 namespace Spatie\IcalendarGenerator\ValueObjects;
 
 use DateInterval;
-use Exception;
 
 class DurationValue
 {
-    private DateInterval $interval;
-
-    public static function create($interval): DurationValue
+    public static function create(DateInterval|string $interval): DurationValue
     {
         if ($interval instanceof DateInterval) {
             return new self($interval);
         }
 
-        if (is_string($interval)) {
-            return new self(new DateInterval($interval));
-        }
-
-        throw new Exception("A duration can only be a DateInterval");
+        return new self(new DateInterval($interval));
     }
 
-    private function __construct(DateInterval $interval)
+    protected function __construct(protected DateInterval $interval)
     {
-        $this->interval = $interval;
     }
 
     public function invert(): self

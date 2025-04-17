@@ -2,28 +2,22 @@
 
 namespace Spatie\IcalendarGenerator\Properties;
 
-use Spatie\Enum\Enum;
+use BackedEnum;
 use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
+use Stringable;
 
 class Parameter
 {
-    private string $name;
-
-    /** @var mixed|\Spatie\Enum\Enum|\Spatie\IcalendarGenerator\ValueObjects\DateTimeValue */
-    private $value;
-
-    private bool $disableEscaping;
-
-    public static function create(string $name, $value, $disableEscaping = false): Parameter
+    public static function create(string $name, string|int|bool|BackedEnum|DateTimeValue|Stringable $value, bool $disableEscaping = false): Parameter
     {
         return new self($name, $value, $disableEscaping);
     }
 
-    public function __construct(string $name, $value, $disableEscaping = false)
-    {
-        $this->name = $name;
-        $this->value = $value;
-        $this->disableEscaping = $disableEscaping;
+    public function __construct(
+        protected string $name,
+        protected string|int|bool|BackedEnum|DateTimeValue|Stringable $value,
+        protected bool $disableEscaping = false
+    ) {
     }
 
     public function getName(): string
@@ -53,7 +47,7 @@ class Parameter
         return str_replace(array_keys($replacements), $replacements, $value);
     }
 
-    private function valueToString(): string
+    protected function valueToString(): string
     {
         if (is_bool($this->value)) {
             $bool = $this->value ? 'TRUE' : 'FALSE';
@@ -61,7 +55,7 @@ class Parameter
             return "BOOLEAN:{$bool}";
         }
 
-        if ($this->value instanceof Enum) {
+        if ($this->value instanceof BackedEnum) {
             return (string) $this->value->value;
         }
 
@@ -71,6 +65,6 @@ class Parameter
                 : "DATE:{$this->value->format()}";
         }
 
-        return $this->value;
+        return (string) $this->value;
     }
 }

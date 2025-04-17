@@ -66,7 +66,7 @@ test('it will format the date and time correctly with a conversion to another ti
 });
 
 test('it will format the date and time without timezone', function () {
-    $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true, true);
+    $property = DateTimeProperty::fromDateTime('STARTS', $this->date, true, false);
 
     PropertyExpectation::create($property)->expectOutput('20190516T121015');
 });

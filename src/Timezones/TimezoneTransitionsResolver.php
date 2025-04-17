@@ -7,22 +7,20 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
+use Exception;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 
 class TimezoneTransitionsResolver
 {
-    private DateTimeZone $timeZone;
+    protected DateTimeImmutable $start;
 
-    private DateTimeImmutable $start;
-
-    private DateTimeImmutable $end;
+    protected DateTimeImmutable $end;
 
     public function __construct(
-        DateTimeZone $timeZone,
+        protected DateTimeZone $timeZone,
         DateTimeInterface $start,
         DateTimeInterface $end
     ) {
-        $this->timeZone = $timeZone;
         $this->start = (new DateTimeImmutable($start->format(DATE_ATOM)))->sub(
             new DateInterval('P270D'),
         );
@@ -31,6 +29,9 @@ class TimezoneTransitionsResolver
         );
     }
 
+    /**
+     * @return TimezoneTransition[]
+     */
     public function getTransitions(): array
     {
         $transitions = $this->timeZone->getTransitions(
@@ -69,8 +70,8 @@ class TimezoneTransitionsResolver
             $transition = $transitions[$i];
 
             $type = $transition['isdst']
-                ? TimezoneEntryType::daylight()
-                : TimezoneEntryType::standard();
+                ? TimezoneEntryType::Daylight
+                : TimezoneEntryType::Standard;
 
             $offsetFrom = $this->resolveOffset($previousTransition['offset']);
             $offsetTo = $this->resolveOffset($transition['offset']);
@@ -90,7 +91,7 @@ class TimezoneTransitionsResolver
         return $found;
     }
 
-    private function resolveOffset(int $offset): DateInterval
+    protected function resolveOffset(int $offset): DateInterval
     {
         $hours = (int) floor($offset / 3600);
         $minutes = abs(intdiv($offset, 60) % 60);
@@ -98,7 +99,7 @@ class TimezoneTransitionsResolver
         return $this->resolveInterval($hours, $minutes);
     }
 
-    private function resolveOffsetDiff(DateInterval $from, DateInterval $to): DateInterval
+    protected function resolveOffsetDiff(DateInterval $from, DateInterval $to): DateInterval
     {
         $hours = (int) $from->format('%r%h') - (int) $to->format('%r%h');
         $minutes = (int) $from->format('%r%m') - (int) $to->format('%r%m');
@@ -106,10 +107,10 @@ class TimezoneTransitionsResolver
         return $this->resolveInterval($hours, $minutes);
     }
 
-    private function resolveInterval(int $hours, int $minutes): DateInterval
+    protected function resolveInterval(int $hours, int $minutes): DateInterval
     {
         $interval = new DateInterval(
-            'PT' . abs($hours) . 'H' . abs($minutes) . 'M'
+            'PT'.abs($hours).'H'.abs($minutes).'M'
         );
 
         if ($hours < 0 || $minutes < 0) {
@@ -119,14 +120,23 @@ class TimezoneTransitionsResolver
         return $interval;
     }
 
-    private function resolveStartDate(string $timestamp, DateInterval $offset): DateTime
+    protected function resolveStartDate(string $timestamp, DateInterval $offset): DateTime
     {
-        $start = DateTime::createFromFormat('U', $timestamp, new DateTimeZone('UTC'))
-            ->setTimezone($this->timeZone);
+        $start = DateTime::createFromFormat('U', $timestamp, new DateTimeZone('UTC'));
 
-        return DateTime::createFromFormat(
+        if ($start === false) {
+            throw new Exception('Could not create DateTime from timestamp');
+        }
+
+        $normalizedStart = DateTime::createFromFormat(
             'Y-m-d\TH:i:s',
-            $start->format('Y-m-d\TH:i:s')
-        )->add($offset);
+            $start->setTimezone($this->timeZone)->format('Y-m-d\TH:i:s')
+        );
+
+        if ($normalizedStart === false) {
+            throw new Exception('Could not create DateTime from timestamp');
+        }
+
+        return $normalizedStart->add($offset);
     }
 }

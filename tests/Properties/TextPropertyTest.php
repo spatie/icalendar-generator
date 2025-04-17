@@ -61,7 +61,7 @@ test('it can disable escaping', function () {
 });
 
 test('it can be created from an enum', function () {
-    $property = TextProperty::createFromEnum('', Classification::private());
+    $property = TextProperty::createFromEnum('', Classification::Private);
 
     PropertyExpectation::create($property)
         ->expectOutput('PRIVATE')

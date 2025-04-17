@@ -1,0 +1,14 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$dateTime of static method Spatie\\IcalendarGenerator\\ValueObjects\\DateTimeValue\:\:create\(\) expects DateTimeInterface, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Components/Event.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between list\<array\{ts\: int, time\: string, offset\: int, isdst\: bool, abbr\: string\}\> and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Timezones/TimezoneTransitionsResolver.php
+

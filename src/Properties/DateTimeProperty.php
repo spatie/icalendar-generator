@@ -8,40 +8,32 @@ use Spatie\IcalendarGenerator\ValueObjects\DateTimeValue;
 
 class DateTimeProperty extends Property
 {
-    private DateTimeValue $dateTimeValue;
-
-    private DateTimeZone $dateTimeZone;
-
-    private bool $withoutTimeZone;
+    protected DateTimeZone $dateTimeZone;
 
     public static function fromDateTime(
         string $name,
         DateTimeInterface $dateTime,
         bool $withTime = false,
-        bool $withoutTimeZone = false
+        bool $withTimezone = true
     ): DateTimeProperty {
-        return new self($name, new DateTimeValue($dateTime, $withTime), $withoutTimeZone);
+        return new self($name, new DateTimeValue($dateTime, $withTime, $withTimezone));
     }
 
     public static function create(
         string $name,
         DateTimeValue $dateTimeValue,
-        bool $withoutTimeZone = false
-    ) {
-        return new self($name, $dateTimeValue, $withoutTimeZone);
+    ): self {
+        return new self($name, $dateTimeValue);
     }
 
-    private function __construct(
+    protected function __construct(
         string $name,
-        DateTimeValue $dateTimeValue,
-        bool $withoutTimeZone = false
+        protected DateTimeValue $dateTimeValue,
     ) {
         $this->name = $name;
-        $this->dateTimeValue = $dateTimeValue;
         $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
-        $this->withoutTimeZone = $withoutTimeZone;
 
-        if (! $withoutTimeZone && ! $this->isUTC()) {
+        if ($this->dateTimeValue->withTimezone() && ! $this->isUTC()) {
             $this->addParameter(new Parameter('TZID', $this->dateTimeZone->getName()));
         }
 
@@ -52,7 +44,7 @@ class DateTimeProperty extends Property
 
     public function getValue(): string
     {
-        return $this->isUTC() && $this->dateTimeValue->hasTime() && $this->withoutTimeZone === false
+        return $this->isUTC() && $this->dateTimeValue->hasTime() && $this->dateTimeValue->withTimezone()
             ? "{$this->dateTimeValue->format()}Z"
             : $this->dateTimeValue->format();
     }
@@ -62,7 +54,7 @@ class DateTimeProperty extends Property
         return $this->dateTimeValue->getDateTime();
     }
 
-    private function isUTC(): bool
+    protected function isUTC(): bool
     {
         return $this->dateTimeZone->getName() === 'UTC';
     }

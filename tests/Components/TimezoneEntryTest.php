@@ -11,7 +11,7 @@ use function Spatie\Snapshots\assertMatchesSnapshot;
 
 test('it can create a standard entry', function () {
     $payload = TimezoneEntry::create(
-        TimezoneEntryType::standard(),
+        TimezoneEntryType::Standard,
         new DateTime('16 may 2020 12:00:00'),
         '+00:00',
         '+02:00'
@@ -26,7 +26,7 @@ test('it can create a standard entry', function () {
 
 test('it can create a standard entry with negative offsets', function () {
     $payload = TimezoneEntry::create(
-        TimezoneEntryType::standard(),
+        TimezoneEntryType::Standard,
         new DateTime('16 may 2020 12:00:00'),
         '-00:00',
         '-02:00'
@@ -41,7 +41,7 @@ test('it can create a standard entry with negative offsets', function () {
 
 test('it can create a daylight entry', function () {
     $payload = TimezoneEntry::create(
-        TimezoneEntryType::daylight(),
+        TimezoneEntryType::Daylight,
         new DateTime('16 may 2020 12:00:00'),
         '+00:00',
         '+02:00'
@@ -56,7 +56,7 @@ test('it can create a daylight entry', function () {
 
 test('it can set a name and description', function () {
     $payload = TimezoneEntry::create(
-        TimezoneEntryType::standard(),
+        TimezoneEntryType::Standard,
         new DateTime('16 may 2020 12:00:00'),
         '+00:00',
         '+02:00'
@@ -72,26 +72,26 @@ test('it can set a name and description', function () {
 
 test('it can set a rrule', function () {
     $payload = TimezoneEntry::create(
-        TimezoneEntryType::standard(),
+        TimezoneEntryType::Standard,
         new DateTime('16 may 2020 12:00:00'),
         '+00:00',
         '+02:00'
     )
-        ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
+        ->rrule(RRule::frequency(RecurrenceFrequency::Daily))
         ->resolvePayload();
 
     PayloadExpectation::create($payload)
-        ->expectPropertyValue('RRULE', RRule::frequency(RecurrenceFrequency::daily()));
+        ->expectPropertyValue('RRULE', RRule::frequency(RecurrenceFrequency::Daily));
 });
 
 test('it can write out a timezone entry', function () {
     $payload = TimezoneEntry::create(
-        TimezoneEntryType::daylight(),
+        TimezoneEntryType::Daylight,
         new DateTime('16 may 2020 12:00:00'),
         '+00:00',
         '+02:00'
     )
-        ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
+        ->rrule(RRule::frequency(RecurrenceFrequency::Daily))
         ->name('Europe - Brussels')
         ->description('Belgian timezones ftw!')
         ->resolvePayload();

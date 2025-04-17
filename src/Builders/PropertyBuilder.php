@@ -6,14 +6,13 @@ use Spatie\IcalendarGenerator\Properties\Property;
 
 class PropertyBuilder
 {
-    /** @var \Spatie\IcalendarGenerator\Properties\Property */
-    private Property $property;
-
-    public function __construct(Property $property)
+    public function __construct(protected Property $property)
     {
-        $this->property = $property;
     }
 
+    /**
+     * @return array<string>
+     */
     public function build(): array
     {
         $parameters = $this->resolveParameters();
@@ -28,12 +27,11 @@ class PropertyBuilder
         );
     }
 
-    private function resolveParameters(): string
+    protected function resolveParameters(): string
     {
         $parameters = '';
 
         foreach ($this->property->getParameters() as $parameter) {
-            /** @var \Spatie\IcalendarGenerator\Properties\Parameter $parameter */
             $name = $parameter->getName();
             $value = $parameter->getValue();
 

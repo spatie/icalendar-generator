@@ -5,43 +5,41 @@ namespace Spatie\IcalendarGenerator\Timezones;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
-use Exception;
 
 class TimezoneRangeCollection
 {
-    private array $ranges;
-
+    /**
+     * @param array<string, array{min: DateTimeInterface, max: DateTimeInterface}> $ranges
+     */
     public static function create(array $ranges = []): self
     {
         return new self($ranges);
     }
 
-    public function __construct(array $ranges = [])
+    /**
+     * @param array<string, array{min: DateTimeInterface, max: DateTimeInterface}> $ranges
+     */
+    public function __construct(protected array $ranges = [])
     {
-        $this->ranges = $ranges;
     }
 
+    /**
+     * @return  array<string, array{min: DateTimeInterface, max: DateTimeInterface}> $ranges
+     */
     public function get(): array
     {
         return $this->ranges;
     }
 
     /**
-     * @param array|null|\Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection|DateTimeInterface|\Spatie\IcalendarGenerator\Timezones\HasTimezones $entries
-     *
-     * @return \Spatie\IcalendarGenerator\Timezones\TimezoneRangeCollection
-     * @throws \Exception
+     * @param array<null|TimezoneRangeCollection|DateTimeInterface|HasTimezones>|null|TimezoneRangeCollection|DateTimeInterface|HasTimezones $entries
      */
-    public function add(...$entries): self
+    public function add(array|null|TimezoneRangeCollection|DateTimeInterface|HasTimezones ...$entries): self
     {
         foreach ($entries as $entry) {
             if (is_array($entry)) {
                 $this->addArray($entry);
 
-                continue;
-            }
-
-            if ($entry === null) {
                 continue;
             }
 
@@ -64,14 +62,12 @@ class TimezoneRangeCollection
 
                 continue;
             }
-
-            throw new Exception('Could not add entry to TimeZoneRangeCollection');
         }
 
         return $this;
     }
 
-    private function addTimezoneRangeCollection(TimezoneRangeCollection $timezoneRangeCollection)
+    protected function addTimezoneRangeCollection(TimezoneRangeCollection $timezoneRangeCollection): void
     {
         foreach ($timezoneRangeCollection->get() as $timezone => $range) {
             ['min' => $minimum, 'max' => $maximum] = $range;
@@ -81,7 +77,7 @@ class TimezoneRangeCollection
         }
     }
 
-    private function addDateTimeInterface(DateTimeInterface $date): void
+    protected function addDateTimeInterface(DateTimeInterface $date): void
     {
         $this->addEntry(
             $date->getTimezone()->getName(),
@@ -89,19 +85,28 @@ class TimezoneRangeCollection
         );
     }
 
-    private function addArray(array $entries)
+    /**
+     * @param array<null|TimezoneRangeCollection|DateTimeInterface|HasTimezones> $entries
+     */
+    protected function addArray(array $entries): void
     {
         foreach ($entries as $entry) {
             $this->add($entry);
         }
     }
 
-    private function addEntry(string $timezone, DateTimeInterface $date)
+    protected function addEntry(string $timezone, DateTimeInterface $date): void
     {
         $date = DateTimeImmutable::createFromFormat(
             DATE_ATOM,
             $date->format(DATE_ATOM)
-        )->setTimezone(new DateTimeZone('UTC'));
+        );
+
+        if ($date === false) {
+            return;
+        }
+
+        $date = $date->setTimezone(new DateTimeZone('UTC'));
 
         if (! array_key_exists($timezone, $this->ranges)) {
             $this->ranges[$timezone] = [

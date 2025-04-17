@@ -160,24 +160,24 @@ You can also set the participation status of an attendee:
 
 ``` php
 Event::create()
-    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::accepted())
+    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::Accepted)
     ...
 ```
 
 There are five participation statuses:
 
-- `ParticipationStatus::accepted()`
-- `ParticipationStatus::declined()`
-- `ParticipationStatus::tentative()`
-- `ParticipationStatus::needs_action()`
-- `ParticipationStatus::delegated()`
+- `ParticipationStatus::Accepted`
+- `ParticipationStatus::Declined`
+- `ParticipationStatus::Tentative`
+- `ParticipationStatus::NeedsAction`
+- `ParticipationStatus::Delegated`
 
 
 You can indicate that an attendee is required to RSVP to an event:
 
 ``` php
 Event::create()
-    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::needs_action(), requiresResponse: true)
+    ->attendee('ruben@spatie.be', 'Ruben', ParticipationStatus::NeedsAction, requiresResponse: true)
     ...
 ```
 
@@ -201,21 +201,21 @@ The status of an event can be set:
 
 ``` php
 Event::create()
-    ->status(EventStatus::cancelled())
+    ->status(EventStatus::Cancelled)
     ...
 ```
 
 There are three event statuses:
 
-- `EventStatus::confirmed()`
-- `EventStatus::cancelled()`
-- `EventStatus::tentative()`
+- `EventStatus::Confirmed`
+- `EventStatus::Cancelled`
+- `EventStatus::Tentative`
 
-An event can be classified(`public`, `private`, `confidential`) as such:
+An event can be classified(`Public`, `Private`, `Confidential`) as such:
 
 ``` php
 Event::create()
-    ->classification(Classification::private())
+    ->classification(Classification::Private)
     ...
 ```
 
@@ -244,16 +244,16 @@ You can add an image as such:
 Event::create()
     ->image('https://spatie.be/logo.svg')
     ->image('https://spatie.be/logo.svg', 'text/svg+xml')
-    ->image('https://spatie.be/logo.svg', 'text/svg+xml', Display::badge())
+    ->image('https://spatie.be/logo.svg', 'text/svg+xml', Display::Badge)
     ...
 ```
 
 There are four different image display types:
 
-- `Display::badge()`
-- `Display::graphic()`
-- `Display::fullsize()`
-- `Display::thumbnail()`
+- `Display::Badge`
+- `Display::Graphic`
+- `Display::Fullsize`
+- `Display::Thumbnail`
 
 You can add a sequence to an event as such:
 
@@ -348,7 +348,7 @@ You can manually add timezones to a calendar if desired as such:
 
 ```php
 $timezoneEntry = TimezoneEntry::create(
-    TimezoneEntryType::daylight(),
+    TimezoneEntryType::Daylight,
     new DateTime('23 march 2020'),
     '+00:00',
     '+02:00'
@@ -414,7 +414,7 @@ Event::create('Laracon Online')
 Recurrence rules or RRule's in short, make it possible to add a repeating event in your calendar by describing when it repeats within an RRule. First, we have to create an RRule:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::daily());
+$rrule = RRule::frequency(RecurrenceFrequency::Daily);
 ```
 
 This rule describes an event that will be repeated daily. You can also set the frequency to `secondly`, `minutely`, `hourly`, `weekly`, `monthly` or `yearly`.
@@ -423,7 +423,7 @@ The RRULE can be added to an event as such:
 
 ``` php
 Event::create('Laracon Online')
-    ->rrule(RRule::frequency(RecurrenceFrequency::monthly()));
+    ->rrule(RRule::frequency(RecurrenceFrequency::Monthly));
 ```
 
 It is possible to finetune the RRule to your personal taste; let's have a look!
@@ -431,25 +431,25 @@ It is possible to finetune the RRule to your personal taste; let's have a look!
 A RRule can start from a certain point in time:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::daily())->starting(new DateTime('now'));
+$rrule = RRule::frequency(RecurrenceFrequency::Daily)->starting(new DateTime('now'));
 ```
 
 And stop at a certain point:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::daily())->until(new DateTime('now'));
+$rrule = RRule::frequency(RecurrenceFrequency::Daily)->until(new DateTime('now'));
 ```
 
 It can only be repeated for a few times, 10 times for example:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::daily())->times(10);
+$rrule = RRule::frequency(RecurrenceFrequency::Daily)->times(10);
 ```
 
 The interval of the repetition can be changed:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::daily())->interval(2);
+$rrule = RRule::frequency(RecurrenceFrequency::Daily)->interval(2);
 ```
 
 When this event starts on Monday, for example, the next repetition of this event will not occur on Tuesday but Wednesday. You can do the same for all the frequencies.
@@ -457,37 +457,37 @@ When this event starts on Monday, for example, the next repetition of this event
 It is also possible to repeat the event on a specific weekday:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onWeekDay(
-   RecurrenceDay::friday()
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onWeekDay(
+   RecurrenceDay::Friday
 );
 ```
 
 Or on a specific weekday of a week in the month:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onWeekDay(
-   RecurrenceDay::friday(), 3
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onWeekDay(
+   RecurrenceDay::Friday, 3
 );
 ```
 
 Or on the last weekday of a month:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onWeekDay(
-   RecurrenceDay::sunday(), -1
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onWeekDay(
+   RecurrenceDay::Sunday, -1
 );
 ```
 
 You can repeat on a specific day in the month:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonthDay(16);
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onMonthDay(16);
 ```
 
 It is even possible to give an array of days in the month:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonthDay(
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onMonthDay(
    [5, 10, 15, 20]
 );
 ```
@@ -495,23 +495,23 @@ $rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonthDay(
 Repeating can be done for certain months (for example only in the second quarter):
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonth(
-   [RecurrenceMonth::april(), RecurrenceMonth::may(), RecurrenceMonth::june()]
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onMonth(
+   [RecurrenceMonth::April, RecurrenceMonth::May, RecurrenceMonth::June]
 );
 ```
 
 Or just on one month only:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->onMonth(
-   RecurrenceMonth::october()
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->onMonth(
+   RecurrenceMonth::October
 );
 ```
 
 It is possible to set the day when the week starts:
 
 ```php
-$rrule = RRule::frequency(RecurrenceFrequency::monthly())->weekStartsOn(
+$rrule = RRule::frequency(RecurrenceFrequency::Monthly)->weekStartsOn(
    ReccurenceDay::monday()
 );
 ```
@@ -520,7 +520,7 @@ You can provide a specific date on which an event won't be repeated:
 
 ```php
 Event::create('Laracon Online')
-    ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
+    ->rrule(RRule::frequency(RecurrenceFrequency::Daily))
     ->doNotRepeatOn(new DateTime('05/16/2020 12:00:00'));
 ```
 
@@ -528,7 +528,7 @@ It is also possible to give an array of dates on which the event won't be repeat
 
 ```php
 Event::create('Laracon Online')
-    ->rrule(RRule::frequency(RecurrenceFrequency::daily()))
+    ->rrule(RRule::frequency(RecurrenceFrequency::Daily))
     ->doNotRepeatOn([new DateTime('05/16/2020 12:00:00'), new DateTime('08/13/2020 15:00:00')]);
 ```
 
@@ -601,7 +601,7 @@ A timezone consists of multiple entries where the time of the timezone changed r
 
 ```php
 $entry = TimezoneEntry::create(
-    TimezoneEntryType::standard(),
+    TimezoneEntryType::Standard,
     new DateTime('16 may 2020 12:00:00'),
     '+00:00',
     '+02:00'
@@ -622,7 +622,7 @@ An RRule for the entry can be given as such:
 
 ```php
 $entry = TimezoneEntry::create(...)
-    ->rrule(RRule::frequency(RecurrenceFrequency::daily()));
+    ->rrule(RRule::frequency(RecurrenceFrequency::Daily));
 ```
 
 In the end you can add an entry to a timezone:
@@ -703,10 +703,6 @@ It is possible to create your subcomponents by extending the `Component` class.
 ``` bash
 composer test
 ```
-
-### Alternatives
-
-We strive for a simple and easy to use API. Want something more? Then check out this [package](https://github.com/markuspoerschke/iCal) by Markus Poerschke.
 
 ### Changelog
 
