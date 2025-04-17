@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 [![Tests](https://github.com/spatie/icalendar-generator/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/run-tests.yml)
 [![Check & fix styling](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml)
-[![Psalm](https://github.com/spatie/icalendar-generator/actions/workflows/psalm.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/psalm.yml)
+[![PHPStan](https://github.com/spatie/icalendar-generator/actions/workflows/phpstan.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/phpstan.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
 Want to create online calendars so that you can display them on an iPhone's calendar app or in Google Calendar?
