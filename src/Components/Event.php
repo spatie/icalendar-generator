@@ -28,8 +28,8 @@ use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 class Event extends Component implements HasTimezones
 {
-    /** @var Alert[] */
-    protected array $alerts = [];
+
+    use Alerts;
 
     protected ?DateTimeValue $starts = null;
 
@@ -233,34 +233,6 @@ class Event extends Component implements HasTimezones
     public function fullDay(): Event
     {
         $this->isFullDay = true;
-
-        return $this;
-    }
-
-    public function alert(Alert $alert): Event
-    {
-        $this->alerts[] = $alert;
-
-        return $this;
-    }
-
-    public function alertAt(DateTimeInterface $alert, ?string $message = null): self
-    {
-        $this->alerts[] = Alert::date($alert, $message);
-
-        return $this;
-    }
-
-    public function alertMinutesBefore(int $minutes, ?string $message = null): Event
-    {
-        $this->alerts[] = Alert::minutesBeforeStart($minutes, $message);
-
-        return $this;
-    }
-
-    public function alertMinutesAfter(int $minutes, ?string $message = null): Event
-    {
-        $this->alerts[] = Alert::minutesAfterEnd($minutes, $message);
 
         return $this;
     }
@@ -578,15 +550,4 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-    protected function resolveAlerts(ComponentPayload $payload): self
-    {
-        $alerts = array_map(
-            fn (Alert $alert) => $this->withTimezone ? $alert : $alert->withoutTimezone(),
-            $this->alerts
-        );
-
-        $payload->subComponent(...$alerts);
-
-        return $this;
-    }
 }

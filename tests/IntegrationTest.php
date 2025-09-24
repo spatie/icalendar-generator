@@ -7,6 +7,7 @@ use DateTimeZone;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
+use Spatie\IcalendarGenerator\Components\Todo;
 use Spatie\IcalendarGenerator\Enums\Classification;
 use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
@@ -71,6 +72,23 @@ test('it can create a full day event', function () {
                 ->createdAt(new DateTime('6 March 2019 15:00:00'))
                 ->startsAt(new DateTime('6 March 2019'))
                 ->endsAt(new DateTime('6 March 2019'))
+        )
+        ->get();
+
+    assertMatchesSnapshot($calendar);
+});
+
+test('it can create a todo', function () {
+    $calendar = Calendar::create('Task Calendar')
+        ->todo(
+            Todo::create('Finish documentation')
+                ->uniqueIdentifier('todo_1')
+                ->createdAt(new DateTime('6 March 2023 10:00:00'))
+                ->dtstart(new DateTime('6 March 2023 12:00:00'))
+                ->dueAt(new DateTime('6 March 2023 18:00:00'))
+                ->description('Complete the documentation for the new feature')
+                ->priority(1)
+                ->percentComplete(50)
         )
         ->get();
 

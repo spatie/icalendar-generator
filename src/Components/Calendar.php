@@ -19,6 +19,9 @@ class Calendar extends Component implements HasTimezones
     /** @var Event[] */
     protected array $events = [];
 
+    /** @var Todo[] */
+    protected array $todos = [];
+
     /** @var Timezone[] */
     protected array $timezones = [];
 
@@ -104,6 +107,32 @@ class Calendar extends Component implements HasTimezones
     }
 
     /**
+     * @param Todo|array<Todo|Closure>|Closure|null $todo
+     */
+    public function todo(Todo|array|Closure|null $todo): self
+    {
+        if (is_null($todo)) {
+            return $this;
+        }
+
+        $todos = array_map(function ($todoToResolve) {
+            if (! is_callable($todoToResolve)) {
+                return $todoToResolve;
+            }
+
+            $newTodo = new Todo();
+
+            $todoToResolve($newTodo);
+
+            return $newTodo;
+        }, is_array($todo) ? $todo : [$todo]);
+
+        $this->todos = array_merge($this->todos, $todos);
+
+        return $this;
+    }
+
+    /**
      * @param Timezone|array<Timezone>|null $timezone
      */
     public function timezone(Timezone|array|null $timezone): self
@@ -157,8 +186,8 @@ class Calendar extends Component implements HasTimezones
     {
         return TimezoneRangeCollection::create()
             ->add(...array_map(
-                fn (Event $event) => $event->getTimezoneRangeCollection(),
-                $this->resolveEvents()
+                fn ($component) => $component->getTimezoneRangeCollection(),
+                array_merge($this->resolveEvents(), $this->resolveTodos())
             ));
     }
 
@@ -187,7 +216,8 @@ class Calendar extends Component implements HasTimezones
 
         return $payload
             ->subComponent(...$this->resolveTimezones())
-            ->subComponent(...$this->resolveEvents());
+            ->subComponent(...$this->resolveEvents())
+            ->subComponent(...$this->resolveTodos());
     }
 
     /**
@@ -202,6 +232,21 @@ class Calendar extends Component implements HasTimezones
         return array_map(
             fn (Event $event) => $event->withoutTimezone(),
             $this->events
+        );
+    }
+
+    /**
+     * @return Todo[]
+     */
+    protected function resolveTodos(): array
+    {
+        if ($this->withTimezone === true) {
+            return $this->todos;
+        }
+
+        return array_map(
+            fn (Todo $todo) => $todo->withoutTimezone(),
+            $this->todos
         );
     }
 
