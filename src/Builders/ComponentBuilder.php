@@ -83,8 +83,8 @@ class ComponentBuilder
 
         while (strlen($line) > 0) {
             if (strlen($line) > 75) {
-                $chippedLines[] = mb_strcut($line, 0, 75, 'utf-8');
-                $line = ' '.mb_strcut($line, 75, strlen($line), 'utf-8');
+                $chippedLines[] = \mb_strcut($line, 0, 75, 'utf-8');
+                $line = ' '.\mb_strcut($line, 75, strlen($line), 'utf-8');
             } else {
                 $chippedLines[] = $line;
 
