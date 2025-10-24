@@ -100,11 +100,11 @@ test('it can create a todo', function () {
             Todo::create('Finish documentation')
                 ->uniqueIdentifier('todo_1')
                 ->createdAt(new DateTime('6 March 2023 10:00:00'))
-                ->dtstart(new DateTime('6 March 2023 12:00:00'))
+                ->startsAt(new DateTime('6 March 2023 12:00:00'))
                 ->dueAt(new DateTime('6 March 2023 18:00:00'))
                 ->description('Complete the documentation for the new feature')
                 ->priority(1)
-                ->percentComplete(50)
+                ->percentCompleted(50)
         )
         ->get();
 
