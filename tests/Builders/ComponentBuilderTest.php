@@ -74,7 +74,7 @@ test('it will chip a line when it becomes too long', function () {
         <<<EOT
             BEGIN:VTEST\r
             location:This is a really long text. Possibly you will never write a text l\r
-             ike this in a property. But hey we support the RFC so let us chip it! You \r
+             ike this in a property. But hey we support the RFC so let us chip it! You ${''}\r
              can maybe write some HTML in here that will make it longer than usual.\r
             END:VTEST
             EOT,

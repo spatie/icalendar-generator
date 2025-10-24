@@ -401,6 +401,7 @@ Event::create('Laracon Online')
 
 Removing timezones on a calendar or event will also remove timezones on the alert.
 
+
 ### Repeating events
 
 It is possible for events to repeat, for example your monthly company dinner. This can be done as such:
@@ -558,6 +559,105 @@ Event::create('SymfonyCon')
     );
 ```
 
+### Todo's
+
+It is possible to add todo's to a calendar as such:
+
+```php
+$todo = Todo::create('My first todo')
+
+$calendar = Calendar::create('My calendar')->todo($todo);
+```
+
+Adding an array of todo's or using a closure for creating an inline todo is also possible, similar to events.
+
+A todo can be at a specified date:
+
+```php
+Todo::create()
+    ->starts(new DateTime('2023-12-31 23:59:59'))
+    ...
+```
+
+And have a duration:
+
+```php
+Todo::create()
+    ->duration(new DateInterval('PT1H30M'))
+    ...
+```
+
+Please notice that a todo with a duration always needs a start date.
+
+It is also possible to set the due date of a todo:
+
+```php
+Todo::create()
+    ->due(new DateTime('2023-12-31 23:59:59'))
+    ...
+```
+
+It is impossible to set a start date and a due date on a todo, only one of them can be set.
+
+A todo can have a completion date:
+
+```php
+Todo::create()
+    ->completedAt(new DateTime('2023-12-25 12:00:00'))
+    ...
+```
+
+You can set the percentage complete as such:
+
+```php
+Todo::create()
+    ->percentComplete(75) // In a range from 0 to 100
+    ...
+```  
+
+It is possible to set the priority of a todo:
+
+```php
+Todo::create()
+    ->priority(1) // In a range from 0 to 9
+    ...
+```
+
+The status of a todo can be set:
+
+```php
+Todo::create()
+    ->status(TodoStatus::Completed)
+    ...
+```
+
+There are four todo statuses:
+
+- `TodoStatus::NeedsAction`
+- `TodoStatus::Completed`
+- `TodoStatus::InProcess`
+- `TodoStatus::Cancelled`
+
+A todo has many similarities with events so the following methods are also available on todos:
+
+```php
+Todo::create()
+  ->description('Meeting about project updates')
+  ->uniqueIdentifier('event-12345')
+  ->createdAt(new DateTime('2024-01-15 09:00:00'))
+  ->withoutTimezone()
+  ->classification(Classification::Public)
+  ->url('https://example.com/details')
+  ->sequence(1)
+  ->attendee('john@example.com')
+  ->attachment('https://example.com/file.pdf')
+  ->address('123 Main St, New York')
+  ->addressName('Conference Room A')
+  ->coordinates(40.7128, -74.0060)
+  ->organizer('admin@example.com')
+  ->rrule('FREQ=DAILY')
+  ->alert(Alert::minutesBeforeStart(15))
+```
 
 ### Use with Laravel
 
