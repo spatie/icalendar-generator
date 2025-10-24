@@ -2,6 +2,16 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.1.0 - 2025-10-24
+
+### What's Changed
+
+* Update issue template by @AlexVanderbist in https://github.com/spatie/icalendar-generator/pull/155
+* feat(Added VTODO) by @xtay2 in https://github.com/spatie/icalendar-generator/pull/157
+* Fixed a bug with unix timezeones offsets not following spec
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/3.0.0...3.1.0
+
 ## 3.0.0 - 2025-04-17
 
 ### What's Changed
