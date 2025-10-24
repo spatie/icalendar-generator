@@ -79,3 +79,21 @@ test('it can be created from a DateTime value', function () {
 
     PropertyExpectation::create($property)->expectOutput('20190516T121015');
 });
+
+it('will transform a UTC timezone offset to UTC', function ($offset, $expectedOutput) {
+    $date = new DateTime('16 may 2019 12:10:15', new DateTimeZone($offset));
+
+    $property = DateTimeProperty::fromDateTime('STARTS', $date, true);
+
+    PropertyExpectation::create($property)->expectOutput($expectedOutput);
+})->with(function (){
+    yield [
+        '+02:00',
+        '20190516T101015Z'
+    ];
+
+    yield [
+        '-02:00',
+        '20190516T141015Z'
+    ];
+});

@@ -33,6 +33,7 @@ class DateTimeProperty extends Property
         $this->name = $name;
         $this->dateTimeZone = $dateTimeValue->getDateTime()->getTimezone();
 
+
         if ($this->dateTimeValue->withTimezone() && ! $this->isUTC()) {
             $this->addParameter(new Parameter('TZID', $this->dateTimeZone->getName()));
         }

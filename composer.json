@@ -43,6 +43,7 @@
     "scripts": {
         "test": "vendor/bin/pest",
         "analyse": "vendor/bin/phpstan analyse",
+        "baseline": "vendor/bin/phpstan analyse --generate-baseline",
         "test-coverage": "vendor/bin/pest --coverage-html coverage"
     },
     "config": {
