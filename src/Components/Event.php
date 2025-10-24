@@ -127,18 +127,7 @@ class Event extends Component implements HasTimezones
 
     public function endsAt(DateTimeInterface $ends, bool $withTime = true): Event
     {
-        if ($this->isFullDay) {
-            if (method_exists($ends, 'modify')) {
-                $ends = $ends->modify('+1 day');
-            } else {
-                throw new \LogicException('The provided DateTimeInterface instance does not support the modify method.');
-            }
-
-            $this->ends = DateTimeValue::create($ends, false);
-        } else {
-            $this->ends = DateTimeValue::create($ends, $withTime);
-        }
-
+        $this->ends = DateTimeValue::create($ends, $withTime);
 
         return $this;
     }
@@ -407,8 +396,8 @@ class Event extends Component implements HasTimezones
             ->add($this->created)
             ->add(
                 is_string($this->rrule)
-                ? [$this->rruleStarting, $this->rruleUntil]
-                : $this->rrule
+                    ? [$this->rruleStarting, $this->rruleUntil]
+                    : $this->rrule
             )
             ->add($this->recurrenceDates)
             ->add($this->excludedRecurrenceDates);
@@ -421,7 +410,7 @@ class Event extends Component implements HasTimezones
         $this
             ->resolveProperties($payload)
             ->resolveDateProperty($payload, $this->starts, 'DTSTART')
-            ->resolveDateProperty($payload, $this->ends, 'DTEND')
+            ->resolveDateProperty($payload, $this->resolveEnd(), 'DTEND')
             ->resolveLocationProperties($payload)
             ->resolveAlerts($payload);
 
@@ -588,5 +577,22 @@ class Event extends Component implements HasTimezones
         $payload->subComponent(...$alerts);
 
         return $this;
+    }
+
+    protected function resolveEnd(): DateTimeValue|null
+    {
+        if ($this->ends === null || $this->isFullDay === false) {
+            return $this->ends;
+        }
+
+        $datetime = $this->ends->getDateTime();
+
+        if (method_exists($datetime, 'modify')) {
+            $datetime = $datetime->modify('+1 day');
+        } else {
+            throw new \LogicException('The provided DateTimeInterface instance does not support the modify method.');
+        }
+
+        return DateTimeValue::create($datetime, false);
     }
 }

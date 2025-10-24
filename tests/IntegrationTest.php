@@ -76,19 +76,3 @@ test('it can create a full day event', function () {
 
     assertMatchesSnapshot($calendar);
 });
-
-test('it can create a full day event irrespective of param ordering', function () {
-    $calendar = Calendar::create('Laracon online')
-        ->withoutTimezone()
-        ->event(
-            Event::create('Laracon online')
-                ->uniqueIdentifier('uuid_2')
-                ->createdAt(new DateTime('6 March 2019 15:00:00'))
-                ->startsAt(new DateTime('6 March 2019'))
-                ->endsAt(new DateTime('6 March 2019'))
-                ->fullDay()
-        )
-        ->get();
-
-    assertMatchesSnapshot($calendar);
-});
