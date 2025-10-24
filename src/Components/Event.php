@@ -339,21 +339,4 @@ class Event extends Component implements HasTimezones
 
         return DateTimeValue::create($datetime, false);
     }
-
-    protected function resolveEnd(): DateTimeValue|null
-    {
-        if ($this->ends === null || $this->isFullDay === false) {
-            return $this->ends;
-        }
-
-        $datetime = $this->ends->getDateTime();
-
-        if (method_exists($datetime, 'modify')) {
-            $datetime = $datetime->modify('+1 day');
-        } else {
-            throw new \LogicException('The provided DateTimeInterface instance does not support the modify method.');
-        }
-
-        return DateTimeValue::create($datetime, false);
-    }
 }

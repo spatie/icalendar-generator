@@ -7,6 +7,18 @@ parameters:
 			path: src/Components/Event.php
 
 		-
+			message: '#^Parameter \#1 \.\.\.\$entries of method Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\:\:add\(\) expects array\<DateTimeInterface\|Spatie\\IcalendarGenerator\\Timezones\\HasTimezones\|Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\|null\>\|DateTimeInterface\|Spatie\\IcalendarGenerator\\Timezones\\HasTimezones\|Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\|null, list\<DateTimeInterface\|null\>\|Spatie\\IcalendarGenerator\\ValueObjects\\RRule\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Components/Event.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$entries of method Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\:\:add\(\) expects array\<DateTimeInterface\|Spatie\\IcalendarGenerator\\Timezones\\HasTimezones\|Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\|null\>\|DateTimeInterface\|Spatie\\IcalendarGenerator\\Timezones\\HasTimezones\|Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\|null, list\<DateTimeInterface\|null\>\|Spatie\\IcalendarGenerator\\ValueObjects\\RRule\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Components/Todo.php
+
+		-
 			message: '#^Strict comparison using \=\=\= between list\<array\{ts\: int, time\: string, offset\: int, isdst\: bool, abbr\: string\}\> and false will always evaluate to false\.$#'
 			identifier: identical.alwaysFalse
 			count: 1
