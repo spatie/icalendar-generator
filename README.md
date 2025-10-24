@@ -344,6 +344,14 @@ Calendar::create()
     ...
 ```
 
+Quick note, when using UTC offsets as timezones(e.g. `+02:00`), no Timezone components will be added automatically and the dates will automatically be converted to UTC.
+
+``` php
+$starts = new DateTime('6 march 2019 12:00', new DateTimeZone('+02:00'))
+
+Event::create()->startsAt($starts); // DTSTART will be 20190306T100000Z
+```
+
 You can manually add timezones to a calendar if desired as such:
 
 ```php

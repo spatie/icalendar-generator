@@ -24,6 +24,7 @@ class DateTimeValue implements HasTimezones
         protected bool $withTime = true,
         protected bool $withTimezone = true,
     ) {
+        $this->cleanupUtcOffsetTimezones();
     }
 
     public function disableTimezone(): self
@@ -78,5 +79,22 @@ class DateTimeValue implements HasTimezones
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    protected function cleanupUtcOffsetTimezones(): void
+    {
+        $timezone = $this->dateTime->getTimezone();
+
+        if ($timezone === false) {
+            return;
+        }
+
+        $name = $timezone->getName();
+
+        if (preg_match('/^[+\-]\d{2}:\d{2}$/', $name) !== 1) {
+            return;
+        }
+
+        $this->dateTime = (clone $this->dateTime)->setTimezone(new DateTimeZone('UTC'));
     }
 }

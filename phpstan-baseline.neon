@@ -12,3 +12,21 @@ parameters:
 			count: 1
 			path: src/Timezones/TimezoneTransitionsResolver.php
 
+		-
+			message: '#^Call to an undefined method DateTimeInterface\:\:setTimezone\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/ValueObjects/DateTimeValue.php
+
+		-
+			message: '#^Property Spatie\\IcalendarGenerator\\ValueObjects\\DateTimeValue\:\:\$dateTime \(DateTimeInterface\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/ValueObjects/DateTimeValue.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between DateTimeZone and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/ValueObjects/DateTimeValue.php
+
