@@ -86,14 +86,14 @@ it('will transform a UTC timezone offset to UTC', function ($offset, $expectedOu
     $property = DateTimeProperty::fromDateTime('STARTS', $date, true);
 
     PropertyExpectation::create($property)->expectOutput($expectedOutput);
-})->with(function () {
+})->with(function (){
     yield [
         '+02:00',
-        '20190516T101015Z',
+        '20190516T101015Z'
     ];
 
     yield [
         '-02:00',
-        '20190516T141015Z',
+        '20190516T141015Z'
     ];
 });
