@@ -1,14 +1,13 @@
 <?php
 
 use Spatie\IcalendarGenerator\Components\Todo;
-use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
-use Spatie\IcalendarGenerator\Enums\Display;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
-use Spatie\IcalendarGenerator\ValueObjects\RRule;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Properties\DateTimeProperty;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
 use Spatie\IcalendarGenerator\Tests\PropertyExpectation;
+use Spatie\IcalendarGenerator\ValueObjects\CalendarAddress;
+use Spatie\IcalendarGenerator\ValueObjects\RRule;
 
 test('it can create a todo', function () {
     $payload = Todo::create()->resolvePayload();

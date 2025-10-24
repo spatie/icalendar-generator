@@ -194,7 +194,6 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
-
     public function url(string $url): Event
     {
         $this->url = $url;

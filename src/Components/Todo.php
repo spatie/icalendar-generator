@@ -304,5 +304,4 @@ class Todo extends Component implements HasTimezones
             throw new LogicException('Cannot set duration on a todo without setting a start date');
         }
     }
-
 }

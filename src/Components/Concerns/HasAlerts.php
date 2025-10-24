@@ -51,5 +51,4 @@ trait HasAlerts
 
         return $this;
     }
-
 }

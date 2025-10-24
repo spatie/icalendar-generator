@@ -26,7 +26,6 @@ trait HasRRule
     /** @var DateTimeValue[] */
     public array $excludedRecurrenceDates = [];
 
-
     public function rrule(RRule $rrule): self
     {
         $this->rrule = $rrule;
