@@ -26,7 +26,7 @@
         "ext-json": "*",
         "nesbot/carbon": "^3.5",
         "larapack/dd": "^1.1",
-        "pestphp/pest": "^2.34",
+        "pestphp/pest": "^2.34 || ^3.0 || ^4.0",
         "spatie/pest-plugin-snapshots": "^2.1",
         "phpstan/phpstan" : "^2.0"
     },
