@@ -23,7 +23,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php }}
                   extensions: mbstring
-                  coverage: none
+                  coverage: pcov
 
             - name: Setup problem matchers
               run: |
