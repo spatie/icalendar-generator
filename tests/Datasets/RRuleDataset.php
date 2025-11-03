@@ -66,15 +66,15 @@ dataset('months', [
 
 dataset('month-days', [
     [
-        'monthsDays' => 1,
+        1,
         'expected' => '1',
     ],
     [
-        'monthsDays' => [1, 2, 3],
+        [1, 2, 3],
         'expected' => '1,2,3',
     ],
     [
-        'monthsDays' => [1, 2, 1],
+        [1, 2, 1],
         'expected' => '1,2',
     ],
 ]);
