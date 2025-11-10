@@ -39,6 +39,8 @@ class Event extends Component implements HasTimezones
 
     protected DateTimeValue $created;
 
+    protected ?DateTimeValue $lastModified = null;
+
     protected ?string $description = null;
 
     protected ?string $googleConference = null;
@@ -159,6 +161,14 @@ class Event extends Component implements HasTimezones
         return $this;
     }
 
+    public function lastModifiedAt(DateTimeInterface $modified, bool $withTime = true): Event
+    {
+        $this->lastModified = DateTimeValue::create($modified, $withTime)
+            ->convertToTimezone(new DateTimeZone('UTC'));
+
+        return $this;
+    }
+
     public function withoutTimezone(): Event
     {
         $this->withTimezone = false;
@@ -264,6 +274,10 @@ class Event extends Component implements HasTimezones
             $payload->property(
                 DateTimeProperty::fromDateTime('DTEND', $end->getDateTime(), ! $this->isFullDay, $this->withTimezone)
             );
+        }
+
+        if ($this->lastModified) {
+            $payload->property(DateTimeProperty::create('LAST-MODIFIED', $this->lastModified));
         }
 
         if ($this->name) {

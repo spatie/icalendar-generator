@@ -37,6 +37,8 @@ class Todo extends Component implements HasTimezones
 
     protected DateTimeValue $created;
 
+    protected ?DateTimeValue $lastModified = null;
+
     protected ?string $name = null;
 
     protected ?string $description = null;
@@ -113,6 +115,14 @@ class Todo extends Component implements HasTimezones
     public function createdAt(DateTimeInterface $created, bool $withTime = true): self
     {
         $this->created = DateTimeValue::create($created, $withTime)
+            ->convertToTimezone(new DateTimeZone('UTC'));
+
+        return $this;
+    }
+
+    public function lastModified(DateTimeInterface $modified, bool $withTime = true): self
+    {
+        $this->lastModified = DateTimeValue::create($modified, $withTime)
             ->convertToTimezone(new DateTimeZone('UTC'));
 
         return $this;
@@ -249,6 +259,10 @@ class Todo extends Component implements HasTimezones
             $payload->property(
                 DateTimeProperty::fromDateTime('DUE', $this->due->getDateTime(), $this->due->hasTime(), $this->withTimezone)
             );
+        }
+
+        if ($this->lastModified) {
+            $payload->property(DateTimeProperty::create('LAST-MODIFIED', $this->lastModified));
         }
 
         if ($this->name) {
