@@ -2,6 +2,19 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.1.1 - 2025-11-18
+
+### What's Changed
+
+* ci: add tests for PHP 8.5 by @Chris53897 in https://github.com/spatie/icalendar-generator/pull/160
+* fix: full timezone offset issue half hour by @atymic in https://github.com/spatie/icalendar-generator/pull/165
+
+### New Contributors
+
+* @atymic made their first contribution in https://github.com/spatie/icalendar-generator/pull/165
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/3.1.0...3.1.1
+
 ## 3.1.0 - 2025-10-24
 
 ### What's Changed
