@@ -5,8 +5,9 @@ use Spatie\IcalendarGenerator\Components\TimezoneEntry;
 use Spatie\IcalendarGenerator\Enums\RecurrenceFrequency;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 use Spatie\IcalendarGenerator\Tests\PayloadExpectation;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransition;
+use Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver;
 use Spatie\IcalendarGenerator\ValueObjects\RRule;
-
 use function Spatie\Snapshots\assertMatchesSnapshot;
 
 test('it can create a standard entry', function () {
@@ -108,7 +109,7 @@ test('it correctly formats half-hour offsets when created from transition', func
     $positiveOffsetTo = new DateInterval('PT10H30M');
     $positiveOffsetTo->invert = 0;
 
-    $positiveTransition = new \Spatie\IcalendarGenerator\Timezones\TimezoneTransition(
+    $positiveTransition = new TimezoneTransition(
         new DateTime('2025-10-05 02:00:00'),
         $positiveOffsetFrom,
         $positiveOffsetTo,
@@ -129,7 +130,7 @@ test('it correctly formats half-hour offsets when created from transition', func
     $negativeOffsetTo = new DateInterval('PT4H30M');
     $negativeOffsetTo->invert = 1;
 
-    $negativeTransition = new \Spatie\IcalendarGenerator\Timezones\TimezoneTransition(
+    $negativeTransition = new TimezoneTransition(
         new DateTime('2025-04-06 03:00:00'),
         $negativeOffsetFrom,
         $negativeOffsetTo,
@@ -146,7 +147,7 @@ test('it correctly formats half-hour offsets when created from transition', func
 });
 
 test('it correctly handles Australia Adelaide timezone with half-hour offsets', function () {
-    $resolver = new \Spatie\IcalendarGenerator\Timezones\TimezoneTransitionsResolver(
+    $resolver = new TimezoneTransitionsResolver(
         new DateTimeZone('Australia/Adelaide'),
         new DateTime('2025-08-01 00:00:00'),
         new DateTime('2025-08-31 23:59:59')
