@@ -30,8 +30,8 @@ class TimezoneEntry extends Component
         return new self(
             $transition->type,
             $transition->start,
-            $transition->offsetFrom->format('%R%H%M'),
-            $transition->offsetTo->format('%R%H%M')
+            $transition->offsetFrom->format('%R%H%I'),
+            $transition->offsetTo->format('%R%H%I')
         );
     }
 
