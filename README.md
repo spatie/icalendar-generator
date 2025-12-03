@@ -197,6 +197,8 @@ Event::create()
     ...
 ```
 
+Please notice that an end date according to the spec is always non inclusive. So an event that spans a full day on March 6th 2019 should have March 7th 2019 as end date. Your calendar application should handle this correctly and display the event on March 6th only.
+
 The status of an event can be set:
 
 ``` php

@@ -260,9 +260,9 @@ class Event extends Component implements HasTimezones
             );
         }
 
-        if ($end = $this->resolveEnd()) {
+        if ($this->ends) {
             $payload->property(
-                DateTimeProperty::fromDateTime('DTEND', $end->getDateTime(), ! $this->isFullDay, $this->withTimezone)
+                DateTimeProperty::fromDateTime('DTEND', $this->ends->getDateTime(), ! $this->isFullDay, $this->withTimezone)
             );
         }
 
