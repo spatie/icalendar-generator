@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.2.0 - 2025-12-03
+
+- revert #128
+
 ## 3.1.1 - 2025-11-18
 
 ### What's Changed
