@@ -36,6 +36,9 @@ class TextProperty extends Property
             return $this->text;
         }
 
+        // Normalize all newline variants (CRLF, CR, LF) to LF before escaping
+        $text = str_replace(["\r\n", "\r"], "\n", $this->text);
+
         $replacements = [
             '\\' => '\\\\',
             '"' => '\\"',
@@ -44,7 +47,7 @@ class TextProperty extends Property
             "\n" => '\\n',
         ];
 
-        return str_replace(array_keys($replacements), $replacements, $this->text);
+        return str_replace(array_keys($replacements), $replacements, $text);
     }
 
     public function getOriginalValue(): string
