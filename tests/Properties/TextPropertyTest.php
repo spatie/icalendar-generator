@@ -67,3 +67,29 @@ test('it can be created from an enum', function () {
         ->expectOutput('PRIVATE')
         ->expectValue('PRIVATE');
 });
+
+test('it normalizes all newline variants before escaping', function () {
+    // LF (Unix)
+    assertEquals(
+        'line1\\nline2',
+        (new TextProperty('', "line1\nline2"))->getValue()
+    );
+
+    // CRLF (Windows)
+    assertEquals(
+        'line1\\nline2',
+        (new TextProperty('', "line1\r\nline2"))->getValue()
+    );
+
+    // CR (old Mac)
+    assertEquals(
+        'line1\\nline2',
+        (new TextProperty('', "line1\rline2"))->getValue()
+    );
+
+    // Mixed newlines
+    assertEquals(
+        'line1\\nline2\\nline3\\nline4',
+        (new TextProperty('', "line1\nline2\r\nline3\rline4"))->getValue()
+    );
+});
