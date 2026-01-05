@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.2.1 - 2026-01-05
+
+### What's Changed
+
+* Fix: normalize CRLF and CR newlines before escaping in TextProperty by @gnutix in https://github.com/spatie/icalendar-generator/pull/166
+
+### New Contributors
+
+* @gnutix made their first contribution in https://github.com/spatie/icalendar-generator/pull/166
+
+**Full Changelog**: https://github.com/spatie/icalendar-generator/compare/3.2.0...3.2.1
+
 ## 3.2.0 - 2025-12-03
 
 - revert #128
