@@ -16,7 +16,9 @@ All notable changes to `icalendar-generator` will be documented in this file
 
 ## 3.2.0 - 2025-12-03
 
-- revert #128
+### Breaking Change
+All day events no longer get an extra day added, due to revert of #128.    
+Any logic that uses the `fullDay` method needs to be modified, if this behaviour was written between 2.6.2 - 2024-05-08 and 3.2.0 - 2025-12-03
 
 ## 3.1.1 - 2025-11-18
 
