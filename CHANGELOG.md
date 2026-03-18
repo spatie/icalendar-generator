@@ -2,6 +2,10 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.3.0 - 2026-03-18
+
+Fix VTIMEZONE DTSTART to use local wall-clock time per RFC 5545 §3.6.5
+
 ## 3.2.1 - 2026-01-05
 
 ### What's Changed
@@ -17,7 +21,8 @@ All notable changes to `icalendar-generator` will be documented in this file
 ## 3.2.0 - 2025-12-03
 
 ### Breaking Change
-All day events no longer get an extra day added, due to revert of #128.    
+
+All day events no longer get an extra day added, due to revert of #128.
 Any logic that uses the `fullDay` method needs to be modified, if this behaviour was written between 2.6.2 - 2024-05-08 and 3.2.0 - 2025-12-03
 
 ## 3.1.1 - 2025-11-18
