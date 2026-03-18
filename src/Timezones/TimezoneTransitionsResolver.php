@@ -76,10 +76,8 @@ class TimezoneTransitionsResolver
             $offsetFrom = $this->resolveOffset($previousTransition['offset']);
             $offsetTo = $this->resolveOffset($transition['offset']);
 
-            $offsetDiff = $this->resolveOffsetDiff($offsetFrom, $offsetTo);
-
             $found[] = new TimezoneTransition(
-                $this->resolveStartDate((string) $transition['ts'], $offsetDiff),
+                $this->resolveStartDate((string) $transition['ts'], $previousTransition['offset']),
                 $offsetFrom,
                 $offsetTo,
                 $type
@@ -99,14 +97,6 @@ class TimezoneTransitionsResolver
         return $this->resolveInterval($hours, $minutes);
     }
 
-    protected function resolveOffsetDiff(DateInterval $from, DateInterval $to): DateInterval
-    {
-        $hours = (int) $from->format('%r%h') - (int) $to->format('%r%h');
-        $minutes = (int) $from->format('%r%m') - (int) $to->format('%r%m');
-
-        return $this->resolveInterval($hours, $minutes);
-    }
-
     protected function resolveInterval(int $hours, int $minutes): DateInterval
     {
         $interval = new DateInterval(
@@ -120,23 +110,27 @@ class TimezoneTransitionsResolver
         return $interval;
     }
 
-    protected function resolveStartDate(string $timestamp, DateInterval $offset): DateTime
+    protected function resolveStartDate(string $timestamp, int $utcOffsetBefore): DateTime
     {
-        $start = DateTime::createFromFormat('U', $timestamp, new DateTimeZone('UTC'));
+        // Compute the local wall-clock onset time from the UTC transition instant
+        // and the UTC offset that was in effect BEFORE the transition.
+        // RFC 5545 §3.6.5 requires DTSTART to be local date-time (no "Z" suffix),
+        // so we must NOT use a UTC-named DateTimeZone.
+        $utcInstant = DateTime::createFromFormat('U', $timestamp, new DateTimeZone('UTC'));
 
-        if ($start === false) {
+        if ($utcInstant === false) {
             throw new Exception('Could not create DateTime from timestamp');
         }
 
-        $normalizedStart = DateTime::createFromFormat(
-            'Y-m-d\TH:i:s',
-            $start->setTimezone($this->timeZone)->format('Y-m-d\TH:i:s')
-        );
+        // Add the previous UTC offset to get the local onset time
+        $localTimestamp = $utcInstant->getTimestamp() + $utcOffsetBefore;
 
-        if ($normalizedStart === false) {
+        $localStart = DateTime::createFromFormat('U', (string) $localTimestamp);
+
+        if ($localStart === false) {
             throw new Exception('Could not create DateTime from timestamp');
         }
 
-        return $normalizedStart->add($offset);
+        return $localStart;
     }
 }
