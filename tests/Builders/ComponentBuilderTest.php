@@ -70,11 +70,14 @@ test('it will chip a line when it becomes too long', function () {
 
     $builder = new ComponentBuilder($payload);
 
+    // The folded line ends on a space, written as a variable so it does not get trimmed away
+    $trailingSpace = ' ';
+
     assertEquals(
         <<<EOT
             BEGIN:VTEST\r
             location:This is a really long text. Possibly you will never write a text l\r
-             ike this in a property. But hey we support the RFC so let us chip it! You ${''}\r
+             ike this in a property. But hey we support the RFC so let us chip it! You{$trailingSpace}\r
              can maybe write some HTML in here that will make it longer than usual.\r
             END:VTEST
             EOT,
