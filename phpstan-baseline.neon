@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$dateTime of static method Spatie\\IcalendarGenerator\\ValueObjects\\DateTimeValue\:\:create\(\) expects DateTimeInterface, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Components/Event.php
-
-		-
 			message: '#^Parameter \#1 \.\.\.\$entries of method Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\:\:add\(\) expects array\<DateTimeInterface\|Spatie\\IcalendarGenerator\\Timezones\\HasTimezones\|Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\|null\>\|DateTimeInterface\|Spatie\\IcalendarGenerator\\Timezones\\HasTimezones\|Spatie\\IcalendarGenerator\\Timezones\\TimezoneRangeCollection\|null, list\<DateTimeInterface\|null\>\|Spatie\\IcalendarGenerator\\ValueObjects\\RRule\|string\|null given\.$#'
 			identifier: argument.type
 			count: 1
