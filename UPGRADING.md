@@ -1,5 +1,43 @@
 # Upgrading
 
+## Upgrading from 3.1 to 3.2
+
+### Full day events no longer get an extra day added
+
+Versions 2.6.2 up to and including 3.1.1 added one day to the end date of a full day event. Version 3.2.0 removed that behaviour. The package now writes the end date exactly as you provide it.
+
+The iCalendar spec defines the end of an event as non inclusive, which means the end date is the day after the last day of the event. You are now responsible for that conversion yourself.
+
+If you wrote code against 2.6.2 up to and including 3.1.1, add one day to every end date you pass to a full day event:
+
+``` php
+// Before 3.2.0, the package added the day for you
+Event::create()
+    ->fullDay()
+    ->startsAt(new DateTime('6 March 2019'))
+    ->endsAt(new DateTime('6 March 2019'));
+
+// From 3.2.0 on, you add the day yourself
+Event::create()
+    ->fullDay()
+    ->startsAt(new DateTime('6 March 2019'))
+    ->endsAt(new DateTime('7 March 2019'));
+```
+
+Both of these produce the same output:
+
+```
+DTSTART;VALUE=DATE:20190306
+DTEND;VALUE=DATE:20190307
+```
+
+If you skip this change, every full day event ends one day too early. Calendar applications will not report an error, they simply display a shorter event.
+
+Two things worth knowing:
+
+* Events that use `fullDay()` are the only ones affected. Events with a time were always written unchanged.
+* If you upgraded from a version older than 2.6.2 you are not affected, because those versions also wrote the end date unchanged.
+
 ## Upgrading from 2.x to 3.x
 
 Version 3 has some minor changes:

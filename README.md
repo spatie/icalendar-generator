@@ -194,10 +194,30 @@ It is possible to create an event that spans a full day:
 ``` php
 Event::create()
     ->fullDay()
-    ...
+    ->startsAt(new DateTime('6 March 2019'))
+    ->endsAt(new DateTime('7 March 2019'))
 ```
 
-Please notice that an end date according to the spec is always non inclusive. So an event that spans a full day on March 6th 2019 should have March 7th 2019 as end date. Your calendar application should handle this correctly and display the event on March 6th only.
+The iCalendar spec defines the end of an event as non inclusive, so the end date is the day after the last day of the event. The event above takes place on March 6th only. Your calendar application will display it on March 6th.
+
+This package writes the end date exactly as you provide it, it never adds a day for you. A three day event running from March 6th up to and including March 8th therefore ends on March 9th:
+
+``` php
+Event::create()
+    ->fullDay()
+    ->startsAt(new DateTime('6 March 2019'))
+    ->endsAt(new DateTime('9 March 2019'))
+```
+
+For an event that spans a single day you can leave out the end date. The spec defines a full day event without an end date as lasting exactly one day:
+
+``` php
+Event::create()
+    ->fullDay()
+    ->startsAt(new DateTime('6 March 2019'))
+```
+
+Do not pass the same date as start and end. The spec requires the end to be later than the start, so `startsAt(new DateTime('6 March 2019'))` combined with `endsAt(new DateTime('6 March 2019'))` produces a file that calendar applications may reject or render as an empty event.
 
 The status of an event can be set:
 

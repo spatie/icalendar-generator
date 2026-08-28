@@ -25,6 +25,8 @@ Fix VTIMEZONE DTSTART to use local wall-clock time per RFC 5545 §3.6.5
 All day events no longer get an extra day added, due to revert of #128.
 Any logic that uses the `fullDay` method needs to be modified, if this behaviour was written between 2.6.2 - 2024-05-08 and 3.2.0 - 2025-12-03
 
+See [UPGRADING.md](UPGRADING.md) for what to change in your code.
+
 ## 3.1.1 - 2025-11-18
 
 ### What's Changed
