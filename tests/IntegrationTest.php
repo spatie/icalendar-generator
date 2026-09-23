@@ -4,6 +4,7 @@ namespace Spatie\IcalendarGenerator\Tests;
 
 use DateTime;
 use DateTimeZone;
+use function PHPUnit\Framework\assertStringContainsString;
 use Spatie\IcalendarGenerator\Components\Alert;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
@@ -77,6 +78,24 @@ test('it can create a full day event', function () {
 
     assertMatchesSnapshot($calendar);
 });
+
+test('it encodes organizer and attendee name newlines', function (string $newline) {
+    $calendar = Calendar::create()
+        ->event(
+            Event::create('Meeting')
+                ->startsAt(new DateTime('2026-09-23 10:00:00', new DateTimeZone('UTC')))
+                ->organizer('organizer@example.com', 'Organizing' . $newline . 'team')
+                ->attendee('attendee@example.com', 'Attending' . $newline . 'team')
+        )
+        ->get();
+
+    assertStringContainsString('ORGANIZER;CN=Organizing^nteam:MAILTO:organizer@example.com', $calendar);
+    assertStringContainsString('ATTENDEE;CN=Attending^nteam:MAILTO:attendee@example.com', $calendar);
+})->with([
+    'LF' => ["\n"],
+    'CRLF' => ["\r\n"],
+    'CR' => ["\r"],
+]);
 
 test('it can create a full day event irrespective of param ordering', function () {
     $calendar = Calendar::create('Laracon online')

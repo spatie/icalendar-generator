@@ -156,6 +156,8 @@ Event::create()
     ...
 ```
 
+Line breaks in organizer and attendee names are encoded as `^n`, including CRLF, CR and LF input.
+
 You can also set the participation status of an attendee:
 
 ``` php

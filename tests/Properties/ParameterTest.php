@@ -70,6 +70,34 @@ test('it can disable escaping', function () {
     );
 });
 
+test('it encodes parameter newlines', function (string $newline) {
+    assertEquals(
+        'First^nSecond',
+        Parameter::create('CN', 'First' . $newline . 'Second')->getValue()
+    );
+})->with([
+    'LF' => ["\n"],
+    'CRLF' => ["\r\n"],
+    'CR' => ["\r"],
+]);
+
+test('it preserves literal caret escapes beside parameter newlines', function () {
+    assertEquals(
+        "one^^n^ntwo^^'^nthree^^^^^nfour",
+        Parameter::create('CN', "one^n\r\ntwo^'\rthree^^\nfour")->getValue()
+    );
+});
+
+test('it preserves parameter newlines when escaping is disabled', function (string $newline) {
+    $value = 'First' . $newline . 'Second';
+
+    assertEquals($value, Parameter::create('CN', $value, true)->getValue());
+})->with([
+    'LF' => ["\n"],
+    'CRLF' => ["\r\n"],
+    'CR' => ["\r"],
+]);
+
 test('it can format a boolean', function () {
     assertEquals(
         'BOOLEAN:TRUE',
