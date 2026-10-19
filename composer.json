@@ -19,16 +19,17 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "ext-mbstring": "*"
     },
     "require-dev": {
         "ext-json": "*",
-        "nesbot/carbon": "^3.5",
+        "friendsofphp/php-cs-fixer": "^3.95",
         "larapack/dd": "^1.1",
-        "pestphp/pest": "^2.34 || ^3.0 || ^4.0 || ^5.0",
-        "spatie/pest-plugin-snapshots": "^2.1",
-        "phpstan/phpstan" : "^2.0"
+        "nesbot/carbon": "^3.5",
+        "pestphp/pest": "^5.0",
+        "phpstan/phpstan": "^2.0",
+        "spatie/pest-plugin-snapshots": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -43,6 +44,8 @@
     "scripts": {
         "test": "vendor/bin/pest",
         "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/php-cs-fixer fix --config=.php_cs.dist.php --allow-risky=yes",
+        "format-check": "@format --dry-run --diff",
         "baseline": "vendor/bin/phpstan analyse --generate-baseline",
         "test-coverage": "vendor/bin/pest --coverage-html coverage"
     },

@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 [![Tests](https://github.com/spatie/icalendar-generator/actions/workflows/run-tests.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/run-tests.yml)
-[![Check & fix styling](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml)
+[![Check styling](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/fix-styling.yml)
 [![PHPStan](https://github.com/spatie/icalendar-generator/actions/workflows/phpstan.yml/badge.svg)](https://github.com/spatie/icalendar-generator/actions/workflows/phpstan.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/icalendar-generator.svg?style=flat-square)](https://packagist.org/packages/spatie/icalendar-generator)
 
@@ -54,6 +54,8 @@ We invest a lot of resources into creating [best in class open source packages](
 We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
+
+This package requires PHP 8.4 or higher.
 
 You can install the package via composer:
 

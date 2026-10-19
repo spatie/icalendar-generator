@@ -84,8 +84,8 @@ test('it encodes organizer and attendee name newlines', function (string $newlin
         ->event(
             Event::create('Meeting')
                 ->startsAt(new DateTime('2026-09-23 10:00:00', new DateTimeZone('UTC')))
-                ->organizer('organizer@example.com', 'Organizing' . $newline . 'team')
-                ->attendee('attendee@example.com', 'Attending' . $newline . 'team')
+                ->organizer('organizer@example.com', "Organizing{$newline}team")
+                ->attendee('attendee@example.com', "Attending{$newline}team")
         )
         ->get();
 

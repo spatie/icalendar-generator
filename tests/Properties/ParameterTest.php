@@ -73,7 +73,7 @@ test('it can disable escaping', function () {
 test('it encodes parameter newlines', function (string $newline) {
     assertEquals(
         'First^nSecond',
-        Parameter::create('CN', 'First' . $newline . 'Second')->getValue()
+        Parameter::create('CN', "First{$newline}Second")->getValue()
     );
 })->with([
     'LF' => ["\n"],
@@ -89,7 +89,7 @@ test('it preserves literal caret escapes beside parameter newlines', function ()
 });
 
 test('it preserves parameter newlines when escaping is disabled', function (string $newline) {
-    $value = 'First' . $newline . 'Second';
+    $value = "First{$newline}Second";
 
     assertEquals($value, Parameter::create('CN', $value, true)->getValue());
 })->with([
