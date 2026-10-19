@@ -33,6 +33,8 @@ class Parameter
             return $value;
         }
 
+        $value = str_replace(["\r\n", "\r"], "\n", $value);
+
         $replacements = [
             // RFC 5545
             '\\' => '\\\\',
@@ -41,7 +43,7 @@ class Parameter
             // RFC 6868
             '^' => '^^',
             '"' => '^\'',
-            PHP_EOL => '^n',
+            "\n" => '^n',
         ];
 
         return str_replace(array_keys($replacements), $replacements, $value);

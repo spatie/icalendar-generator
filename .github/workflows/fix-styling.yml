@@ -1,4 +1,4 @@
-name: Check & fix styling
+name: Check styling
 
 on: [push, pull_request]
 
@@ -8,22 +8,17 @@ jobs:
 
         steps:
             -   name: Checkout code
-                uses: actions/checkout@v4
+                uses: actions/checkout@v7
 
-            -   name: Fix style
-                uses: docker://oskarstark/php-cs-fixer-ga
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
                 with:
-                    args: --config=.php_cs.dist.php --allow-risky=yes
+                    php-version: '8.5'
+                    extensions: mbstring
+                    coverage: none
 
-            -   name: Extract branch name
-                shell: bash
-                run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-                id: extract_branch
+            -   name: Install composer dependencies
+                uses: ramsey/composer-install@v4
 
-            -   name: Commit changes
-                uses: stefanzweifel/git-auto-commit-action@v5.0.1
-                with:
-                    commit_message: Fix styling
-                    branch: ${{ steps.extract_branch.outputs.branch }}
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            -   name: Check style
+                run: composer format-check
