@@ -2,6 +2,18 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.3.1 - 2026-10-19
+
+### What changed
+
+- Normalize CRLF, CR and LF in parameter values before RFC 6868 encoding, including organizer and attendee names. Preserve literal carets and the escaping bypass. (#173)
+- Update test tooling to Pest 5 and snapshot plugin 2.4, test PHP 8.4 and 8.5 with lowest and latest dependencies, and run PHPStan for pull requests.
+- Replace styling auto-commits with reproducible, read-only Composer style checks.
+
+Requires PHP 8.4 or higher. No public API breaking changes.
+
+Validation: all 177 tests (541 assertions) pass across the four PHP/dependency combinations; PHPStan and style checks pass.
+
 ## 3.3.0 - 2026-03-18
 
 Fix VTIMEZONE DTSTART to use local wall-clock time per RFC 5545 §3.6.5
