@@ -84,3 +84,39 @@ test('it will chip a line when it becomes too long', function () {
         $builder->build()
     );
 });
+
+test('it keeps the order of lines with multiple properties and sub-components', function () {
+    $payload = ComponentPayload::create('VTEST');
+
+    $payload->property(new DummyProperty('location', 'Antwerp'));
+    $payload->property(
+        (new DummyProperty('url', 'https://spatie.be'))->addAlias('x-url', 'x-website')
+    );
+
+    $secondComponent = new DummyComponent('SECOND');
+    $secondComponent->description = 'A description that is long enough to be chipped over multiple lines in the output';
+
+    $payload->subComponent(new DummyComponent('FIRST'), $secondComponent);
+
+    $builder = new ComponentBuilder($payload);
+
+    assertEquals(
+        <<<EOT
+            BEGIN:VTEST\r
+            location:Antwerp\r
+            url:https://spatie.be\r
+            x-url:https://spatie.be\r
+            x-website:https://spatie.be\r
+            BEGIN:VDUMMY\r
+            name:FIRST\r
+            END:VDUMMY\r
+            BEGIN:VDUMMY\r
+            name:SECOND\r
+            description:A description that is long enough to be chipped over multiple l\r
+             ines in the output\r
+            END:VDUMMY\r
+            END:VTEST
+            EOT,
+        $builder->build()
+    );
+});
