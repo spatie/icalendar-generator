@@ -52,7 +52,13 @@ class ComponentBuilder
         foreach ($this->componentPayload->getProperties() as $property) {
             $builder = new PropertyBuilder($property);
 
-            foreach ($builder->build() as $line) {
+            foreach ($builder->build() as $key => $line) {
+                if (is_string($key)) {
+                    $lines[$key] = $line;
+
+                    continue;
+                }
+
                 $lines[] = $line;
             }
         }
@@ -68,7 +74,13 @@ class ComponentBuilder
         foreach ($this->componentPayload->getSubComponents() as $component) {
             $builder = new ComponentBuilder($component->resolvePayload());
 
-            foreach ($builder->buildComponent() as $line) {
+            foreach ($builder->buildComponent() as $key => $line) {
+                if (is_string($key)) {
+                    $lines[$key] = $line;
+
+                    continue;
+                }
+
                 $lines[] = $line;
             }
         }

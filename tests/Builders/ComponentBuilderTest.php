@@ -120,3 +120,58 @@ test('it keeps the order of lines with multiple properties and sub-components', 
         $builder->build()
     );
 });
+
+test('it preserves named alias overwrites across properties and nested components', function () {
+    $payload = ComponentPayload::create('VTEST');
+
+    $payload->property(
+        (new DummyProperty('location', 'Antwerp'))->addAlias('x-positional', shared: 'x-first', unique: 'x-unique')
+    );
+    $payload->property(
+        (new DummyProperty('url', 'https://spatie.be'))->addAlias(shared: 'x-second', local: 'x-local-first')
+    );
+    $payload->property(
+        (new DummyProperty('description', 'Brussels'))->addAlias(local: 'x-local-last')
+    );
+
+    $firstComponent = new DummyComponent('FIRST');
+    $firstComponent->appendProperty(
+        (new DummyProperty('alpha', 'One'))->addAlias(shared: 'x-child-first', sibling: 'x-sibling-first')
+    );
+    $secondComponent = new DummyComponent('SECOND');
+    $secondComponent->appendProperty(
+        (new DummyProperty('beta', 'Two'))->addAlias(sibling: 'x-sibling-last')
+    );
+    $secondComponent->appendSubComponent(
+        (new DummyComponent('NESTED'))->appendProperty(
+            (new DummyProperty('gamma', 'Three'))->addAlias(shared: 'x-nested-last')
+        )
+    );
+
+    $payload->subComponent($firstComponent, $secondComponent);
+
+    expect((new ComponentBuilder($payload))->build())->toBe(implode("\r\n", [
+        'BEGIN:VTEST',
+        'location:Antwerp',
+        'x-positional:Antwerp',
+        'x-nested-last:Three',
+        'x-unique:Antwerp',
+        'url:https://spatie.be',
+        'x-local-last:Brussels',
+        'description:Brussels',
+        'BEGIN:VDUMMY',
+        'name:FIRST',
+        'alpha:One',
+        'x-sibling-last:Two',
+        'END:VDUMMY',
+        'BEGIN:VDUMMY',
+        'name:SECOND',
+        'beta:Two',
+        'BEGIN:VDUMMY',
+        'name:NESTED',
+        'gamma:Three',
+        'END:VDUMMY',
+        'END:VDUMMY',
+        'END:VTEST',
+    ]));
+});
