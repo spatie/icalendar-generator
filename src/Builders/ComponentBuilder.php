@@ -20,7 +20,9 @@ class ComponentBuilder
         $lines = [];
 
         foreach ($this->buildComponent() as $line) {
-            $lines = array_merge($lines, $this->chipLine($line));
+            foreach ($this->chipLine($line) as $chippedLine) {
+                $lines[] = $chippedLine;
+            }
         }
 
         return implode("\r\n", $lines);
@@ -50,10 +52,15 @@ class ComponentBuilder
         foreach ($this->componentPayload->getProperties() as $property) {
             $builder = new PropertyBuilder($property);
 
-            $lines = array_merge(
-                $lines,
-                $builder->build()
-            );
+            foreach ($builder->build() as $key => $line) {
+                if (is_string($key)) {
+                    $lines[$key] = $line;
+
+                    continue;
+                }
+
+                $lines[] = $line;
+            }
         }
 
         return $lines;
@@ -67,10 +74,15 @@ class ComponentBuilder
         foreach ($this->componentPayload->getSubComponents() as $component) {
             $builder = new ComponentBuilder($component->resolvePayload());
 
-            $lines = array_merge(
-                $lines,
-                $builder->buildComponent()
-            );
+            foreach ($builder->buildComponent() as $key => $line) {
+                if (is_string($key)) {
+                    $lines[$key] = $line;
+
+                    continue;
+                }
+
+                $lines[] = $line;
+            }
         }
 
         return $lines;
