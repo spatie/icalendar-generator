@@ -2,6 +2,21 @@
 
 All notable changes to `icalendar-generator` will be documented in this file
 
+## 3.3.2 - 2026-11-06
+
+### What's changed
+
+- Improve large-calendar generation performance by avoiding repeated copies of accumulated component lines. Thanks to @ptweezy for #174.
+- Preserve existing output ordering and named property-alias overwrite behavior, including collisions across sibling and nested components. Add regression coverage for these cases.
+- Extend CI coverage to PHP 8.6 alongside PHP 8.4 and 8.5 (#175).
+- Update the README sponsor image URL and include the previous release's changelog entry.
+
+No public API, PHP requirement, or dependency changes in this release. Requires PHP 8.4 or higher.
+
+Validation: 179 tests (543 assertions), PHPStan, and style checks pass. GitHub CI passes with lowest and stable dependencies on PHP 8.4, 8.5, and 8.6. Independent byte/key parity checks match the previous implementation across 74 asymmetric calendars and custom payloads, including folded Unicode lines and named aliases.
+
+**Full changelog**: https://github.com/spatie/icalendar-generator/compare/3.3.1...3.3.2
+
 ## 3.3.1 - 2026-10-19
 
 ### What changed
